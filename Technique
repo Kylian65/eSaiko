@@ -107,38 +107,542 @@ Le module ESaiko se compose de 5 sous-modules interconnectés:
 
 ## 2. Architecture technique
 
-### 2.1 Architecture globale
 Le module ESaiko respecte l'architecture MVC (Modèle-Vue-Contrôleur) de Dolibarr avec:
 - **Modèles**: Gestion des accès aux données
 - **Vues**: Templates d'affichage
 - **Contrôleurs**: Logique métier et traitements
 
-### 2.2 Structure des répertoires
+## 2. Architecture technique
+
+### 2.1 Structure des répertoires et fichiers
+
+#### 2.1.1 Répertoire principal
 ```
 htdocs/
 └── custom/
     └── esaiko/
-        ├── admin/                  # Configuration du module
-        ├── class/                  # Classes PHP (objets métier)
+        ├── admin/
+        │   ├── about.php                   # À propos du module
+        │   ├── audit.php                   # Journal des actions
+        │   ├── dynamicfields.php           # Configuration des champs dynamiques
+        │   ├── integration.php             # Configuration des intégrations
+        │   ├── permissions.php             # Gestion des permissions
+        │   ├── setup.php                   # Configuration générale du module
+        │   ├── tagsetup.php                # Configuration des tags
+        │   ├── templates.php               # Gestion des modèles de documents
+        │   └── workflows.php               # Configuration des workflows
+        │
+        ├── api/
+        │   ├── index.php                   # Point d'entrée principal API
+        │   ├── clients.php                 # API clients
+        │   ├── prestations.php             # API prestations
+        │   ├── dossiers.php                # API dossiers
+        │   ├── taches.php                  # API tâches
+        │   ├── abonnements.php             # API abonnements
+        │   ├── communications.php          # API communications
+        │   ├── documents.php               # API documents
+        │   └── tags.php                    # API tags
+        │
+        ├── class/
+        │   ├── api/
+        │   │   ├── api_esaiko.class.php                # Classe API principale
+        │   │   ├── api_esaiko_clients.class.php        # API clients
+        │   │   ├── api_esaiko_prestations.class.php    # API prestations
+        │   │   ├── api_esaiko_dossiers.class.php       # API dossiers
+        │   │   ├── api_esaiko_taches.class.php         # API tâches
+        │   │   └── api_esaiko_abonnements.class.php    # API abonnements
+        │   │
+        │   ├── client/
+        │   │   ├── esaikoparticulier.class.php         # Classe particulier
+        │   │   ├── esaikoassociation.class.php         # Classe association
+        │   │   └── esaikoenterprise.class.php          # Classe entreprise
+        │   │
+        │   ├── dossier/
+        │   │   ├── esaikocreancier.class.php           # Classe créancier
+        │   │   ├── esaikobudget.class.php              # Classe budget
+        │   │   └── esaikostep.class.php                # Classe étape de workflow
+        │   │
+        │   ├── utils/
+        │   │   ├── esaikodynamicfield.class.php        # Gestion champs dynamiques
+        │   │   ├── esaikoworkflow.class.php            # Gestion des workflows
+        │   │   ├── esaikonotification.class.php        # Système de notifications
+        │   │   ├── esaikomail.class.php                # Intégration emails
+        │   │   └── esaikodocument.class.php            # Gestion documentaire
+        │   │
+        │   ├── esaikoclient.class.php                  # Classe client
+        │   ├── esaikoprestation.class.php              # Classe prestation
+        │   ├── esaikodossier.class.php                 # Classe dossier
+        │   ├── esaikotache.class.php                   # Classe tâche
+        │   ├── esaikoabonnement.class.php              # Classe abonnement
+        │   ├── esaikocommunication.class.php           # Classe communication
+        │   ├── esaikointervenant.class.php             # Classe intervenant externe
+        │   └── esaikotag.class.php                     # Classe tag
+        │
         ├── core/
-        │   ├── modules/            # Descripteur du module
-        │   ├── triggers/           # Triggers d'événements
-        │   └── boxes/              # Widgets pour dashboard
-        ├── css/                    # Styles spécifiques
-        ├── img/                    # Images du module
-        ├── js/                     # Scripts JavaScript
-        │   └── dynamic-fields/     # Gestion des champs dynamiques
-        ├── langs/                  # Traductions
+        │   ├── modules/
+        │   │   ├── modesaiko.php                       # Descripteur principal du module
+        │   │   ├── modESaikoClient.php                 # Sous-module Client
+        │   │   ├── modESaikoPrestation.php             # Sous-module Prestation
+        │   │   ├── modESaikoDossier.php                # Sous-module Dossier
+        │   │   ├── modESaikoTache.php                  # Sous-module Tâche
+        │   │   └── modESaikoAbonnement.php             # Sous-module Abonnement
+        │   │
+        │   ├── triggers/
+        │   │   └── interface_99_modesaiko_ESaikoWorkflow.php   # Déclencheurs de workflow
+        │   │
+        │   └── boxes/
+        │       ├── esaiko_dashboard_box.php            # Widget tableau de bord
+        │       ├── esaiko_tasks_box.php                # Widget tâches
+        │       └── esaiko_alerts_box.php               # Widget alertes
+        │
+        ├── css/
+        │   ├── esaiko.css                              # Styles généraux du module
+        │   ├── esaiko-responsive.css                   # Styles spécifiques responsive
+        │   ├── esaiko-colors.css                       # Définition des couleurs et thèmes
+        │   ├── esaiko-icons.css                        # Icônes personnalisées
+        │   ├── dashboard.css                           # Styles du tableau de bord
+        │   ├── cards.css                               # Styles des fiches détaillées
+        │   ├── lists.css                               # Styles des listes
+        │   ├── kanban.css                              # Styles des tableaux Kanban
+        │   ├── timeline.css                            # Styles des timelines
+        │   ├── forms.css                               # Styles des formulaires
+        │   ├── tags.css                                # Styles des tags
+        │   ├── calendar.css                            # Styles des calendriers
+        │   └── notifications.css                       # Styles des notifications
+        │
+        ├── img/
+        │   ├── esaiko.png                              # Logo principal du module
+        │   ├── esaiko-small.png                        # Logo petit format
+        │   ├── object_client.png                       # Icône client
+        │   ├── object_prestation.png                   # Icône prestation
+        │   ├── object_dossier.png                      # Icône dossier
+        │   ├── object_tache.png                        # Icône tâche
+        │   ├── object_abonnement.png                   # Icône abonnement
+        │   ├── object_communication.png                # Icône communication
+        │   ├── object_intervenant.png                  # Icône intervenant
+        │   └── object_tag.png                          # Icône tag
+        │
+        ├── js/
+        │   ├── dynamic-fields/
+        │   │   ├── engine.js                           # Moteur pour champs dynamiques
+        │   │   └── admin.js                            # Interface admin champs dynamiques
+        │   │
+        │   ├── timeline/
+        │   │   └── main.js                             # Gestion des timelines
+        │   │
+        │   ├── kanban/
+        │   │   └── board.js                            # Gestion des tableaux Kanban
+        │   │
+        │   ├── esaiko.js                               # Fonctions communes du module
+        │   ├── dashboard.js                            # Scripts pour le tableau de bord
+        │   ├── charts.js                               # Graphiques et visualisations
+        │   ├── client.js                               # Scripts spécifiques clients
+        │   ├── prestation.js                           # Scripts spécifiques prestations
+        │   ├── dossier.js                              # Scripts spécifiques dossiers
+        │   ├── tache.js                                # Scripts spécifiques tâches
+        │   ├── abonnement.js                           # Scripts spécifiques abonnements
+        │   ├── communication.js                        # Scripts communications
+        │   ├── tag.js                                  # Gestion des tags
+        │   ├── document-manager.js                     # Gestionnaire de documents
+        │   ├── tag-manager.js                          # Gestion des tags
+        │   ├── esaiko-calendar.js                      # Calendrier personnalisé
+        │   └── notifications.js                        # Système de notifications
+        │
+        ├── langs/
         │   ├── fr_FR/
+        │   │   ├── esaiko.lang                         # Traduction principale française
+        │   │   ├── esaikoclient.lang                   # Traduction spécifique client
+        │   │   ├── esaikoprestation.lang               # Traduction spécifique prestation
+        │   │   ├── esaikodossier.lang                  # Traduction spécifique dossier
+        │   │   ├── esaikotache.lang                    # Traduction spécifique tâche
+        │   │   └── esaikoabonnement.lang               # Traduction spécifique abonnement
+        │   │
         │   └── en_US/
-        ├── sql/                    # Scripts de création/mise à jour DB
-        │   ├── llx_esaiko_*.key.sql
-        │   ├── llx_esaiko_*.sql
-        │   └── data/               # Données initiales
-        ├── tpl/                    # Templates
-        ├── api/                    # API REST
-        └── lib/                    # Bibliothèques tierces
-```
+        │       ├── esaiko.lang                         # Traduction principale anglaise
+        │       ├── esaikoclient.lang                   # Traduction spécifique client
+        │       ├── esaikoprestation.lang               # Traduction spécifique prestation
+        │       ├── esaikodossier.lang                  # Traduction spécifique dossier
+        │       ├── esaikotache.lang                    # Traduction spécifique tâche
+        │       └── esaikoabonnement.lang               # Traduction spécifique abonnement
+        │
+        ├── lib/                                        # Bibliothèques tierces
+        │
+        ├── sql/
+        │   ├── data/                                   # Données initiales
+        │   │   ├── llx_c_esaiko_dossier_type.sql       # Types de dossiers prédéfinis
+        │   │   └── llx_c_esaiko_tache_type.sql         # Types de tâches prédéfinis
+        │   │
+        │   ├── llx_esaiko_client_info.sql              # Table info client
+        │   ├── llx_esaiko_client_info.key.sql          # Clés table info client
+        │   ├── llx_esaiko_particulier.sql              # Table particulier
+        │   ├── llx_esaiko_particulier.key.sql          # Clés table particulier
+        │   ├── llx_esaiko_particulier_budget_lines.sql # Table budget particulier
+        │   ├── llx_esaiko_particulier_budget_lines.key.sql # Clés budget particulier
+        │   ├── llx_esaiko_association.sql              # Table association
+        │   ├── llx_esaiko_association.key.sql          # Clés table association
+        │   ├── llx_esaiko_enterprise.sql               # Table entreprise
+        │   ├── llx_esaiko_enterprise.key.sql           # Clés table entreprise
+        │   ├── llx_esaiko_enterprise_creator.sql       # Table créateur entreprise
+        │   ├── llx_esaiko_enterprise_creator.key.sql   # Clés créateur entreprise
+        │   ├── llx_esaiko_service.sql                  # Table service
+        │   ├── llx_esaiko_service.key.sql              # Clés table service
+        │   ├── llx_esaiko_task.sql                     # Table tâche
+        │   ├── llx_esaiko_task.key.sql                 # Clés table tâche
+        │   ├── llx_esaiko_task_checklist.sql           # Table checklist de tâche
+        │   ├── llx_esaiko_task_checklist.key.sql       # Clés checklist de tâche
+        │   ├── llx_esaiko_subscription.sql             # Table abonnement
+        │   ├── llx_esaiko_subscription.key.sql         # Clés table abonnement
+        │   ├── llx_esaiko_communication.sql            # Table communication
+        │   ├── llx_esaiko_communication.key.sql        # Clés table communication
+        │   ├── llx_esaiko_particular_case.sql          # Table dossier particulier
+        │   ├── llx_esaiko_particular_case.key.sql      # Clés dossier particulier
+        │   ├── llx_esaiko_external_intervenant.sql     # Table intervenant externe
+        │   ├── llx_esaiko_external_intervenant.key.sql # Clés intervenant externe
+        │   ├── llx_esaiko_contact_hours.sql            # Table heures de contact
+        │   ├── llx_esaiko_contact_hours.key.sql        # Clés heures de contact
+        │   ├── llx_esaiko_household_member.sql         # Table membre du foyer
+        │   ├── llx_esaiko_household_member.key.sql     # Clés membre du foyer
+        │   ├── llx_esaiko_association_leader.sql       # Table dirigeants association
+        │   ├── llx_esaiko_association_leader.key.sql   # Clés dirigeants association
+        │   ├── llx_esaiko_document.sql                 # Table document
+        │   ├── llx_esaiko_document.key.sql             # Clés table document
+        │   ├── llx_esaiko_service_team.sql             # Table équipe service
+        │   ├── llx_esaiko_service_team.key.sql         # Clés équipe service
+        │   ├── llx_esaiko_task_time.sql                # Table temps tâche
+        │   ├── llx_esaiko_task_time.key.sql            # Clés temps tâche
+        │   ├── llx_esaiko_case_step.sql                # Table étape dossier
+        │   ├── llx_esaiko_case_step.key.sql            # Clés étape dossier
+        │   ├── llx_esaiko_case_creditor.sql            # Table créancier dossier
+        │   ├── llx_esaiko_case_creditor.key.sql        # Clés créancier dossier
+        │   ├── llx_esaiko_case_budget.sql              # Table budget dossier
+        │   ├── llx_esaiko_case_budget.key.sql          # Clés budget dossier
+        │   ├── llx_esaiko_dossier_intervenant_link.sql # Table lien dossier-intervenant
+        │   ├── llx_esaiko_dossier_intervenant_link.key.sql # Clés lien dossier-intervenant
+        │   ├── llx_esaiko_dynamic_field_config.sql     # Table config champ dynamique
+        │   ├── llx_esaiko_dynamic_field_config.key.sql # Clés config champ dynamique
+        │   ├── llx_esaiko_dynamic_field_condition.sql  # Table condition champ dynamique
+        │   ├── llx_esaiko_dynamic_field_condition.key.sql # Clés condition champ dynamique
+        │   ├── llx_esaiko_field_group.sql              # Table groupe de champs
+        │   ├── llx_esaiko_field_group.key.sql          # Clés groupe de champs
+        │   ├── llx_esaiko_field_group_condition.sql    # Table condition groupe de champs
+        │   ├── llx_esaiko_field_group_condition.key.sql # Clés condition groupe de champs
+        │   ├── llx_esaiko_tag.sql                      # Table tag
+        │   ├── llx_esaiko_tag.key.sql                  # Clés table tag
+        │   ├── llx_esaiko_tag_link.sql                 # Table lien tag
+        │   ├── llx_esaiko_tag_link.key.sql             # Clés lien tag
+        │   ├── llx_esaiko_mandate.sql                  # Table mandat
+        │   └── llx_esaiko_mandate.key.sql              # Clés table mandat
+        │
+        ├── tpl/
+        │   ├── client/
+        │   │   ├── card.tpl.php                        # Template fiche client
+        │   │   ├── list.tpl.php                        # Template liste clients
+        │   │   └── stat.tpl.php                        # Template stats client
+        │   │
+        │   ├── prestation/
+        │   │   ├── card.tpl.php                        # Template fiche prestation
+        │   │   └── list.tpl.php                        # Template liste prestations
+        │   │
+        │   ├── dossier/
+        │   │   ├── card.tpl.php                        # Template fiche dossier
+        │   │   ├── list.tpl.php                        # Template liste dossiers
+        │   │   ├── creancier.tpl.php                   # Template créanciers
+        │   │   └── budget.tpl.php                      # Template budget
+        │   │
+        │   ├── tache/
+        │   │   ├── card.tpl.php                        # Template fiche tâche
+        │   │   ├── list.tpl.php                        # Template liste tâches
+        │   │   └── kanban.tpl.php                      # Template kanban tâches
+        │   │
+        │   ├── abonnement/
+        │   │   ├── card.tpl.php                        # Template fiche abonnement
+        │   │   └── list.tpl.php                        # Template liste abonnements
+        │   │
+        │   ├── communication/
+        │   │   ├── list.tpl.php                        # Template liste communications
+        │   │   └── timeline.tpl.php                    # Template timeline communications
+        │   │
+        │   ├── intervenant/
+        │   │   ├── card.tpl.php                        # Template fiche intervenant
+        │   │   └── list.tpl.php                        # Template liste intervenants
+        │   │
+        │   ├── tag/
+        │   │   ├── card.tpl.php                        # Template fiche tag
+        │   │   └── list.tpl.php                        # Template liste tags
+        │   │
+        │   ├── dashboard.tpl.php                       # Template tableau de bord
+        │   ├── card.tpl.php                            # Template général fiche
+        │   └── list.tpl.php                            # Template général liste
+        │
+        ├── abonnement/
+        │   ├── card.php                                # Fiche abonnement détaillée
+        │   ├── list.php                                # Liste des abonnements
+        │   ├── calendar.php                            # Vue calendaire des échéances
+        │   └── document.php                            # Documents liés aux abonnements
+        │
+        ├── client/
+        │   ├── card.php                                # Fiche client détaillée
+        │   ├── list.php                                # Liste des clients
+        │   ├── stats.php                               # Statistiques client
+        │   └── document.php                            # Documents liés aux clients
+        │
+        ├── communication/
+        │   ├── list.php                                # Liste des communications
+        │   ├── timeline.php                            # Timeline des communications
+        │   ├── mail.php                                # Interface gestion emails
+        │   └── templates.php                           # Modèles de communication
+        │
+        ├── dossier/
+        │   ├── card.php                                # Fiche dossier détaillé
+        │   ├── list.php                                # Liste des dossiers
+        │   ├── bdf.php                                 # Dossiers Banque de France
+        │   ├── fiscal.php                              # Dossiers Fiscaux
+        │   ├── caf.php                                 # Dossiers Sociaux (CAF/MSA)
+        │   ├── retraite.php                            # Dossiers Retraite
+        │   ├── document.php                            # Documents liés aux dossiers
+        │   ├── creancier.php                           # Gestion des créanciers
+        │   └── budget.php                              # Budgets prévisionnels
+        │
+        ├── intervenant/
+        │   ├── card.php                                # Fiche intervenant détaillée
+        │   ├── list.php                                # Liste des intervenants externes
+        │   └── stats.php                               # Statistiques des interactions
+        │
+        ├── prestation/
+        │   ├── card.php                                # Fiche prestation détaillée
+        │   ├── list.php                                # Liste des prestations
+        │   ├── stats.php                               # Statistiques des prestations
+        │   └── document.php                            # Documents liés aux prestations
+        │
+        ├── tache/
+        │   ├── card.php                                # Fiche tâche détaillée
+        │   ├── list.php                                # Liste des tâches
+        │   ├── kanban.php                              # Vue Kanban des tâches
+        │   ├── calendar.php                            # Vue calendrier des tâches
+        │   └── temps.php                               # Gestion du temps passé
+        │
+        ├── abonnements.php                             # Liste des abonnements (accueil)
+        ├── clients.php                                 # Liste des clients (accueil)
+        ├── dossiers.php                                # Liste des dossiers (accueil)
+        ├── index.php                                   # Tableau de bord principal
+        ├── intervenants.php                            # Liste des intervenants (accueil)
+        ├── prestations.php                             # Liste des prestations (accueil)
+        ├── taches.php                                  # Liste des tâches (accueil)
+        ├── tags.php                                    # Gestion des tags (accueil)
+        │
+        ├── changelog.md                                # Journal des modifications
+        ├── COPYING                                     # Licence du module
+        ├── ChangeLog.md                                # Historique des versions
+        ├── README.md                                   # Documentation du module
+        └── setup.php                                   # Script d'installation
+
+#### 2.1.2 Fichiers PHP principaux (Pages)
+
+##### Pages de premier niveau
+- `index.php` - Tableau de bord principal du module
+- `clients.php` - Liste des clients
+- `prestations.php` - Liste des prestations/services
+- `dossiers.php` - Liste des dossiers particuliers
+- `taches.php` - Liste des tâches
+- `abonnements.php` - Liste des abonnements
+- `intervenants.php` - Liste des intervenants externes
+- `tags.php` - Gestion des tags
+
+##### Pages Clients
+- `client/card.php` - Fiche client détaillée
+- `client/list.php` - Liste des clients (alternative à clients.php)
+- `client/stats.php` - Statistiques client
+- `client/document.php` - Documents liés aux clients
+
+##### Pages Prestations
+- `prestation/card.php` - Fiche prestation détaillée
+- `prestation/list.php` - Liste des prestations
+- `prestation/stats.php` - Statistiques des prestations
+- `prestation/document.php` - Documents liés aux prestations
+
+##### Pages Dossiers Particuliers
+- `dossier/card.php` - Fiche dossier détaillé
+- `dossier/list.php` - Liste des dossiers
+- `dossier/bdf.php` - Dossiers Banque de France
+- `dossier/fiscal.php` - Dossiers Fiscaux
+- `dossier/caf.php` - Dossiers Sociaux (CAF/MSA)
+- `dossier/retraite.php` - Dossiers Retraite
+- `dossier/document.php` - Documents liés aux dossiers
+- `dossier/creancier.php` - Gestion des créanciers
+- `dossier/budget.php` - Budgets prévisionnels
+
+##### Pages Tâches
+- `tache/card.php` - Fiche tâche détaillée
+- `tache/list.php` - Liste des tâches
+- `tache/kanban.php` - Vue Kanban des tâches
+- `tache/calendar.php` - Vue calendrier des tâches
+- `tache/temps.php` - Gestion du temps passé
+
+##### Pages Abonnements
+- `abonnement/card.php` - Fiche abonnement détaillée
+- `abonnement/list.php` - Liste des abonnements
+- `abonnement/calendar.php` - Vue calendaire des échéances
+- `abonnement/document.php` - Documents liés aux abonnements
+
+##### Pages Intervenants Externes
+- `intervenant/card.php` - Fiche intervenant détaillée
+- `intervenant/list.php` - Liste des intervenants externes
+- `intervenant/stats.php` - Statistiques des interactions
+
+##### Pages Communications
+- `communication/list.php` - Liste des communications
+- `communication/timeline.php` - Timeline des communications
+- `communication/mail.php` - Interface de gestion des emails
+- `communication/templates.php` - Modèles de communication
+
+##### Pages d'Administration
+- `admin/setup.php` - Configuration générale du module
+- `admin/about.php` - À propos du module
+- `admin/dynamicfields.php` - Configuration des champs dynamiques
+- `admin/workflows.php` - Configuration des workflows
+- `admin/templates.php` - Gestion des modèles de documents
+- `admin/tagsetup.php` - Configuration des tags
+- `admin/permissions.php` - Gestion des permissions
+- `admin/integration.php` - Configuration des intégrations
+- `admin/audit.php` - Journal des actions
+
+#### 2.1.3 Fichiers JavaScript
+
+##### Scripts principaux
+- `js/esaiko.js` - Fonctions communes du module
+- `js/dashboard.js` - Scripts pour le tableau de bord
+- `js/charts.js` - Graphiques et visualisations
+
+##### Scripts spécifiques par module
+- `js/client.js` - Scripts spécifiques clients
+- `js/prestation.js` - Scripts spécifiques prestations
+- `js/dossier.js` - Scripts spécifiques dossiers
+- `js/tache.js` - Scripts spécifiques tâches
+- `js/abonnement.js` - Scripts spécifiques abonnements
+- `js/communication.js` - Scripts communications
+- `js/tag.js` - Gestion des tags
+
+##### Scripts pour fonctionnalités transversales
+- `js/dynamic-fields/engine.js` - Moteur pour champs dynamiques
+- `js/dynamic-fields/admin.js` - Interface admin champs dynamiques
+- `js/timeline/main.js` - Gestion des timelines
+- `js/kanban/board.js` - Gestion des tableaux Kanban
+- `js/document-manager.js` - Gestionnaire de documents
+- `js/tag-manager.js` - Gestion des tags
+- `js/esaiko-calendar.js` - Calendrier personnalisé
+- `js/notifications.js` - Système de notifications
+
+#### 2.1.4 Fichiers CSS
+
+##### Styles principaux
+- `css/esaiko.css` - Styles généraux du module
+- `css/esaiko-responsive.css` - Styles spécifiques responsive
+- `css/esaiko-colors.css` - Définition des couleurs et thèmes
+- `css/esaiko-icons.css` - Icônes personnalisées
+
+##### Styles par composant
+- `css/dashboard.css` - Styles du tableau de bord
+- `css/cards.css` - Styles des fiches détaillées
+- `css/lists.css` - Styles des listes
+- `css/kanban.css` - Styles des tableaux Kanban
+- `css/timeline.css` - Styles des timelines
+- `css/forms.css` - Styles des formulaires
+- `css/tags.css` - Styles des tags
+- `css/calendar.css` - Styles des calendriers
+- `css/notifications.css` - Styles des notifications
+
+#### 2.1.5 Fichiers de configuration
+
+##### Configuration module
+- `core/modules/modesaiko.php` - Descripteur principal du module
+- `core/modules/modESaikoClient.php` - Sous-module Client
+- `core/modules/modESaikoPrestation.php` - Sous-module Prestation
+- `core/modules/modESaikoDossier.php` - Sous-module Dossier
+- `core/modules/modESaikoTache.php` - Sous-module Tâche
+- `core/modules/modESaikoAbonnement.php` - Sous-module Abonnement
+
+##### Widgets dashboard
+- `core/boxes/esaiko_dashboard_box.php` - Widget tableau de bord
+- `core/boxes/esaiko_tasks_box.php` - Widget tâches
+- `core/boxes/esaiko_alerts_box.php` - Widget alertes
+
+##### Triggers
+- `core/triggers/interface_99_modesaiko_ESaikoWorkflow.php` - Déclencheurs de workflow
+
+#### 2.1.6 Templates et vues
+
+##### Templates principaux
+- `tpl/dashboard.tpl.php` - Template tableau de bord
+- `tpl/card.tpl.php` - Template de base des fiches
+- `tpl/list.tpl.php` - Template de base des listes
+
+##### Templates spécifiques
+- `tpl/client/` - Templates spécifiques clients
+- `tpl/prestation/` - Templates spécifiques prestations
+- `tpl/dossier/` - Templates spécifiques dossiers
+- `tpl/tache/` - Templates spécifiques tâches
+- `tpl/abonnement/` - Templates spécifiques abonnements
+- `tpl/communication/` - Templates communications
+- `tpl/intervenant/` - Templates intervenants
+- `tpl/tag/` - Templates gestion des tags
+
+#### 2.1.7 API REST
+
+##### Endpoints principaux
+- `api/index.php` - Point d'entrée principal API
+- `api/clients.php` - API clients
+- `api/prestations.php` - API prestations
+- `api/dossiers.php` - API dossiers
+- `api/taches.php` - API tâches
+- `api/abonnements.php` - API abonnements
+- `api/communications.php` - API communications
+- `api/documents.php` - API documents
+- `api/tags.php` - API tags
+
+##### Services API
+- `class/api/api_esaiko.class.php` - Classe API principale
+- `class/api/api_esaiko_clients.class.php` - API clients
+- `class/api/api_esaiko_prestations.class.php` - API prestations
+- `class/api/api_esaiko_dossiers.class.php` - API dossiers
+- `class/api/api_esaiko_taches.class.php` - API tâches
+- `class/api/api_esaiko_abonnements.class.php` - API abonnements
+
+#### 2.1.8 Classes business (Modèles)
+
+##### Classes principales
+- `class/esaikoclient.class.php` - Classe client
+- `class/esaikoprestation.class.php` - Classe prestation
+- `class/esaikodossier.class.php` - Classe dossier
+- `class/esaikotache.class.php` - Classe tâche
+- `class/esaikoabonnement.class.php` - Classe abonnement
+- `class/esaikocommunication.class.php` - Classe communication
+- `class/esaikointervenant.class.php` - Classe intervenant externe
+- `class/esaikotag.class.php` - Classe tag
+
+##### Classes spécifiques
+- `class/client/esaikoparticulier.class.php` - Classe particulier
+- `class/client/esaikoassociation.class.php` - Classe association
+- `class/client/esaikoenterprise.class.php` - Classe entreprise
+- `class/dossier/esaikocreancier.class.php` - Classe créancier
+- `class/dossier/esaikobudget.class.php` - Classe budget
+- `class/dossier/esaikostep.class.php` - Classe étape de workflow
+
+##### Classes utilitaires
+- `class/utils/esaikodynamicfield.class.php` - Gestion champs dynamiques
+- `class/utils/esaikoworkflow.class.php` - Gestion des workflows
+- `class/utils/esaikonotification.class.php` - Système de notifications
+- `class/utils/esaikomail.class.php` - Intégration emails
+- `class/utils/esaikodocument.class.php` - Gestion documentaire
+
+#### 2.1.9 Traductions
+
+- `langs/fr_FR/esaiko.lang` - Traduction française
+- `langs/en_US/esaiko.lang` - Traduction anglaise
+- `langs/fr_FR/esaikoclient.lang` - Traduction spécifique client
+- `langs/fr_FR/esaikoprestation.lang` - Traduction spécifique prestation
+- `langs/fr_FR/esaikodossier.lang` - Traduction spécifique dossier
+- `langs/fr_FR/esaikotache.lang` - Traduction spécifique tâche
+- `langs/fr_FR/esaikoabonnement.lang` - Traduction spécifique abonnement
 
 ### 2.3 Sécurité
 - Authentification à double facteur (Google Authenticator)
