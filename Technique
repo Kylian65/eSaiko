@@ -1,0 +1,1649 @@
+# Document Technique Détaillé - Module ESaiko pour Dolibarr v21
+
+**Date de rédaction:** 2025-05-19  
+**Dernière mise à jour:** 2025-05-19 11:38:31  
+**Auteur:** GitHub Copilot  
+**Client:** ESaiko (Kylian65)  
+**Version:** 1.3
+
+## Table des matières
+1. [Vue d'ensemble du module](#1-vue-densemble-du-module)
+2. [Architecture technique](#2-architecture-technique)
+3. [Structure détaillée des interfaces](#3-structure-détaillée-des-interfaces)
+4. [Systèmes transversaux](#4-systèmes-transversaux)
+5. [Structure des données](#5-structure-des-données)
+6. [Intégrations](#6-intégrations)
+7. [Roadmap de développement](#7-roadmap-de-développement)
+8. [Spécifications techniques](#8-spécifications-techniques)
+
+---
+
+## 1. Vue d'ensemble du module
+
+### 1.1 Objectif du module
+Le module ESaiko est conçu pour gérer de manière complète les services d'accompagnement administratif pour trois types de clients principaux: particuliers, associations et entreprises. Il permet le suivi des dossiers, la gestion des tâches, le stockage documentaire et offre une vision client à 360°. Le module vise spécifiquement l'optimisation du temps de traitement des dossiers et l'amélioration de la qualité du suivi pour chaque client, avec une attention particulière à la traçabilité des échanges avec les intervenants externes (partenaires, administrations).
+
+### 1.2 Modules principaux
+Le module ESaiko se compose de 5 sous-modules interconnectés:
+
+#### 1.2.1 Module Client 360°
+- Vue consolidée de toutes les informations client
+- Indicateurs d'activité et alertes
+  * Dernier contact ESaiko
+  * Prochaine échéance dossier critique
+  * Nombre de documents manquants pour dossier X
+  * Statut des réponses partenaires
+- Timeline interactive des interactions
+  * Filtrage par type (Email, Appel, RDV, Note interne, Communication avec partenaire externe)
+- Préférences de communication et contraintes d'accessibilité
+- Informations financières essentielles pour les particuliers
+  * Synthèse des revenus et charges principaux
+  * Capacité de remboursement estimée (si dossier de surendettement)
+  * Aperçu des abonnements et de leur poids budgétaire
+- Mandats et autorisations accordés par le client
+
+#### 1.2.2 Module Gestion des Services/Prestations
+- Suivi des prestations en cours
+- Gestion du cycle de vie des services
+- Suivi de la facturation
+- Vue multi-dossiers par client
+
+#### 1.2.3 Module Dossiers Particuliers
+- Gestion spécifique des dossiers d'accompagnement des particuliers
+- Workflows adaptés par type de procédure (Banque de France, CAF, etc.)
+  * Intégration d'étapes de "Validation par le client"
+  * "Transmission au partenaire X"
+  * "Attente réponse partenaire Y"
+- Suivi budgétaire et financier
+- Gestion des créanciers et des négociations
+  * Traçabilité de chaque étape de négociation
+  * Propositions faites/reçues
+  * Accords conclus
+  * Contacts spécifiques chez chaque créancier
+- Gestion des Intervenants Externes/Partenaires par Dossier
+  * Centralisation et suivi des informations et interactions avec tous les tiers impliqués
+  * Exemples de partenaires: Travailleurs sociaux, Conseillers Banque de France, Gestionnaires CAF/Pôle Emploi, Avocats, Huissiers, Notaires, Médecins (pour dossiers MDPH)
+  * Informations collectées par partenaire/intervenant:
+    * Nom de l'organisme/structure partenaire
+    * Contact principal au sein de l'organisme pour ce dossier
+    * Coordonnées directes
+    * Référence du dossier chez le partenaire
+    * Rôle du partenaire dans le dossier
+    * Historique des communications spécifiques
+    * Documents échangés
+    * Prochaines actions attendues
+
+#### 1.2.4 Module Tâches et Suivi Opérationnel
+- Découpage des prestations en tâches actionnables
+- Assignation et suivi
+- Remontée du temps passé
+- Checklists intégrées
+  * Dynamiques et adaptatives selon le type de dossier et l'étape du workflow
+  * Spécifiques à chaque procédure (ex: checklist pour "Dépôt dossier Banque de France" vs "Demande APL")
+
+#### 1.2.5 Module Abonnements
+- Gestion des abonnements clients
+- Vue calendaire des échéances
+- Analyse budgétaire par catégorie
+- Potentiel d'optimisation
+
+### 1.3 Intégration avec les modules natifs Dolibarr
+- Tiers (Clients)
+- Projets/Tâches
+- Service
+- Factures
+- Agenda
+- GED
+- Notes
+- Contrats
+- Tickets
+- Produits/Services
+- Propositions commerciales/Commandes
+- Banque
+- Notes de frais
+- Feuilles de temps
+
+---
+
+## 2. Architecture technique
+
+### 2.1 Architecture globale
+Le module ESaiko respecte l'architecture MVC (Modèle-Vue-Contrôleur) de Dolibarr avec:
+- **Modèles**: Gestion des accès aux données
+- **Vues**: Templates d'affichage
+- **Contrôleurs**: Logique métier et traitements
+
+### 2.2 Structure des répertoires
+```
+htdocs/
+└── custom/
+    └── esaiko/
+        ├── admin/                  # Configuration du module
+        ├── class/                  # Classes PHP (objets métier)
+        ├── core/
+        │   ├── modules/            # Descripteur du module
+        │   ├── triggers/           # Triggers d'événements
+        │   └── boxes/              # Widgets pour dashboard
+        ├── css/                    # Styles spécifiques
+        ├── img/                    # Images du module
+        ├── js/                     # Scripts JavaScript
+        │   └── dynamic-fields/     # Gestion des champs dynamiques
+        ├── langs/                  # Traductions
+        │   ├── fr_FR/
+        │   └── en_US/
+        ├── sql/                    # Scripts de création/mise à jour DB
+        │   ├── llx_esaiko_*.key.sql
+        │   ├── llx_esaiko_*.sql
+        │   └── data/               # Données initiales
+        ├── tpl/                    # Templates
+        ├── api/                    # API REST
+        └── lib/                    # Bibliothèques tierces
+```
+
+### 2.3 Sécurité
+- Authentification à double facteur (Google Authenticator)
+- Chiffrement des données sensibles (AES-256)
+  * Champs spécifiquement chiffrés:
+    * NIR (numéro de sécurité sociale)
+    * Identifiants CAF/Pôle Emploi
+    * Numéro fiscal
+    * Détails bancaires
+    * Mots de passe d'espaces clients (si stockés)
+    * Informations médicales sensibles
+- Système de permissions granulaires
+  * Définies par rôle utilisateur
+  * Par type de dossier
+  * Par niveau de sensibilité d'un dossier spécifique
+  * Restriction d'accès pour dossiers "Haute Confidentialité"
+- Journal d'audit complet
+  * Traçabilité des modifications de données
+  * Traçabilité des consultations de dossiers/documents sensibles
+  * Horodatage et identification utilisateur
+- Protection CSRF sur tous les formulaires
+- Validation des entrées utilisateur
+- Niveaux de confidentialité pour les documents
+
+### 2.4 Responsive design
+- Framework CSS adaptatif
+- Grille flexible
+- Media queries pour différentes tailles d'écran
+- Optimisation pour tactile sur mobile/tablette
+- Approche "Mobile First"
+- Design cohérent sur tous les appareils
+
+---
+
+## 3. Structure détaillée des interfaces
+
+### 3.1 Menu principal ESaiko
+- Tableau de bord
+- Clients
+- Prestations
+- Dossiers Particuliers
+  * Tous les dossiers
+  * Dossiers Banque de France
+  * Dossiers Fiscaux
+  * Dossiers Sociaux (CAF/MSA)
+  * Dossiers Retraite
+  * Intervenants Externes/Partenaires
+  * Paramètres des dossiers
+- Tâches
+- Abonnements
+- Configuration
+
+### 3.2 Tableau de bord ESaiko
+#### 3.2.1 Fonctionnalités
+- Vue globale de l'activité
+- KPIs principaux
+- Alertes et notifications
+- Actions rapides
+- Nuage de tags avec filtrage rapide
+
+#### 3.2.2 Widgets configurables
+- Prestations en cours
+- Tâches à réaliser aujourd'hui
+- Rendez-vous à venir
+- Alertes échéances
+- Top clients actifs
+- Performances (temps passé vs facturé)
+- Communications récentes importantes
+- Dossiers particuliers prioritaires
+- Tâches en attente de réponse de partenaires externes
+- Dossiers bloqués par un tiers
+
+### 3.3 Module Client 360°
+
+#### 3.3.1 Liste des clients
+**Fonctionnalités:**
+- Filtrage avancé par type, statut, activité, tags
+- Vue liste/carte
+- Export des données
+- Actions groupées
+- Tags visuels personnalisables
+
+**Champs affichés:**
+- Type de client (particulier, association, entreprise)
+- Nom/Raison sociale
+- Statut de la relation
+- Contact principal
+- Préférence de communication
+- Dernière interaction
+- Nombre de prestations actives
+- Alertes actives
+- Tags associés
+- Référent principal ESaiko
+
+#### 3.3.2 Fiche client 360°
+**Onglets:**
+1. **Synthèse**
+   - Informations générales (coordonnées, type, etc.)
+   - Préférences de communication et disponibilités
+   - Contraintes d'accessibilité
+   - Indicateurs d'activité
+   - Alertes actives
+   - Timeline des interactions récentes
+   - Documents importants
+   - Tags associés
+   - Section "Mandats et Autorisations"
+     * Type de mandat signé (Mandat de gestion administrative, Mandat de représentation, etc.)
+     * Date de signature et d'échéance
+     * Lien vers le document de mandat numérisé
+     * Périmètre exact des autorisations accordées
+
+2. **Informations détaillées**
+   - Informations spécifiques par type de client (champs dynamiques)
+   - Pour particuliers: situation bancaire, taux d'endettement, projets personnels
+   - Contacts associés
+   - Paramètres de facturation
+   - Historique de la relation
+   - Notes et commentaires
+   - Référent principal ESaiko
+
+3. **Prestations**
+   - Liste des prestations en cours
+   - Historique des prestations terminées
+   - Indicateurs de performance par prestation
+   - Facturation associée
+
+4. **Dossiers** (pour particuliers)
+   - Liste des dossiers d'accompagnement spécifiques
+   - Statut et progression de chaque dossier
+   - Prochain intervenant clé (interne ESaiko ou partenaire externe)
+   - Prochaine action majeure pour chaque dossier
+   - Accès rapide au détail des dossiers
+
+5. **Abonnements**
+   - Vue des abonnements actifs
+   - Calendrier des échéances
+   - Analyse des coûts
+   - Historique des optimisations
+
+6. **Documents**
+   - GED intégrée
+   - Classification par catégorie et niveau de sensibilité
+   - Versioning des documents
+   - Workflow de validation multi-niveau
+   - Dernière vérification des documents
+
+7. **Communications**
+   - Historique unifié des échanges
+   - Emails archivés via IMAP
+   - Comptes-rendus de rendez-vous
+   - Appels téléphoniques
+   - Préférences de communication
+   - Planification de communications futures
+
+8. **Facturation**
+   - Synthèse des factures
+   - État des paiements
+   - Devis en cours
+   - Analyses financières
+
+### 3.4 Module Gestion des Services/Prestations
+
+#### 3.4.1 Liste des prestations
+**Fonctionnalités:**
+- Filtrage par client, statut, responsable, tags
+- Vue Kanban par statut
+- Indicateurs visuels de progression
+- Alertes sur retards
+- Tags visuels personnalisables
+
+**Champs affichés:**
+- Client
+- Type de prestation
+- Statut
+- Dates début/fin
+- Responsable
+- Progression
+- Facturé/À facturer
+- Alertes
+- Tags associés
+
+#### 3.4.2 Fiche prestation
+**Onglets:**
+1. **Résumé**
+   - Informations générales
+   - Progression globale
+   - Client et contacts
+   - Équipe affectée
+   - Dates clés
+   - Statut financier
+   - Tags associés
+
+2. **Description et périmètre**
+   - Description détaillée
+   - Objectifs
+   - Livrables attendus
+   - Contraintes spécifiques
+   - Conditions particulières
+   - Champs dynamiques selon type de prestation
+
+3. **Planning & Tâches**
+   - Découpage en tâches
+   - Diagramme de Gantt
+   - Assignation des responsabilités
+   - Suivi de l'avancement
+
+4. **Temps & Budget**
+   - Temps prévu vs passé
+   - Budget initial vs consommé
+   - Historique des saisies de temps
+   - Alertes dépassement
+
+5. **Documents**
+   - Documents liés à la prestation
+   - Templates spécifiques
+   - Workflow de validation
+   - Partage avec le client
+   - Niveau de sensibilité des documents
+
+6. **Communications**
+   - Timeline unifiée des échanges liés à la prestation
+   - Historique des points de suivi
+   - Questions en attente
+   - Points de blocage
+   - Modèles de communication par étape
+
+7. **Facturation**
+   - État de facturation
+   - Historique des factures
+   - Éléments à facturer
+   - Règlements associés
+
+### 3.5 Module Dossiers Particuliers
+
+#### 3.5.1 Liste des dossiers particuliers
+**Fonctionnalités:**
+- Filtrage multi-critères par type, statut, référent, tags
+- Vue tableau détaillée
+- Vue Kanban par statut
+- Export et impression des données
+- Actions groupées
+- Tags visuels personnalisables
+
+**Champs affichés:**
+- Référence dossier (ex: BDF-2025-042)
+- Client (Nom, prénom)
+- Type de dossier
+- Statut actuel avec code couleur
+- Date d'ouverture
+- Échéance principale
+- Progression (%)
+- Alerte (icône si action urgente requise)
+- Tags associés
+- Niveau d'urgence et confidentialité
+- Actions rapides
+
+#### 3.5.2 Fiche dossier particulier
+**En-tête:**
+- Référence du dossier
+- Client concerné (avec lien vers sa fiche)
+- Type de dossier (avec badge visuel)
+- Statut actuel (avec timeline visuelle du workflow)
+- Dates clés (ouverture, échéance)
+- Référent et intervenants du dossier
+- Tags associés
+- Niveau de Sensibilité/Confidentialité du Dossier (Normal, Élevé, Très Élevé) avec code couleur
+- Boutons d'actions contextuelles
+
+**Onglets:**
+1. **Synthèse**
+   - Résumé du dossier et objectif
+   - État d'avancement global
+   - Prochaines étapes critiques
+   - Alertes et points de vigilance
+   - Indicateurs clés spécifiques au type de dossier
+   - Tags associés
+
+2. **Situation du Client**
+   - Synthèse de la situation financière
+   - Revenus et charges mensuels
+   - Patrimoine
+   - Niveau d'endettement
+   - Historique bancaire pertinent
+   - Facteurs de fragilité identifiés
+   - Champs dynamiques adaptés au type de dossier
+
+3. **Procédure**
+   - Workflow détaillé de la procédure spécifique
+   - Étape actuelle avec historique des transitions
+   - Calendrier des échéances procédurales
+   - Points de vigilance par étape
+   - Visualisation claire des étapes dépendant d'un partenaire externe
+   - Statut de ces dépendances externes
+
+4. **Intervenants Externes & Partenaires**
+   - Liste des organismes/personnes externes impliqués spécifiquement dans ce dossier
+   - Pour chaque intervenant externe:
+     * Nom de l'organisme/structure
+     * Nom du contact spécifique pour ce dossier
+     * Coordonnées directes (Tél, Email)
+     * Référence du dossier chez cet intervenant
+     * Rôle/Nature de son intervention dans le dossier
+     * Date du dernier contact avec cet intervenant
+     * Prochaine action attendue de/vers cet intervenant
+     * Statut de la relation avec cet intervenant
+     * Notes spécifiques sur les échanges
+   - Lien rapide vers l'historique des communications avec cet intervenant
+   - Lien rapide vers les documents échangés avec cet intervenant
+
+5. **Documents**
+   - Checklist des documents requis avec statut
+   - Colonne "Fourni par" (Client, ESaiko, Partenaire X)
+   - Colonne "Transmis à" (Organisme Y, Partenaire Z)
+   - Visualisation des documents par catégorie
+   - Interface d'upload direct
+   - Niveau de sensibilité des documents
+   - Validation multi-niveau (préparé, vérifié, approuvé)
+
+6. **Communications**
+   - Timeline unifiée de tous les échanges
+   - Filtrage par type (email, téléphone, courrier, rendez-vous)
+   - Filtrage par intervenant (client, partenaire spécifique)
+   - Modèles de communication spécifiques à la procédure
+   - Indicateurs de suivi (attente de réponse, à relancer)
+   - Création de communication directement depuis l'interface
+   - Liaison explicite d'une communication à un intervenant externe spécifique
+
+7. **Créanciers** (spécifique aux dossiers Banque de France)
+   - Liste des créanciers avec détails complets
+   - Tableau récapitulatif de l'endettement global
+   - Capacité de remboursement calculée
+   - Statut des négociations
+   - Champs conditionnels selon type de dette
+   - Historique détaillé des propositions et contre-propositions
+
+8. **Budget Prévisionnel**
+   - Plan de redressement proposé
+   - Simulation des solutions (PRP, moratoire, rééchelonnement)
+   - Impact sur le budget mensuel du client
+   - Calendrier des remboursements prévus
+   - Graphiques comparatifs
+
+9. **Tâches**
+   - Liste des tâches spécifiques au dossier
+   - Assignation et échéances
+   - Dépendances entre tâches
+   - Suivi du temps passé par intervenant
+
+10. **Facturation**
+    - Services facturables liés au dossier
+    - État des règlements
+    - Documents de facturation
+
+11. **Notes**
+    - Notes internes sur le dossier
+    - Observations confidentielles
+    - Points à approfondir
+
+### 3.6 Module Tâches et Suivi Opérationnel
+
+#### 3.6.1 Vue d'ensemble des tâches
+**Fonctionnalités:**
+- Tableau Kanban configurable
+- Vue calendaire
+- Vue liste avec filtres avancés
+- Saisie rapide du temps passé
+- Filtrage par tags
+
+**Modes d'affichage:**
+- Par responsable
+- Par prestation/dossier
+- Par priorité
+- Par échéance
+- Par tags
+- Par partenaire externe concerné
+
+#### 3.6.2 Fiche tâche
+**Onglets:**
+1. **Détails**
+   - Description
+   - Instructions
+   - Checklist d'actions
+   - Priorité et tags
+   - Dates début/échéance
+   - Contexte (prestation ou dossier lié)
+   - Intervenant externe concerné (si applicable)
+
+2. **Suivi**
+   - Progression
+   - Commentaires
+   - Points de blocage
+   - Historique des modifications
+   - Tags associés
+
+3. **Temps**
+   - Temps estimé
+   - Temps passé (détail)
+   - Saisie rapide
+   - Facturable/non facturable
+   - Complexité de l'intervention
+   - Niveau de stress du client
+
+4. **Documents**
+   - Fichiers liés
+   - Références externes
+   - Modèles applicables
+
+5. **Communications**
+   - Communications liées à la tâche
+   - Modèles de communication contextuelle
+   - Historique des notifications
+
+### 3.7 Module Abonnements
+
+#### 3.7.1 Liste des abonnements
+**Fonctionnalités:**
+- Filtrage par client, catégorie, fournisseur, tags
+- Vue calendaire des échéances
+- Alertes de renouvellement
+- Analyse comparative
+- Export des données
+
+**Champs affichés:**
+- Client
+- Service/Produit
+- Fournisseur
+- Montant
+- Fréquence
+- Prochaine échéance
+- Statut
+- Potentiel d'optimisation
+- Tags associés
+
+#### 3.7.2 Fiche abonnement
+**Onglets:**
+1. **Informations générales**
+   - Client
+   - Service/Produit
+   - Fournisseur
+   - Dates de début/fin
+   - Conditions particulières
+   - Tags associés
+
+2. **Budget & Paiements**
+   - Montant
+   - Fréquence
+   - Historique des paiements
+   - Évolution tarifaire
+   - Méthode de paiement
+
+3. **Optimisation**
+   - Benchmark
+   - Potentiel d'économie
+   - Alternatives identifiées
+   - Historique des actions d'optimisation
+   - Suggestions automatiques
+
+4. **Documents**
+   - Contrat
+   - Factures
+   - Correspondances
+   - Conditions générales
+   - Niveau de sensibilité des documents
+
+5. **Échéances**
+   - Calendrier des paiements
+   - Alertes programmées
+   - Dates clés (résiliation, renégociation)
+
+6. **Communications**
+   - Historique des échanges avec le fournisseur
+   - Modèles de courriers (résiliation, réclamation)
+   - Suivi des négociations
+
+---
+
+## 4. Systèmes transversaux
+
+### 4.1 Système de champs dynamiques et conditionnels
+
+#### 4.1.1 Concept et objectifs
+- Simplification des interfaces en n'affichant que les champs pertinents
+- Adaptation dynamique des formulaires selon le type de client/dossier
+- Réduction des erreurs de saisie
+- Évolutivité des interfaces sans modification du code
+
+#### 4.1.2 Mécanisme de fonctionnement
+- Définition de règles conditionnelles basées sur des déclencheurs
+- Affichage/masquage de champs individuels ou de groupes de champs
+- Modification dynamique des listes de valeurs
+- Validation contextuelle des données saisies
+
+#### 4.1.3 Exemples d'application
+- Adaptation par type de client (particulier, association, entreprise)
+- Adaptation par type de dossier (Banque de France, CAF, Fiscal)
+- Adaptation par étape dans les workflows
+- Champs conditionnels dans les formulaires de saisie
+- Conditions basées sur le statut d'un intervenant externe (ex: si "Accord Banque de France Reçu", afficher groupe de champs pour plan de redressement)
+
+#### 4.1.4 Interface d'administration
+- Éditeur graphique de champs dynamiques
+- Gestionnaire de conditions
+- Concepteur de formulaires
+- Tests de validation des règles
+
+### 4.2 Système de Tags/Étiquettes personnalisables
+
+#### 4.2.1 Concept et objectifs
+- Catégorisation flexible des éléments dans tout le module
+- Recherche et filtrage multi-critères facilités
+- Organisation adaptée aux méthodes de travail personnelles
+- Identification rapide des caractéristiques importantes
+
+#### 4.2.2 Fonctionnalités clés
+- Création et gestion des tags (avec couleurs et icônes)
+- Application sur tous les éléments du module
+- Filtrage universel par tags
+- Statistiques d'utilisation des tags
+
+#### 4.2.3 Cas d'utilisation
+- Tags de priorité ("Urgent", "Prioritaire")
+- Tags géographiques ("Tarbes", "Occitanie")
+- Tags qualitatifs ("Complexe", "VIP")
+- Tags temporels ("À traiter cette semaine", "Relance prévue")
+- Tags liés à des intervenants ("Expert-comptable M. X", "Assistante sociale Mme Y")
+
+### 4.3 Historique centralisé des communications
+
+#### 4.3.1 Concept et objectifs
+- Centralisation de toutes les communications par client/dossier
+- Traçabilité complète des échanges
+- Facilitation de la reprise de dossier entre collaborateurs
+- Analyse qualitative des communications
+
+#### 4.3.2 Sources intégrées
+- Emails (IMAP bidirectionnel)
+  * Liaison automatique aux dossiers ESaiko via références uniques dans l'objet
+  * Reconnaissance automatique des adresses email clients/partenaires
+  * Option de liaison manuelle facile
+- Appels téléphoniques
+- Courriers et documents
+- Rendez-vous (Agenda)
+- Messages internes
+
+#### 4.3.3 Fonctionnalités principales
+- Timeline chronologique unifiée
+- Filtres intelligents par canal et contenu
+- Filtres par intervenant (client, partenaire spécifique)
+- Actions contextuelles (réponse, suivi, tâche)
+- Modèles de communication
+- Indicateurs de qualité
+
+---
+
+## 5. Structure des données
+
+### 5.1 Tables principales
+
+#### 5.1.1 `llx_esaiko_client_info`
+Extension des données client de Dolibarr (llx_societe)
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_soc` | int(11) | Clé étrangère vers llx_societe |
+| `client_type` | varchar(20) | Type de client (particulier, association, entreprise, créateur) |
+| `preferred_contact_method` | varchar(20) | Méthode de contact préférée |
+| `contact_hours` | varchar(255) | Plages horaires de disponibilité |
+| `contact_urgency_level` | varchar(20) | Niveau d'urgence standard |
+| `accessibility_constraints` | text | Contraintes d'accessibilité |
+| `date_created` | datetime | Date de création |
+| `date_modified` | datetime | Date de dernière modification |
+| `bank_relation` | varchar(255) | Banque principale (pour particuliers) |
+| `health_insurance` | varchar(255) | Assurance maladie complémentaire |
+| `debt_ratio` | decimal(5,2) | Taux d'endettement (%) |
+| `personal_projects` | text | Projets personnels |
+| `fk_user_referent_principal` | int(11) | Gestionnaire principal du client |
+| `entity` | int(11) | Entité Dolibarr |
+| `import_key` | varchar(14) | Clé d'import |
+
+#### 5.1.2 `llx_esaiko_particulier`
+Données spécifiques aux clients particuliers
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_client_info` | int(11) | Clé étrangère vers llx_esaiko_client_info |
+| `ssn` | varchar(255) | Numéro de sécurité sociale (chiffré) |
+| `caf_id` | varchar(255) | Identifiant CAF/MSA (chiffré) |
+| `caf_type` | varchar(10) | Type d'organisme (CAF/MSA) |
+| `pole_emploi_id` | varchar(255) | Identifiant Pôle Emploi (chiffré) |
+| `fiscal_number` | varchar(255) | Numéro fiscal (chiffré) |
+| `household_adults` | int(11) | Nombre d'adultes au foyer |
+| `household_children` | int(11) | Nombre d'enfants à charge |
+| `household_income` | decimal(24,8) | Revenus totaux du foyer |
+| `marital_status` | varchar(20) | Situation familiale |
+| `marital_status_date` | date | Date du statut marital |
+| `matrimonial_regime` | varchar(50) | Régime matrimonial |
+| `spouse_name` | varchar(255) | Nom du conjoint |
+| `profession` | varchar(255) | Profession actuelle |
+| `employment_type` | varchar(50) | Type de contrat de travail |
+| `employer` | varchar(255) | Employeur actuel |
+| `job_start_date` | date | Date de début d'activité |
+
+#### 5.1.3 `llx_esaiko_particulier_budget_lines`
+Détail du budget du particulier
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_particulier` | int(11) | Lien vers llx_esaiko_particulier |
+| `type_revenu_charge` | varchar(50) | Type (revenu/charge) |
+| `category` | varchar(50) | Catégorie (salaire, allocation, loyer, etc.) |
+| `libelle` | varchar(255) | Description |
+| `montant_mensuel` | decimal(24,8) | Montant mensuel |
+| `periodicite` | varchar(50) | Périodicité (mensuel, trimestriel, etc.) |
+| `date_debut` | date | Date de début |
+| `date_fin` | date | Date de fin (si temporaire) |
+| `notes` | text | Commentaires |
+
+#### 5.1.4 `llx_esaiko_association`
+Données spécifiques aux associations
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_client_info` | int(11) | Clé étrangère vers llx_esaiko_client_info |
+| `rna_number` | varchar(20) | Numéro RNA |
+| `rna_date` | date | Date d'attribution RNA |
+| `jo_publication_date` | date | Date de publication au JO |
+| `jo_announcement_number` | varchar(50) | Numéro d'annonce JOAFE |
+| `jo_url` | varchar(255) | Lien publication en ligne |
+| `social_purpose` | text | Objet social |
+| `social_purpose_keywords` | varchar(255) | Mots-clés caractérisant l'objet |
+| `statutes_date` | date | Date de dernière version des statuts |
+| `internal_rules_date` | date | Date du règlement intérieur |
+
+#### 5.1.5 `llx_esaiko_enterprise`
+Données spécifiques aux entreprises
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_client_info` | int(11) | Clé étrangère vers llx_esaiko_client_info |
+| `legal_form` | varchar(50) | Forme juridique |
+| `creation_date` | date | Date de création/immatriculation |
+| `registration_office` | varchar(255) | Greffe d'immatriculation |
+| `share_capital` | decimal(24,8) | Capital social |
+| `released_capital` | decimal(24,8) | Montant libéré |
+| `shares_number` | int(11) | Nombre de parts/actions |
+| `share_value` | decimal(24,8) | Valeur nominale par part |
+| `employee_count` | int(11) | Effectif salarié |
+| `employee_count_date` | date | Date de l'information sur l'effectif |
+| `main_activity_details` | text | Secteur d'activité principal |
+| `activity_keywords` | varchar(255) | Mots-clés sectoriels |
+| `collective_agreement` | varchar(255) | Convention collective applicable |
+
+#### 5.1.6 `llx_esaiko_enterprise_creator`
+Données spécifiques aux créateurs d'entreprises
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_client_info` | int(11) | Clé étrangère vers llx_esaiko_client_info |
+| `project_name` | varchar(255) | Nom du projet d'entreprise |
+| `project_description` | text | Description détaillée du projet |
+| `project_summary` | varchar(255) | Résumé du projet |
+| `project_status` | varchar(50) | Stade d'avancement du projet |
+| `project_status_date` | date | Date de passage au stade actuel |
+| `next_major_step` | varchar(255) | Prochaine étape majeure prévue |
+| `legal_form_planned` | varchar(50) | Forme juridique envisagée |
+| `legal_form_motivation` | text | Motivations pour ce choix |
+
+#### 5.1.7 `llx_esaiko_service`
+Services et prestations
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `ref` | varchar(128) | Identifiant unique (ex: SERV-2025-05-001) |
+| `label` | varchar(255) | Libellé/Nom du service |
+| `description` | text | Description détaillée |
+| `fk_soc` | int(11) | Client (lien vers llx_societe) |
+| `fk_projet` | int(11) | Projet Dolibarr associé (lien vers llx_projet) |
+| `fk_user_resp` | int(11) | Responsable interne |
+| `date_creation` | datetime | Date de création |
+| `date_start` | date | Date de début |
+| `date_end_planned` | date | Date de fin prévue |
+| `date_end_real` | date | Date de fin réelle |
+| `status` | varchar(50) | Statut de la prestation |
+| `fk_category` | int(11) | Catégorie de service |
+| `fk_propal` | int(11) | Lien vers proposition commerciale |
+| `fk_commande` | int(11) | Lien vers commande client |
+| `pricing_mode` | varchar(50) | Modalités de tarification |
+| `fixed_amount` | double(24,8) | Montant forfaitaire HT |
+| `hourly_rate` | double(24,8) | Taux horaire HT |
+| `commission_base` | varchar(255) | Base de calcul de commission |
+| `commission_percent` | double(8,4) | Pourcentage de commission |
+| `subscription_amount` | double(24,8) | Montant de l'abonnement HT |
+| `time_planned` | double(24,8) | Temps prévu (heures) |
+| `time_spent` | double(24,8) | Temps réellement passé |
+| `progress` | int(11) | Progression (%) |
+| `note_private` | text | Note privée |
+| `note_public` | text | Note publique |
+| `entity` | int(11) | Entité Dolibarr |
+| `import_key` | varchar(14) | Clé d'import |
+
+#### 5.1.8 `llx_esaiko_task`
+Tâches opérationnelles
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `ref` | varchar(128) | Identifiant unique (ex: TASK-2025-05-00123) |
+| `label` | varchar(255) | Libellé/Description de la tâche |
+| `description` | text | Description détaillée |
+| `fk_service` | int(11) | Service parent (lien vers llx_esaiko_service) |
+| `fk_task_parent` | int(11) | Tâche parente (si sous-tâche) |
+| `fk_projet_task` | int(11) | Lien vers tâche Dolibarr (llx_projet_task) |
+| `fk_user_assign` | int(11) | Responsable de la tâche |
+| `date_creation` | datetime | Date de création |
+| `date_start` | datetime | Date de début |
+| `date_deadline` | datetime | Date d'échéance |
+| `date_end` | datetime | Date de fin réelle |
+| `priority` | varchar(20) | Priorité |
+| `status` | varchar(50) | Statut |
+| `progress` | int(11) | Progression (%) |
+| `planned_workload` | double(24,8) | Temps alloué (heures) |
+| `note_private` | text | Notes privées |
+| `blocked` | tinyint(4) | Tâche bloquée (0/1) |
+| `blocking_reason` | text | Raison du blocage |
+| `fk_external_intervenant_link` | int(11) | Lien vers intervenant externe concerné |
+| `entity` | int(11) | Entité Dolibarr |
+| `import_key` | varchar(14) | Clé d'import |
+
+#### 5.1.9 `llx_esaiko_task_checklist`
+Checklist d'actions pour les tâches
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_task` | int(11) | Tâche associée |
+| `label` | varchar(255) | Libellé de sous-tâche |
+| `done` | tinyint(4) | Statut (0: non fait, 1: fait) |
+| `position` | int(11) | Ordre d'affichage |
+| `date_creation` | datetime | Date de création |
+| `date_done` | datetime | Date de réalisation |
+| `fk_user_done` | int(11) | Utilisateur ayant réalisé |
+
+#### 5.1.10 `llx_esaiko_subscription`
+Abonnements gérés pour les clients
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `ref` | varchar(128) | Identifiant unique |
+| `label` | varchar(255) | Libellé de l'abonnement |
+| `description` | text | Description |
+| `fk_soc` | int(11) | Client concerné |
+| `fk_service` | int(11) | Service associé (si applicable) |
+| `provider_name` | varchar(255) | Nom du fournisseur |
+| `subscription_type` | varchar(50) | Type d'abonnement |
+| `category` | varchar(50) | Catégorie (énergie, telecom, etc.) |
+| `date_start` | date | Date de début |
+| `date_end` | date | Date de fin |
+| `renewal_type` | varchar(50) | Type de renouvellement |
+| `notice_period` | int(11) | Délai de préavis (jours) |
+| `amount` | double(24,8) | Montant HT |
+| `amount_ttc` | double(24,8) | Montant TTC |
+| `frequency` | varchar(50) | Fréquence de paiement |
+| `payment_method` | varchar(50) | Moyen de paiement |
+| `contract_ref` | varchar(255) | Référence contrat fournisseur |
+| `optimization_status` | varchar(50) | Statut d'optimisation |
+| `optimization_potential` | double(24,8) | Potentiel d'économie estimé |
+| `last_analyzed` | date | Date de dernière analyse |
+| `next_action_date` | date | Date prochaine action |
+| `next_action` | varchar(255) | Description prochaine action |
+| `entity` | int(11) | Entité Dolibarr |
+| `import_key` | varchar(14) | Clé d'import |
+
+#### 5.1.11 `llx_esaiko_communication`
+Journal des communications avec les clients
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_soc` | int(11) | Client concerné |
+| `fk_service` | int(11) | Service concerné (si applicable) |
+| `fk_task` | int(11) | Tâche concernée (si applicable) |
+| `fk_subscription` | int(11) | Abonnement concerné (si applicable) |
+| `fk_particular_case` | int(11) | Dossier particulier concerné (si applicable) |
+| `fk_external_intervenant_link` | int(11) | Lien vers intervenant externe concerné |
+| `fk_actioncomm` | int(11) | Lien vers événement agenda Dolibarr |
+| `communication_type` | varchar(50) | Type (email, téléphone, courrier, etc.) |
+| `communication_channel` | varchar(50) | Canal détaillé (email pro, mobile perso, etc.) |
+| `subject` | varchar(255) | Sujet/Titre |
+| `content` | text | Contenu de la communication |
+| `date_creation` | datetime | Date de la communication |
+| `fk_user_author` | int(11) | Utilisateur ayant réalisé la communication |
+| `direction` | varchar(10) | Direction (entrant/sortant) |
+| `status` | varchar(20) | Statut (envoyé, reçu, à traiter, etc.) |
+| `response_expected` | tinyint(4) | Attente de réponse (0/1) |
+| `response_deadline` | datetime | Date limite de réponse attendue |
+| `attachments` | text | Liste des pièces jointes (JSON) |
+| `sentiment` | varchar(20) | Tonalité de l'échange (positif, neutre, négatif) |
+| `follow_up_required` | tinyint(4) | Nécessite un suivi (0/1) |
+| `follow_up_date` | date | Date de suivi prévue |
+| `follow_up_comment` | text | Commentaire pour le suivi |
+| `privacy_level` | varchar(20) | Niveau de confidentialité |
+| `is_key_communication` | tinyint(4) | Communication clé pour le dossier (0/1) |
+| `entity` | int(11) | Entité Dolibarr |
+| `import_key` | varchar(14) | Clé d'import |
+
+#### 5.1.12 `llx_esaiko_particular_case`
+Dossiers d'accompagnement des particuliers
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `ref` | varchar(128) | Référence unique du dossier |
+| `label` | varchar(255) | Libellé du dossier |
+| `fk_soc` | int(11) | Client concerné |
+| `fk_particulier` | int(11) | Lien vers données particulier |
+| `case_type` | varchar(50) | Type de dossier (BDF, CAF, Fiscal, etc.) |
+| `description` | text | Description détaillée |
+| `objective` | text | Objectif du dossier |
+| `status` | varchar(50) | Statut actuel |
+| `fk_user_resp` | int(11) | Référent principal |
+| `date_creation` | datetime | Date de création |
+| `date_opening` | date | Date d'ouverture officielle |
+| `date_deadline` | date | Échéance principale |
+| `date_closing` | date | Date de clôture |
+| `progress` | int(11) | Progression globale (%) |
+| `complexity` | varchar(20) | Niveau de complexité |
+| `priority` | varchar(20) | Priorité |
+| `niveau_urgence_dossier` | varchar(20) | Niveau d'urgence |
+| `confidentialite_dossier` | varchar(20) | Niveau de confidentialité |
+| `success_rate` | int(11) | Taux de réussite estimé (%) |
+| `fk_service` | int(11) | Service/Prestation associé |
+| `note_private` | text | Notes privées |
+| `note_public` | text | Notes partageables |
+| `entity` | int(11) | Entité Dolibarr |
+| `import_key` | varchar(14) | Clé d'import |
+
+#### 5.1.13 `llx_esaiko_external_intervenant`
+Intervenants externes (partenaires)
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `nom_organisme` | varchar(255) | Nom de l'organisme/structure |
+| `nom_contact_principal` | varchar(255) | Nom du contact principal |
+| `fonction_contact` | varchar(255) | Fonction du contact |
+| `tel_direct` | varchar(50) | Téléphone direct |
+| `email_direct` | varchar(255) | Email direct |
+| `adresse_organisme` | text | Adresse postale complète |
+| `type_organisme` | varchar(100) | Type (Administration, Justice, Social, Juridique, Financier) |
+| `notes_generales_organisme` | text | Notes générales sur l'organisme |
+| `date_creation` | datetime | Date de création |
+| `date_modification` | datetime | Date de dernière modification |
+| `fk_user_creat` | int(11) | Utilisateur créateur |
+| `fk_user_modif` | int(11) | Utilisateur dernière modification |
+| `entity` | int(11) | Entité Dolibarr |
+
+### 5.2 Tables secondaires
+
+#### 5.2.1 `llx_esaiko_contact_hours`
+Plages horaires de disponibilité détaillées
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_client_info` | int(11) | Client concerné |
+| `day_of_week` | int(11) | Jour de la semaine (1-7) |
+| `time_start` | time | Heure de début |
+| `time_end` | time | Heure de fin |
+| `preferred` | tinyint(4) | Plage préférentielle (0/1) |
+
+#### 5.2.2 `llx_esaiko_household_member`
+Membres du foyer pour les particuliers
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_particulier` | int(11) | Particulier concerné |
+| `firstname` | varchar(255) | Prénom |
+| `birthdate` | date | Date de naissance |
+| `relationship` | varchar(50) | Relation (enfant, parent, etc.) |
+| `is_child` | tinyint(4) | Enfant à charge (0/1) |
+| `school_status` | varchar(50) | Scolarisé/Niveau d'étude |
+| `childcare_mode` | varchar(50) | Mode de garde (si applicable) |
+
+#### 5.2.3 `llx_esaiko_association_leader`
+Dirigeants des associations
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_association` | int(11) | Association concernée |
+| `fk_socpeople` | int(11) | Contact Dolibarr (lien vers llx_socpeople) |
+| `role` | varchar(50) | Rôle/Fonction |
+| `date_start` | date | Date de début du mandat |
+| `date_end` | date | Date de fin du mandat |
+| `specific_powers` | text | Pouvoirs spécifiques |
+
+#### 5.2.4 `llx_esaiko_document`
+Documents spécifiques ESaiko (extension GED)
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_ecm_files` | int(11) | Fichier GED Dolibarr |
+| `document_type` | varchar(50) | Type de document |
+| `sensitivity_level` | varchar(20) | Niveau de sensibilité |
+| `fk_soc` | int(11) | Client concerné |
+| `fk_service` | int(11) | Service concerné (si applicable) |
+| `fk_task` | int(11) | Tâche concernée (si applicable) |
+| `fk_subscription` | int(11) | Abonnement concerné (si applicable) |
+| `fk_particular_case` | int(11) | Dossier particulier concerné (si applicable) |
+| `provenance_document` | varchar(50) | Origine (Client, ESaiko, Partenaire X, Administration Y) |
+| `destinataire_document` | varchar(50) | Destinataire (Client, ESaiko, Partenaire X, Administration Y) |
+| `validation_status` | varchar(20) | Statut de validation |
+| `prepared_by` | int(11) | Préparé par (utilisateur) |
+| `verified_by` | int(11) | Vérifié par (utilisateur) |
+| `approved_by` | int(11) | Approuvé par (utilisateur) |
+| `validation_date` | datetime | Date de validation |
+| `expiry_date` | date | Date d'expiration |
+| `last_verification` | date | Date de dernière vérification |
+| `entity` | int(11) | Entité Dolibarr |
+| `import_key` | varchar(14) | Clé d'import |
+
+#### 5.2.5 `llx_esaiko_service_team`
+Équipe affectée à un service
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_service` | int(11) | Service concerné |
+| `fk_user` | int(11) | Utilisateur |
+| `role` | varchar(50) | Rôle (Principal, Contributeur) |
+| `date_assignment` | datetime | Date d'affectation |
+
+#### 5.2.6 `llx_esaiko_task_time`
+Temps passé sur les tâches (extension de llx_projet_task_time)
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_task` | int(11) | Tâche ESaiko |
+| `fk_projet_task_time` | int(11) | Lien vers temps Dolibarr |
+| `note` | text | Commentaire sur le temps passé |
+| `billable_status` | varchar(20) | Statut facturable |
+| `complexity` | varchar(20) | Complexité de l'intervention |
+| `client_stress` | varchar(20) | Niveau de stress du client |
+
+#### 5.2.7 `llx_esaiko_case_step`
+Étapes des dossiers particuliers
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_case` | int(11) | Dossier concerné |
+| `step_order` | int(11) | Ordre dans le workflow |
+| `label` | varchar(255) | Libellé de l'étape |
+| `description` | text | Description détaillée |
+| `status` | varchar(50) | Statut (à faire, en cours, terminé, etc.) |
+| `date_start` | datetime | Date de début |
+| `date_end` | datetime | Date de fin |
+| `required_docs` | text | Documents requis pour cette étape |
+| `fk_user_done` | int(11) | Utilisateur ayant réalisé l'étape |
+| `note` | text | Notes sur l'étape |
+| `depends_on_external` | tinyint(4) | Dépend d'un intervenant externe (0/1) |
+| `fk_external_intervenant_link` | int(11) | Lien vers intervenant externe concerné |
+
+#### 5.2.8 `llx_esaiko_case_creditor`
+Créanciers pour les dossiers Banque de France
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_case` | int(11) | Dossier concerné |
+| `name` | varchar(255) | Nom du créancier |
+| `contact_info` | text | Coordonnées complètes |
+| `debt_type` | varchar(50) | Type de dette |
+| `initial_amount` | double(24,8) | Montant initial |
+| `current_balance` | double(24,8) | Solde actuel |
+| `monthly_payment` | double(24,8) | Mensualité actuelle |
+| `interest_rate` | double(8,5) | Taux d'intérêt |
+| `start_date` | date | Date de début du crédit |
+| `end_date` | date | Date de fin prévue |
+| `negotiation_status` | varchar(50) | Statut de la négociation |
+| `proposed_solution` | text | Solution proposée |
+| `agreement_date` | date | Date d'accord |
+| `agreement_terms` | text | Termes de l'accord |
+| `fk_document` | int(11) | Document associé (contrat) |
+
+#### 5.2.9 `llx_esaiko_case_budget`
+Budgets pour les dossiers particuliers
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_case` | int(11) | Dossier concerné |
+| `budget_type` | varchar(50) | Type (actuel, proposé, etc.) |
+| `total_income` | double(24,8) | Revenus totaux |
+| `total_expenses` | double(24,8) | Charges totales |
+| `available_cash` | double(24,8) | Reste à vivre |
+| `calculation_date` | date | Date du calcul |
+| `details` | text | Détails du budget (JSON) |
+| `fk_user_author` | int(11) | Utilisateur ayant créé le budget |
+| `validated` | tinyint(4) | Budget validé (0/1) |
+| `validation_date` | datetime | Date de validation |
+| `fk_user_valid` | int(11) | Utilisateur ayant validé |
+
+#### 5.2.10 `llx_esaiko_dossier_intervenant_link`
+Liens entre dossiers particuliers et intervenants externes
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_particular_case` | int(11) | Dossier particulier concerné |
+| `fk_external_intervenant` | int(11) | Intervenant externe |
+| `nom_contact_dossier` | varchar(255) | Contact spécifique pour ce dossier |
+| `coordonnees_contact_dossier` | text | Coordonnées du contact |
+| `ref_dossier_chez_partenaire` | varchar(100) | Référence dossier chez le partenaire |
+| `role_partenaire_dans_dossier` | text | Rôle dans ce dossier spécifique |
+| `statut_interaction_partenaire` | varchar(100) | Statut de l'interaction |
+| `date_dernier_contact_partenaire` | date | Date du dernier contact |
+| `prochaine_action_partenaire_date` | date | Date de la prochaine action |
+| `prochaine_action_partenaire_desc` | text | Description de la prochaine action |
+| `notes_specifiques_interaction_dossier` | text | Notes spécifiques |
+| `date_creation` | datetime | Date de création |
+| `date_modification` | datetime | Date de dernière modification |
+| `fk_user_creat` | int(11) | Utilisateur créateur |
+| `fk_user_modif` | int(11) | Utilisateur dernière modification |
+| `entity` | int(11) | Entité Dolibarr |
+
+#### 5.2.11 `llx_esaiko_dynamic_field_config`
+Configuration des champs dynamiques
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `field_name` | varchar(128) | Identifiant technique du champ |
+| `entity_type` | varchar(50) | Type d'entité concernée (client, service, dossier, etc.) |
+| `field_label` | varchar(255) | Libellé d'affichage |
+| `field_type` | varchar(50) | Type de champ (texte, nombre, liste, etc.) |
+| `field_options` | text | Options JSON (valeurs de liste, min/max, etc.) |
+| `field_help` | text | Texte d'aide contextuelle |
+| `field_order` | int(11) | Ordre d'affichage |
+| `field_group` | varchar(50) | Groupe de champs (section) |
+| `required` | tinyint(4) | Champ obligatoire (0/1) |
+| `default_value` | text | Valeur par défaut |
+| `is_active` | tinyint(4) | Statut actif (0/1) |
+| `css_class` | varchar(255) | Classes CSS additionnelles |
+| `entity` | int(11) | Entité Dolibarr |
+
+#### 5.2.12 `llx_esaiko_dynamic_field_condition`
+Conditions pour les champs dynamiques
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_field_config` | int(11) | Champ concerné |
+| `condition_group` | varchar(50) | Groupe de conditions (AND) |
+| `trigger_field` | varchar(128) | Champ déclencheur |
+| `operator` | varchar(20) | Opérateur (=, !=, >, <, in, not_in, contains) |
+| `trigger_value` | text | Valeur de comparaison |
+| `action` | varchar(20) | Action (show, hide, require, optional) |
+| `condition_order` | int(11) | Ordre d'évaluation |
+
+#### 5.2.13 `llx_esaiko_field_group`
+Groupes de champs
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `group_code` | varchar(50) | Code technique du groupe |
+| `entity_type` | varchar(50) | Type d'entité concernée |
+| `label` | varchar(255) | Libellé du groupe |
+| `description` | text | Description détaillée |
+| `display_order` | int(11) | Ordre d'affichage |
+| `is_collapsible` | tinyint(4) | Groupe repliable (0/1) |
+| `default_state` | varchar(20) | État initial (expanded/collapsed) |
+| `icon` | varchar(50) | Icône représentative |
+| `css_class` | varchar(255) | Classes CSS additionnelles |
+| `is_active` | tinyint(4) | Statut actif (0/1) |
+| `entity` | int(11) | Entité Dolibarr |
+
+#### 5.2.14 `llx_esaiko_field_group_condition`
+Conditions d'affichage pour les groupes de champs
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_field_group` | int(11) | Groupe de champs concerné |
+| `condition_group` | varchar(50) | Groupe de conditions (AND) |
+| `trigger_field` | varchar(128) | Champ déclencheur |
+| `operator` | varchar(20) | Opérateur (=, !=, >, <, in, not_in, contains) |
+| `trigger_value` | text | Valeur de comparaison |
+| `action` | varchar(20) | Action (show, hide) |
+| `condition_order` | int(11) | Ordre d'évaluation |
+
+#### 5.2.15 `llx_esaiko_tag`
+Tags/étiquettes personnalisables
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `label` | varchar(128) | Libellé du tag |
+| `description` | varchar(255) | Description optionnelle |
+| `color` | varchar(20) | Code couleur (HEX ou nom prédéfini) |
+| `icon` | varchar(50) | Icône associée (bibliothèque Font Awesome) |
+| `fk_user_author` | int(11) | Créateur du tag |
+| `date_creation` | datetime | Date de création |
+| `active` | tinyint(4) | Statut actif (0/1) |
+| `visibility` | varchar(20) | Visibilité (personnel, équipe, global) |
+| `position` | int(11) | Ordre d'affichage |
+| `usage_count` | int(11) | Compteur d'utilisation |
+| `entity` | int(11) | Entité Dolibarr |
+
+#### 5.2.16 `llx_esaiko_tag_link`
+Liens entre tags et éléments
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_tag` | int(11) | Référence vers le tag |
+| `element_type` | varchar(50) | Type d'élément (client, dossier, tâche, document, etc.) |
+| `element_id` | int(11) | ID de l'élément tagué |
+| `fk_user_author` | int(11) | Utilisateur ayant appliqué le tag |
+| `date_creation` | datetime | Date d'application du tag |
+| `comment` | varchar(255) | Commentaire optionnel sur le tag dans ce contexte |
+| `entity` | int(11) | Entité Dolibarr |
+
+#### 5.2.17 `llx_esaiko_mandate`
+Mandats et autorisations accordés par les clients
+
+| Nom du champ | Type | Description |
+|--------------|------|-------------|
+| `rowid` | int(11) | Clé primaire |
+| `fk_soc` | int(11) | Client concerné |
+| `mandate_type` | varchar(50) | Type de mandat (gestion administrative, représentation, etc.) |
+| `label` | varchar(255) | Titre du mandat |
+| `description` | text | Description détaillée |
+| `date_signature` | date | Date de signature |
+| `date_start` | date | Date de début de validité |
+| `date_end` | date | Date de fin de validité |
+| `scope` | text | Périmètre des autorisations accordées |
+| `limitations` | text | Limitations ou restrictions spécifiques |
+| `fk_document` | int(11) | Document signé (lien vers GED) |
+| `status` | varchar(20) | Statut (brouillon, actif, expiré, révoqué) |
+| `date_creation` | datetime | Date de création |
+| `date_modification` | datetime | Date de dernière modification |
+| `fk_user_creat` | int(11) | Utilisateur créateur |
+| `fk_user_modif` | int(11) | Utilisateur dernière modification |
+| `entity` | int(11) | Entité Dolibarr |
+
+---
+
+## 6. Intégrations
+
+### 6.1 Intégration WordPress
+
+#### 6.1.1 Architecture
+- API REST bidirectionnelle
+- Authentification JWT
+- Plugin WordPress dédié
+
+#### 6.1.2 Endpoints API
+- `/clients` - Gestion des clients
+- `/services` - Gestion des prestations
+- `/tasks` - Gestion des tâches
+- `/subscriptions` - Gestion des abonnements
+- `/documents` - Gestion documentaire
+- `/communications` - Communications
+- `/cases` - Dossiers particuliers
+- `/external-intervenants` - Intervenants externes
+
+#### 6.1.3 Fonctionnalités du plugin WordPress
+- Authentification sécurisée
+- Portail client personnalisé
+- Espace documentaire
+- Suivi des prestations
+- Messagerie sécurisée avec ESaiko (liée au dossier)
+- Notifications
+  * Alertes pour documents en attente de validation
+  * Rappels d'échéances importantes
+  * Demandes d'informations complémentaires
+- Visualisation des dossiers en cours
+- Formulaires de saisie simplifiée pour certaines informations
+- Tableau de bord client
+
+### 6.2 Intégration Email IMAP
+
+#### 6.2.1 Configuration
+- Serveur IMAP
+- Authentification
+- Dossiers à surveiller
+- Fréquence de synchronisation
+- Gestion des pièces jointes
+
+#### 6.2.2 Fonctionnalités
+- Archivage automatique des emails par client/prestation/dossier
+- Classification automatique
+  * Par expéditeur/destinataire
+  * Par mots-clés dans l'objet ou le corps
+  * Par références dans l'objet ou le corps
+- Création de tâches depuis les emails
+- Suivi des réponses
+- Intégration à la timeline de communication
+- Alertes sur emails importants sans réponse
+
+### 6.3 Notifications Push
+
+#### 6.3.1 Architecture
+- Service Web Push
+- Intégration Firebase (option)
+- Configuration par utilisateur
+
+#### 6.3.2 Types de notifications
+- Échéances importantes
+- Tâches assignées
+- Documents à valider
+- Communications client
+- Alertes système
+- Modifications de statut des dossiers
+- Réponses de partenaires externes
+- Blocages dans un workflow
+
+#### 6.3.3 Canaux de notification
+- Navigateur (Web Push)
+- Email (alertes critiques)
+- Application mobile (via Firebase)
+- Tableau de bord Dolibarr (notifications internes)
+
+### 6.4 Intégration avec autres systèmes
+
+#### 6.4.1 Export/Import de données
+- Formats pris en charge: CSV, XML, JSON
+- Exports personnalisables
+- Import avec correspondance de champs
+- Validation des données importées
+
+#### 6.4.2 API publique
+- Documentation Swagger/OpenAPI
+- Authentification OAuth2/JWT
+- Limites de taux pour protéger le service
+- Journalisation des appels API
+
+---
+
+## 7. Roadmap de développement
+
+### 7.1 Phase 1: Fondations (4 semaines)
+- **Semaine 1-2:** Structure de base du module
+  * Mise en place de l'architecture
+  * Création des tables SQL principales
+  * Intégration du système d'authentification
+  * Tests unitaires de base
+
+- **Semaine 3-4:** Interface utilisateur de base
+  * Framework responsive
+  * Menus et navigation
+  * Dashboard principal
+  * Système de permissions
+
+### 7.2 Phase 2: Module Client 360° (4 semaines)
+- **Semaine 1:** Gestion des clients
+  * Liste des clients
+  * Filtres et recherche
+  * Import/Export
+
+- **Semaine 2:** Fiche client
+  * Structure des onglets
+  * Informations générales
+  * Préférences de communication
+
+- **Semaine 3:** Données spécifiques par type de client
+  * Particuliers
+  * Associations
+  * Entreprises
+  * Créateurs d'entreprise
+
+- **Semaine 4:** Timeline et indicateurs
+  * Timeline des interactions
+  * Indicateurs d'activité
+  * Alertes et notifications
+  * Tests d'intégration
+
+### 7.3 Phase 3: Module Services/Prestations (3 semaines)
+- **Semaine 1:** Structure de gestion des services
+  * Création/édition des prestations
+  * Catégorisation
+  * Workflow de statuts
+
+- **Semaine 2:** Suivi détaillé des prestations
+  * Description et périmètre
+  * Planning et progression
+  * Équipe et responsabilités
+
+- **Semaine 3:** Aspects financiers
+  * Modalités de tarification
+  * Suivi temps prévu/passé
+  * Lien avec la facturation
+  * Tests d'intégration
+
+### 7.4 Phase 4: Module Dossiers Particuliers et Intervenants Externes (5 semaines)
+- **Semaine 1:** Structure de base des dossiers
+  * Types de dossiers
+  * Workflows par type
+  * Liste et filtres
+
+- **Semaine 2:** Fiche dossier
+  * Interface complète
+  * Onglets spécifiques
+  * Champs dynamiques
+
+- **Semaine 3:** Intervenants externes
+  * Gestion des intervenants
+  * Lien avec les dossiers
+  * Suivi des interactions
+  * Interface dédiée
+
+- **Semaine 4:** Fonctionnalités spécialisées
+  * Budget et finances
+  * Gestion des créanciers
+  * Documents spécifiques
+
+- **Semaine 5:** Intégration et tests
+  * Liaison avec clients
+  * Liaison avec prestations
+  * Tests utilisateurs
+
+### 7.5 Phase 5: Module Tâches (3 semaines)
+- **Semaine 1:** Gestion des tâches
+  * Création/édition des tâches
+  * Assignation et suivi
+  * Vue Kanban
+
+- **Semaine 2:** Suivi opérationnel
+  * Checklists
+  * Saisie du temps
+  * Points de blocage
+
+- **Semaine 3:** Rapports et indicateurs
+  * Rapports de productivité
+  * Indicateurs de performance
+  * Tableaux de bord opérationnels
+  * Tests d'intégration
+
+### 7.6 Phase 6: Module Abonnements (3 semaines)
+- **Semaine 1:** Structure de gestion des abonnements
+  * Création/édition des abonnements
+  * Catégorisation
+  * Échéancier
+
+- **Semaine 2:** Analyse et optimisation
+  * Graphiques de répartition
+  * Outils de comparaison
+  * Détection d'optimisations
+
+- **Semaine 3:** Vue consolidée
+  * Tableau de bord abonnements
+  * Vue calendaire
+  * Alertes de renouvellement
+  * Tests d'intégration
+
+### 7.7 Phase 7: Systèmes transversaux (4 semaines)
+- **Semaine 1:** Champs dynamiques et conditionnels
+  * Framework JavaScript
+  * Configuration des champs
+  * Interface d'administration
+
+- **Semaine 2:** Système de tags
+  * Structure de données
+  * Interface de gestion
+  * Intégration dans les listes et fiches
+
+- **Semaine 3:** Historique de communications
+  * Timeline unifiée
+  * Intégration des sources
+  * Filtres et recherche
+
+- **Semaine 4:** Tests et optimisation
+  * Tests d'intégration
+  * Optimisation performance
+  * Retours utilisateurs
+
+### 7.8 Phase 8: Intégrations (4 semaines)
+- **Semaine 1-2:** API REST et WordPress
+  * Développement des endpoints
+  * Authentification sécurisée
+  * Plugin WordPress de base
+
+- **Semaine 3:** Intégration email IMAP
+  * Configuration du service
+  * Archivage automatique
+  * Classification des messages
+
+- **Semaine 4:** Notifications push
+  * Configuration du service
+  * Types de notifications
+  * Préférences utilisateur
+  * Tests d'intégration
+
+### 7.9 Phase 9: Tests et finalisation (3 semaines)
+- **Semaine 1:** Tests complets
+  * Tests unitaires
+  * Tests d'intégration
+  * Tests de charge
+  * Tests de sécurité
+
+- **Semaine 2:** Corrections et optimisations
+  * Corrections des bugs identifiés
+  * Optimisations de performance
+  * Améliorations UX suite aux retours
+
+- **Semaine 3:** Documentation et déploiement
+  * Documentation technique
+  * Documentation utilisateur
+  * Préparation du déploiement
+  * Formation utilisateurs
+
+### 7.10 Phase 10: Post-déploiement (continu)
+- Support technique
+- Corrections de bugs
+- Améliorations continues
+- Nouvelles fonctionnalités
+- Mises à jour pour compatibilité avec nouvelles versions de Dolibarr
+
+---
+
+## 8. Spécifications techniques
+
+### 8.1 Exigences système
+- PHP 8.0 ou supérieur
+- MySQL 5.7 ou supérieur / MariaDB 10.3 ou supérieur
+- Dolibarr 21.0.0 ou supérieur
+- Navigateurs modernes (Chrome, Firefox, Safari, Edge)
+- Hébergement mutualisé IONOS
+- HTTPS obligatoire
+- Extensions PHP requises:
+  * curl
+  * gd
+  * intl
+  * json
+  * mbstring
+  * mysql/mysqli
+  * openssl
+  * xml
+  * zip
+
+### 8.2 Performance
+- Temps de chargement des pages < 2 secondes
+- Optimisation des requêtes SQL avec indexation appropriée
+- Mise en cache des données fréquemment consultées
+- Pagination stricte des résultats volumineux
+- Chargement asynchrone pour les données non critiques
+- Compression des ressources (HTML, CSS, JS)
+- Optimisation des images
+
+### 8.3 Sécurité
+- Validation de toutes les entrées utilisateur
+- Protection contre les injections SQL
+- Protection CSRF
+- Chiffrement des données sensibles (AES-256)
+- Authentification à double facteur
+- Journalisation des actions sensibles
+- Sessions sécurisées (timeout, scope)
+- Gestion fine des permissions
+- Audit régulier de sécurité
+
+### 8.4 Compatibilité mobile
+- Design responsive (Mobile first)
+- Optimisation tactile
+- Fonctionnalités adaptées selon la taille d'écran
+- Tests sur différents appareils
+- Performance optimisée pour mobile
+
+### 8.5 Maintenance et mises à jour
+- Structure modulaire pour faciliter les mises à jour
+- Scripts de mise à jour automatisés
+- Version sémantique (x.y.z)
+- Rétrocompatibilité maintenue
+- Documentation des changements (changelog)
+- Procédure de sauvegarde avant mise à jour
+- Tests automatisés pour valider les mises à jour
+
+### 8.6 Backup et récupération
+- Procédure de sauvegarde automatique
+- Sauvegarde incrémentielle quotidienne
+- Sauvegarde complète hebdomadaire
+- Rétention des sauvegardes (30 jours)
+- Tests de restauration réguliers
+- Documentation des procédures de récupération
+
+### 8.7 Monitoring et journalisation
+- Logs d'erreurs
+- Logs d'audit pour actions sensibles
+- Monitoring de performance
+- Alertes en cas d'anomalies
+- Tableau de bord administrateur
+- Statistiques d'utilisation
+
+---
+
+Ce document technique détaillé fournit une vue d'ensemble complète du module ESaiko à développer pour Dolibarr v21, couvrant la structure, les fonctionnalités, les interfaces, les données et la roadmap de développement. Il servira de référence principale pour l'équipe de développement tout au long du projet et pourra évoluer selon les besoins spécifiques identifiés en cours de réalisation.
