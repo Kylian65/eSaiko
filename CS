@@ -1,0 +1,2957 @@
+# CAHIER DES CHARGES TECHNIQUE - MODULE ELASKA-ESAIKO
+
+**Version:** 6.0 (Consolidée & Finale)  
+**Date:** 2025-05-27  
+**Client:** eLaska (Kylian65)  
+**Application cible:** Dolibarr v21  
+
+---
+
+## TABLE DES MATIÈRES
+
+1. [INTRODUCTION ET VISION GLOBALE](#1-introduction-et-vision-globale)
+   1.1. [Objectifs et périmètre](#11-objectifs-et-périmètre)
+   1.2. [Public cible](#12-public-cible)
+   1.3. [Intégration avec Dolibarr](#13-intégration-avec-dolibarr)
+
+2. [ARCHITECTURE TECHNIQUE](#2-architecture-technique)
+   2.1. [Structure générale](#21-structure-générale)
+   2.2. [Organisation des répertoires et fichiers](#22-organisation-des-répertoires-et-fichiers)
+   2.3. [Stack technologique](#23-stack-technologique)
+   2.4. [Principes architecturaux](#24-principes-architecturaux)
+   2.5. [Modèle de données](#25-modèle-de-données)
+
+3. [MODULES FONCTIONNELS CORE](#3-modules-fonctionnels-core)
+   3.1. [Module Cœur: Gestion des Tiers 360°](#31-module-cœur-gestion-des-tiers-360)
+   3.2. [Module Dossiers Centralisés](#32-module-dossiers-centralisés)
+   3.3. [Module Tâches et Suivi Opérationnel](#33-module-tâches-et-suivi-opérationnel)
+   3.4. [Module Gestion Documentaire & Coffre-Fort](#34-module-gestion-documentaire--coffre-fort)
+
+4. [MODULES FONCTIONNELS SPÉCIFIQUES](#4-modules-fonctionnels-spécifiques)
+   4.1. [Module Accompagnement des Particuliers](#41-module-accompagnement-des-particuliers)
+   4.2. [Module Accompagnement des Associations](#42-module-accompagnement-des-associations)
+   4.3. [Module Création d'Entreprise](#43-module-création-dentreprise)
+   4.4. [Module Conseil & Gestion TPE/PME](#44-module-conseil--gestion-tpepme)
+   4.5. [Module Conseil en Gestion de Patrimoine](#45-module-conseil-en-gestion-de-patrimoine)
+   4.6. [Module Abonnements Clients](#46-module-abonnements-clients)
+   4.7. [Module Recouvrements](#47-module-recouvrements)
+   4.8. [Module Prospection & CRM](#48-module-prospection--crm)
+
+5. [PORTAIL CLIENT SPA](#5-portail-client-spa)
+   5.1. [Architecture du Portail React](#51-architecture-du-portail-react)
+   5.2. [Sections et fonctionnalités](#52-sections-et-fonctionnalités)
+   5.3. [Composants React](#53-composants-react)
+   5.4. [Communication avec l'API](#54-communication-avec-lapi)
+   5.5. [Authentification et sécurité](#55-authentification-et-sécurité)
+   5.6. [Gestion des notifications](#56-gestion-des-notifications)
+
+6. [SYSTÈMES TRANSVERSAUX](#6-systèmes-transversaux)
+   6.1. [Workflows d'Automatisation](#61-workflows-dautomatisation)
+   6.2. [Système de Champs Dynamiques](#62-système-de-champs-dynamiques)
+   6.3. [Système de Tags/Étiquettes](#63-système-de-tagsétiquettes)
+   6.4. [Gestion des Communications](#64-gestion-des-communications)
+   6.5. [Gestion des Consentements RGPD](#65-gestion-des-consentements-rgpd)
+   6.6. [Prise de Rendez-vous](#66-prise-de-rendez-vous)
+   6.7. [Personnalisation Interface](#67-personnalisation-interface)
+
+7. [SÉCURITÉ](#7-sécurité)
+   7.1. [Modèle de sécurité](#71-modèle-de-sécurité)
+   7.2. [Chiffrement des données](#72-chiffrement-des-données)
+   7.3. [Authentification](#73-authentification)
+   7.4. [Gestion des permissions](#74-gestion-des-permissions)
+   7.5. [Protection des APIs](#75-protection-des-apis)
+   7.6. [Audit et journalisation](#76-audit-et-journalisation)
+
+8. [INTÉGRATIONS EXTERNES](#8-intégrations-externes)
+   8.1. [Google Calendar](#81-google-calendar)
+   8.2. [Google Drive](#82-google-drive)
+   8.3. [Email IMAP/SMTP](#83-email-imapsmtp)
+   8.4. [Signature Électronique](#84-signature-électronique)
+   8.5. [API publique](#85-api-publique)
+
+9. [BASE DE DONNÉES](#9-base-de-données)
+   9.1. [Structure des tables principales](#91-structure-des-tables-principales)
+   9.2. [Relations et contraintes](#92-relations-et-contraintes)
+   9.3. [Indexation et performances](#93-indexation-et-performances)
+   9.4. [Gestion du chiffrement](#94-gestion-du-chiffrement)
+
+10. [UI/UX](#10-uiux)
+    10.1. [Principes de design](#101-principes-de-design)
+    10.2. [Responsive design](#102-responsive-design)
+    10.3. [Système d'icônes](#103-système-dicônes)
+    10.4. [Composants UI partagés](#104-composants-ui-partagés)
+
+11. [PERFORMANCES ET OPTIMISATIONS](#11-performances-et-optimisations)
+    11.1. [Objectifs de performance](#111-objectifs-de-performance)
+    11.2. [Stratégies d'optimisation](#112-stratégies-doptimisation)
+    11.3. [Monitoring et alertes](#113-monitoring-et-alertes)
+
+12. [ROADMAP DE DÉVELOPPEMENT](#12-roadmap-de-développement)
+    12.1. [Phase 1: Socle Technique & Cœur Métier](#121-phase-1-socle-technique--cœur-métier)
+    12.2. [Phase 2: Modules Spécialisés](#122-phase-2-modules-spécialisés)
+    12.3. [Phase 3: Intelligence & Optimisation](#123-phase-3-intelligence--optimisation)
+    12.4. [Phase 4: Innovation & Évolution](#124-phase-4-innovation--évolution)
+
+13. [SPÉCIFICATIONS TECHNIQUES ADDITIONNELLES](#13-spécifications-techniques-additionnelles)
+    13.1. [Exigences système](#131-exigences-système)
+    13.2. [Compatibilité navigateurs](#132-compatibilité-navigateurs)
+    13.3. [Déploiement](#133-déploiement)
+    13.4. [Sauvegarde et récupération](#134-sauvegarde-et-récupération)
+
+14. [ANNEXES](#14-annexes)
+    14.1. [Glossaire technique](#141-glossaire-technique)
+    14.2. [Références](#142-références)
+
+---
+
+## 1. INTRODUCTION ET VISION GLOBALE
+
+### 1.1. Objectifs et périmètre
+
+Le module eLaska-ESaiko est une solution complète de gestion des services d'accompagnement administratif, financier et de conseil, conçue comme extension du système de gestion Dolibarr. Ce module vise à fournir une plateforme unifiée pour la gestion des relations clients, des dossiers, et des prestations pour quatre catégories principales de clients:
+
+- **Particuliers**: accompagnement administratif, objectifs de vie, gestion de patrimoine
+- **Associations**: gestion statutaire, demandes de subventions, obligations réglementaires
+- **Créateurs d'entreprises**: parcours de création, aides, formalités
+- **TPE/PME**: conseil RH, fiscal, gestion externalisée
+
+Le module unifie toutes les interactions et suivis dans une interface performante et sécurisée, avec un portail client moderne et des outils de pilotage avancés.
+
+### 1.2. Public cible
+
+Le module s'adresse à deux types d'utilisateurs principaux:
+
+- **Utilisateurs internes (Gestionnaires/Conseillers)**: Professionnels utilisant le backoffice Dolibarr enrichi par eLaska-ESaiko pour gérer les dossiers clients, avec des rôles et permissions configurables.
+
+- **Utilisateurs externes (Clients)**: Accèdent à un portail web SPA sécurisé offrant une expérience utilisateur moderne pour suivre leurs dossiers, communiquer, consulter/transmettre des documents et prendre des rendez-vous.
+
+Un troisième type d'utilisateurs potentiel concerne les **Apporteurs d'Affaires**, qui peuvent avoir un accès limité au portail pour suivre leurs leads et commissions.
+
+### 1.3. Intégration avec Dolibarr
+
+Le module s'intègre nativement avec les modules standards Dolibarr suivants:
+
+- **Tiers**: Extension des fiches clients avec typologies spécifiques, champs additionnels, et attributs supplémentaires
+- **Projets/Tâches**: Liaison des dossiers eLaska avec les projets Dolibarr pour le suivi de temps
+- **Facturation**: Génération automatisée de propositions, commandes et factures depuis les prestations eLaska
+- **GED**: Utilisation du système documentaire de Dolibarr, avec extensions pour le coffre-fort numérique
+- **Messagerie/Notes**: Enrichissement pour le suivi des communications multi-canal
+- **Agenda**: Synchronisation des échéances, rendez-vous et rappels
+- **Produits/Services**: Catalogue des prestations eLaska
+- **Contrats**: Formalisation des services et abonnements
+- **Banque**: Intégration pour le suivi des règlements
+
+## 2. ARCHITECTURE TECHNIQUE
+
+### 2.1. Structure générale
+
+L'architecture du module eLaska-ESaiko est conçue comme une extension modulaire de Dolibarr, avec deux composants principaux:
+
+1. **Backoffice**: Modules PHP intégrés à Dolibarr, enrichis de composants JavaScript/React pour des fonctionnalités avancées
+2. **Portail Client**: Application React Single Page Application (SPA) communiquant avec le backoffice via API REST
+
+Cette approche hybride permet d'offrir une expérience utilisateur moderne aux clients tout en tirant parti de l'écosystème Dolibarr pour les gestionnaires.
+
+### 2.2. Organisation des répertoires et fichiers
+
+```
+htdocs/custom/elaska/
+├── admin/                          # Configuration et paramétrage
+│   ├── setup.php                   # Configuration générale
+│   ├── dynamicfields.php           # Gestion des champs dynamiques
+│   ├── workflows.php               # Configuration des workflows
+│   ├── permissions.php             # Gestion des permissions
+│   ├── numbering_models.php        # Modèles de numérotation
+│   ├── consent_management.php      # Gestion RGPD
+│   └── role_dashboard_config.php   # Tableaux de bord par rôle
+├── api/                            # API REST pour portail et intégrations
+│   ├── index.php                   # Point d'entrée principal
+│   ├── clients/                    # Endpoints relatifs aux clients
+│   ├── dossiers/                   # Endpoints relatifs aux dossiers
+│   ├── documents/                  # Endpoints gestion documentaire
+│   ├── rdv/                        # Endpoints prise de rendez-vous
+│   ├── patrimoine/                 # Endpoints patrimoine/finance
+│   └── auth/                       # Authentification et sécurité
+├── class/                          # Classes PHP métier
+│   ├── core/                       # Classes principales
+│   ├── specialized/                # Classes spécialisées par type client
+│   ├── patrimoine/                 # Classes patrimoine/finance
+│   └── utils/                      # Classes utilitaires
+├── core/                           # Descripteurs et modules
+│   ├── modules/                    # Sous-modules
+│   ├── triggers/                   # Triggers événementiels
+│   ├── boxes/                      # Widgets tableaux de bord
+│   └── includes/                   # Fichiers partagés
+├── css/                            # Feuilles de style
+│   ├── elaska.css                  # Styles généraux
+│   ├── elaska-responsive.css       # Adaptations responsive
+│   ├── elaska-icons.css            # Font Awesome et icônes
+│   └── theme/                      # Variations thématiques
+├── img/                            # Images et ressources
+├── js/                             # JavaScript et composants React
+│   ├── components/                 # Composants React backoffice
+│   ├── utils/                      # Utilitaires JavaScript
+│   └── lib/                        # Bibliothèques tierces
+├── langs/                          # Fichiers de traduction
+│   ├── fr_FR/                      # Français
+│   └── en_US/                      # Anglais
+├── lib/                            # Bibliothèques tierces PHP
+├── portail/                        # Application SPA portail client
+│   ├── build/                      # Build production (distribué)
+│   └── src/                        # Code source React (dev)
+├── sql/                            # Scripts SQL
+│   ├── llx_elaska_*.sql            # Création tables
+│   └── data/                       # Données initiales
+├── tpl/                            # Templates backoffice
+├── widgets/                        # Widgets spécialisés
+└── views/                          # Vues principales backoffice
+```
+
+### 2.3. Stack technologique
+
+**Backend:**
+- PHP 8.1+ (compatible Dolibarr v21)
+- MySQL/MariaDB avec support chiffrement AES-256
+- API REST sécurisée par JWT/OAuth2
+
+**Frontend Backoffice:**
+- PHP/HTML/CSS (Dolibarr standard)
+- JavaScript/jQuery pour fonctionnalités basiques
+- Composants React encapsulés pour interfaces complexes:
+  - Timelines dossiers
+  - Tableaux Kanban
+  - Dashboards dynamiques
+
+**Frontend Portail Client:**
+- React 18+
+- React Router 6+
+- React Query/SWR pour gestion d'état
+- Axios pour requêtes API
+- Styled Components ou Tailwind CSS pour styles
+
+**Outils de build:**
+- Vite pour build SPA React
+- Webpack pour bundle des composants React backoffice
+- Composer pour dépendances PHP
+
+**Dépendances principales:**
+- Google API Client pour PHP (Calendar, Drive)
+- JWT Firebase PHP pour authentification API
+- Font Awesome pour icônes
+
+### 2.4. Principes architecturaux
+
+**Architecture du backoffice:**
+- Développement en tant qu'extension modulaire de Dolibarr
+- Respect des standards de codage Dolibarr
+- Extension des objets natifs plutôt que réplication
+- Utilisation de hooks et triggers pour extension non-intrusive
+- Architecture MVC où applicable
+
+**Architecture du portail client:**
+- SPA React avec routing côté client
+- Séparation claire entre UI/UX et logique métier
+- Pattern Container/Component pour structure React
+- Communication exclusivement via API REST
+- Code modulaire regroupé par domaine fonctionnel
+
+**Communication inter-composants:**
+- API REST JSON pour toute communication portail <-> backoffice
+- JWT pour sécurisation des échanges
+- Versioning d'API pour évolution sans rupture
+
+### 2.5. Modèle de données
+
+L'architecture de données repose sur l'extension des tables Dolibarr existantes et la création de tables spécifiques à eLaska-ESaiko.
+
+**Principes généraux:**
+- Extension de `llx_societe` pour les informations client spécialisées
+- Tables dédiées par entité métier (dossier, timeline, patrimoine, etc.)
+- Référence externe systématique vers les objets Dolibarr natifs
+- Format de référencement unique `eLSK-{TYPE}-{ANNÉE}-{NUMÉRO}` (configurable)
+- Chiffrement sélectif des données sensibles
+
+**Entités principales:**
+- Client (extension `llx_societe` + `llx_elaska_client_info`)
+- Dossier (`llx_elaska_dossier`)
+- Timeline dossier (`llx_elaska_dossier_timeline`)
+- Tâche (extension `llx_projet_task` + `llx_elaska_task_info`)
+- Prestation/Service (extension `llx_product` + `llx_elaska_prestation`)
+- Patrimoine/Finance (`llx_elaska_patrimoine`, `llx_elaska_assurance`, etc.)
+- Objectif de vie (`llx_elaska_client_objectif`)
+- Intervenant externe (`llx_elaska_intervenant_externe`)
+- Opportunity/Lead CRM (`llx_elaska_opportunite`)
+- Workflow (`llx_elaska_workflow_rule`)
+- Consentement RGPD (`llx_elaska_consent_log`)
+
+Un diagramme détaillé des relations entre entités est fourni en annexe.
+
+## 3. MODULES FONCTIONNELS CORE
+
+### 3.1. Module Cœur: Gestion des Tiers 360°
+
+La gestion des tiers constitue le cœur du module eLaska-ESaiko, étendant les capacités natives de Dolibarr pour offrir une vue à 360° des clients.
+
+**Spécifications techniques:**
+
+1. **Extension du concept de tiers avec typologies spécifiques:**
+   - Particuliers (personne physique)
+   - Associations (structure juridique associative)
+   - Entreprises (TPE/PME, artisans, professions libérales)
+   - Créateurs d'entreprises (phase projet/création)
+   - Intervenants externes (partenaires professionnels)
+   - Organismes locaux/régionaux (administrations, financeurs)
+   - Apporteurs d'affaires (sources de leads)
+
+2. **Structure de données:**
+   ```php
+   // Classe principale d'extension
+   class ElaskaClient extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;
+       public $type_elaska;
+       public $fk_soc;
+       public $attributes = array();
+       public $mandats = array();
+       public $preferences = array();
+       
+       // Méthodes principales
+       public function __construct($db) { ... }
+       public function create($user, $notrigger=false) { ... }
+       public function fetch($id, $ref='') { ... }
+       public function update($user, $notrigger=false) { ... }
+       public function delete($user, $notrigger=false) { ... }
+       
+       // Fonctionnalités spécifiques
+       public function addConsentement($type, $source) { ... }
+       public function getObjectifsVie() { ... }
+       public function getIntervenantsExternes() { ... }
+       // etc.
+   }
+   ```
+
+3. **Interfaces du Module:**
+   - Liste des tiers avec filtres avancés par type
+   - Onglet "eLaska Info" dans fiche Dolibarr native
+   - Vue dédiée "Fiche Client eLaska" avec sous-onglets spécifiques par type:
+     - Particulier: Infos personnelles, Objectifs de vie, Patrimoine
+     - Association: Instances statutaires, Subventions
+     - Entreprise: Contrats délégués, Obligations
+     - Créateur: Parcours création, Aides
+
+4. **Fonctionnalités techniques:**
+   - Génération de référence eLaska configurable 
+   - Champs dynamiques par type client
+   - Système d'alertes et rappels associés
+   - Gestion des consentements RGPD
+   - Contraintes d'accessibilité et préférences
+
+5. **Intégration:**
+   - Synchronisation bidirectionnelle avec `llx_societe`
+   - Liaison avec la GED Dolibarr
+   - Compatibilité avec les modules sociaux/adhérent
+   - Hooks pour plugins tiers
+
+### 3.2. Module Dossiers Centralisés
+
+Ce module constitue l'épine dorsale fonctionnelle du système, centralisant et organisant tous les dossiers client.
+
+**Spécifications techniques:**
+
+1. **Structure de données principale:**
+   ```php
+   class ElaskaDossier extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;        // Format "eLSK-DOS-YYYY-NNNNN"
+       public $fk_soc;            // Client associé
+       public $fk_user_resp;      // Conseiller responsable
+       public $type_dossier;      // Classification
+       public $libelle;           // Titre
+       public $description;
+       public $statut;            // Cycle de vie
+       public $date_creation;
+       public $date_echeance;
+       public $confidentialite;
+       public $timeline_config;   // JSON configuration
+       public $intervenants;      // Intervenants externes JSON
+       public $montant_concerne;
+       
+       // Méthodes principales
+       // ...
+       
+       // Timeline et étapes
+       public function getTimeline() { ... }
+       public function addEtape($params) { ... }
+       public function updateEtapeStatus($etape_id, $status) { ... }
+       public function getCurrentEtape() { ... }
+       
+       // Temps et coûts
+       public function calculateTimeSpent() { ... }
+       public function calculateCosts() { ... }
+   }
+   ```
+
+2. **Structure Timeline:**
+   ```php
+   class ElaskaDossierTimeline extends CommonObject {
+       public $db;
+       public $id;
+       public $fk_dossier;
+       public $numero_etape;
+       public $libelle_etape;
+       public $description_etape;
+       public $statut_etape;      // attente/en_cours/terminee/bloquee
+       public $date_prevue;
+       public $date_realisee;
+       public $commentaire;
+       public $visible_portail;
+       public $dependance_externe;
+       public $temps_prevu;
+       public $temps_realise;
+       public $cout_estime;
+       public $cout_realise;
+       
+       // Méthodes
+       // ...
+   }
+   ```
+
+3. **Composant React Timeline:**
+   ```jsx
+   // Composant backoffice et portail
+   const DossierTimeline = ({ dossierId, editable, onUpdate }) => {
+     const { isLoading, data: timeline } = useQuery(
+       ['timeline', dossierId],
+       () => fetchTimeline(dossierId)
+     );
+     
+     if (isLoading) return <LoadingSpinner />;
+     
+     return (
+       <div className="elaska-timeline">
+         {timeline.etapes.map(etape => (
+           <TimelineStep
+             key={etape.id}
+             etape={etape}
+             editable={editable}
+             onStatusChange={editable ? handleStatusChange : null}
+             onCommentAdd={editable ? handleCommentAdd : null}
+           />
+         ))}
+         {editable && (
+           <AddTimelineStep dossierId={dossierId} onAdd={handleAddStep} />
+         )}
+       </div>
+     );
+   };
+   ```
+
+4. **Modèles de Timeline:**
+   - Configuration JSON pour types de dossiers standards:
+     - Dossier de surendettement
+     - Dossier retraite
+     - Dossier création d'entreprise
+     - Dossier subvention association
+     - etc.
+   - Interface d'administration pour personnalisation
+
+5. **Fonctionnalités techniques:**
+   - Référencement configurable (préfixe, année, compteur)
+   - Modèles de dossiers par type client/besoin
+   - Système de commentaires internes/externes
+   - Suivi temps/coûts par étape
+   - Gestion des dépendances inter-étapes
+   - Confidentialité par dossier/étape
+
+### 3.3. Module Tâches et Suivi Opérationnel
+
+Ce module gère toutes les actions à réaliser sur les dossiers, avec assignation, suivi et reporting.
+
+**Spécifications techniques:**
+
+1. **Extension des tâches Dolibarr:**
+   ```php
+   class ElaskaTask extends Task {  // Hérite de projet_task Dolibarr
+       public $elaska_type;        // Type spécifique
+       public $fk_dossier;         // Lien dossier eLaska
+       public $fk_timeline_etape;  // Étape associée
+       public $checklist;          // JSON array
+       public $priorite_elaska;    // 1-5 avec couleur
+       public $temps_estime;
+       public $visible_client;     // Visibilité portail
+       public $deadline_type;      // flexible/stricte
+       
+       // Méthodes spécifiques
+       public function completeChecklist($item_id) { ... }
+       public function setCompleted($temps_passe) { ... }
+       public function linkToTimelineStep($etape_id) { ... }
+   }
+   ```
+
+2. **Vue Kanban React:**
+   ```jsx
+   const TaskKanban = () => {
+     const { data: columns } = useQuery('kanban-columns', fetchKanbanConfig);
+     const { data: tasks, isLoading } = useQuery('tasks', fetchTasks);
+     
+     if (isLoading) return <LoadingSpinner />;
+     
+     return (
+       <div className="elaska-kanban">
+         {columns.map(column => (
+           <KanbanColumn
+             key={column.id}
+             title={column.title}
+             tasks={tasks.filter(task => task.status === column.status)}
+             onTaskMove={handleTaskMove}
+           />
+         ))}
+       </div>
+     );
+   };
+   ```
+
+3. **Composant de saisie temps:**
+   ```jsx
+   const TimeEntryForm = ({ taskId, dossierRef }) => {
+     const [time, setTime] = useState('');
+     const [date, setDate] = useState(todayISOString());
+     const [description, setDescription] = useState('');
+     const [timelineStep, setTimelineStep] = useState(null);
+     
+     // Fetch timeline steps for the linked dossier
+     const { data: timelineSteps } = useQuery(
+       ['timeline-steps', dossierRef],
+       () => fetchTimelineSteps(dossierRef)
+     );
+     
+     const submitMutation = useMutation(submitTimeEntry, {
+       onSuccess: () => {
+         toast.success('Temps saisi avec succès');
+         // Reset form...
+       }
+     });
+     
+     return (
+       <form onSubmit={handleSubmit}>
+         {/* Form fields */}
+         <input 
+           type="number"
+           min="0.25" 
+           step="0.25"
+           value={time}
+           onChange={e => setTime(e.target.value)}
+           required
+         />
+         
+         <select 
+           value={timelineStep || ''}
+           onChange={e => setTimelineStep(e.target.value)}
+         >
+           <option value="">-- Étape du dossier --</option>
+           {timelineSteps?.map(step => (
+             <option key={step.id} value={step.id}>
+               {step.numero_etape}. {step.libelle_etape}
+             </option>
+           ))}
+         </select>
+         
+         <button type="submit" disabled={submitMutation.isLoading}>
+           Enregistrer
+         </button>
+       </form>
+     );
+   };
+   ```
+
+4. **Fonctionnalités techniques:**
+   - Vues multiples (liste, kanban, calendrier)
+   - Filtrage multi-critères (client, dossier, conseiller, statut)
+   - Checklists dynamiques avec suivi d'avancement
+   - Suivi temps passé par tâche/étape dossier
+   - Notifications et rappels sur échéances
+   - Règles d'escalade sur retards
+
+### 3.4. Module Gestion Documentaire & Coffre-Fort
+
+Ce module étend la GED Dolibarr pour répondre aux besoins spécifiques de sécurisation et de partage client.
+
+**Spécifications techniques:**
+
+1. **Extension de la structure documentaire:**
+   ```php
+   class ElaskaDocument extends CommonObject {
+       public $db;
+       public $id;
+       public $fk_ecm_files;      // Lien document Dolibarr
+       public $ref_elaska;
+       public $type_document;     // classif. métier
+       public $confidentialite;   // 1-3 (normal, sensible, très sensible)
+       public $niveau_chiffrement; // 0-2 (aucun, standard, renforcé)
+       public $partage_client;    // booléen
+       public $coffre_fort;       // booléen (si document CFN)
+       public $date_expiration;   // pour documents temporaires
+       public $tags = array();    // étiquettes
+       
+       // Méthodes
+       public function encrypt() { ... }
+       public function decrypt() { ... }
+       public function shareWithClient() { ... }
+       public function addToSecureVault() { ... }
+   }
+   ```
+
+2. **Coffre-Fort Numérique:**
+   ```php
+   class ElaskaCoffreFort extends CommonObject {
+       public $db;
+       public $id;
+       public $fk_soc;            // Client propriétaire
+       public $titre;
+       public $description;
+       public $niveau_securite;   // 1-3
+       public $documents = array(); // IDs documents
+       public $master_key_id;     // Clé maître chiffrée
+       public $date_creation;
+       public $last_access;
+       public $access_count;
+       
+       // Méthodes de sécurité
+       public function validateAccess($user) { ... }
+       public function logAccess($user) { ... }
+       public function addDocument($doc_id) { ... }
+   }
+   ```
+
+3. **Interface Upload Multiple:**
+   ```jsx
+   const DocumentUploader = ({ dossierId, clientId }) => {
+     const [files, setFiles] = useState([]);
+     const [confidentiality, setConfidentiality] = useState(1);
+     const [shareWithClient, setShareWithClient] = useState(false);
+     const [addToVault, setAddToVault] = useState(false);
+     const [tags, setTags] = useState([]);
+     
+     const uploadMutation = useMutation(uploadDocuments, {
+       onSuccess: () => {
+         toast.success('Documents téléversés avec succès');
+         // Reset form...
+       }
+     });
+     
+     return (
+       <form onSubmit={handleSubmit}>
+         <div className="file-drop-zone">
+           <input
+             type="file"
+             multiple
+             onChange={handleFileSelect}
+           />
+         </div>
+         
+         <div className="document-settings">
+           <SecurityLevelSelector 
+             value={confidentiality}
+             onChange={setConfidentiality}
+           />
+           
+           <div className="options">
+             <label>
+               <input
+                 type="checkbox"
+                 checked={shareWithClient}
+                 onChange={e => setShareWithClient(e.target.checked)}
+               />
+               Partager avec le client
+             </label>
+             
+             <label>
+               <input
+                 type="checkbox"
+                 checked={addToVault}
+                 onChange={e => setAddToVault(e.target.checked)}
+               />
+               Ajouter au coffre-fort
+             </label>
+           </div>
+           
+           <TagSelector
+             selectedTags={tags}
+             onChange={setTags}
+           />
+         </div>
+         
+         <button type="submit" disabled={uploadMutation.isLoading}>
+           Téléverser
+         </button>
+       </form>
+     );
+   };
+   ```
+
+4. **Fonctionnalités techniques:**
+   - Classement multi-critères (client, dossier, type)
+   - Niveaux de confidentialité avec accès contrôlé
+   - Chiffrement sélectif ou systématique (option coffre-fort)
+   - Versionning et historique des modifications
+   - Annotation et commentaires sur documents
+   - Prévisualisation adaptée par type (PDF, images, Office)
+   - Généralisation signatures électroniques
+   - Option d'intégration Google Drive
+
+## 4. MODULES FONCTIONNELS SPÉCIFIQUES
+
+### 4.1. Module Accompagnement des Particuliers
+
+Module spécialisé pour la gestion des besoins spécifiques aux particuliers.
+
+**Spécifications techniques:**
+
+1. **Structure de données - Objectifs de Vie:**
+   ```php
+   class ElaskaObjectifVie extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;        // Format "eLSK-OBJ-YYYY-NNN"
+       public $fk_soc;            // Client particulier
+       public $titre;
+       public $description;
+       public $categorie;         // Logement/Famille/Retraite/etc.
+       public $horizon_temporel;  // Court/Moyen/Long terme
+       public $statut;            // Projet/En cours/Réalisé/Abandonné
+       public $priorite;          // 1-5
+       public $impact_financier;  // Estimation montant
+       public $etapes = array();  // Sous-étapes JSON
+       public $documents = array(); // Documents liés
+       public $commentaires = array(); // Échanges client/conseiller
+       
+       // Méthodes
+       public function progressStatus() { ... }
+       public function addComment($user, $message, $visibility) { ... }
+       public function linkToDossier($dossier_id) { ... }
+   }
+   ```
+
+2. **Composant React - Objectifs de Vie:**
+   ```jsx
+   const ObjectifsVie = ({ clientId }) => {
+     const { data: objectifs, isLoading } = useQuery(
+       ['objectifs-vie', clientId],
+       () => fetchObjectifsVie(clientId)
+     );
+     
+     const addObjectifMutation = useMutation(createObjectifVie, {
+       onSuccess: () => {
+         queryClient.invalidateQueries(['objectifs-vie', clientId]);
+         toast.success('Objectif de vie ajouté');
+       }
+     });
+     
+     return (
+       <div className="objectifs-vie-container">
+         <h2>Mes Objectifs de Vie</h2>
+         
+         {isLoading ? <LoadingSpinner /> : (
+           <div className="objectifs-list">
+             {objectifs.map(objectif => (
+               <ObjectifCard
+                 key={objectif.id}
+                 objectif={objectif}
+                 onUpdate={handleUpdate}
+                 onAddComment={handleAddComment}
+               />
+             ))}
+           </div>
+         )}
+         
+         <AddObjectifForm onSubmit={values => addObjectifMutation.mutate(values)} />
+       </div>
+     );
+   };
+   ```
+
+3. **Structures spécifiques pour démarches complexes:**
+   ```php
+   // Exemple de structure pour dossier Banque de France
+   class ElaskaDossierBDF extends ElaskaDossier {
+       public $situation_surendettement;
+       public $type_procedure;    // PRP/Plan conventionnel
+       public $date_depot;
+       public $date_recevabilite;
+       public $creanciers = array();
+       public $montant_total_dettes;
+       public $mensualite_proposee;
+       public $decision_commission;
+       public $date_fin_mesures;
+       
+       // Méthodes spécialisées
+       public function calculateDebtRatio() { ... }
+       public function generateCreancesList() { ... }
+       public function trackProcedureStatus() { ... }
+   }
+   ```
+
+4. **Fonctionnalités techniques:**
+   - Modèles de dossiers spécifiques: Surendettement, Retraite, MDPH, CAF, etc.
+   - Calculateurs et simulateurs adaptés (reste à vivre, droits sociaux)
+   - Suivi de l'évolution des objectifs de vie
+   - Coffre-Fort Numérique renforcé pour documents sensibles
+   - Échéancier de vie administrative (renouvellements, déclarations)
+
+### 4.2. Module Accompagnement des Associations
+
+Module dédié à la gestion des besoins spécifiques des structures associatives.
+
+**Spécifications techniques:**
+
+1. **Structures de données principales:**
+   ```php
+   // Gestion des instances statutaires
+   class ElaskaInstanceAssociative extends CommonObject {
+       public $db;
+       public $id;
+       public $fk_soc;            // Association
+       public $type_instance;     // AG/CA/Bureau
+       public $date_tenue;
+       public $ordre_jour = array();
+       public $participants = array();
+       public $quorum_atteint;
+       public $pv_genere;         // bool
+       public $decisions = array();
+       public $documents = array();
+       
+       // Méthodes
+       public function generateConvocations() { ... }
+       public function generatePV() { ... }
+       public function recordDecision($libelle, $vote_pour, $vote_contre) { ... }
+   }
+   
+   // Gestion des demandes de financement
+   class ElaskaFinancementAsso extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;        // Format "eLSK-FIN-YYYY-NNN"
+       public $fk_soc;            // Association
+       public $fk_soc_financeur;  // Organisme financeur
+       public $type_financement;  // Subvention/Appel à projet/Mécénat
+       public $montant_demande;
+       public $montant_obtenu;
+       public $date_depot;
+       public $date_reponse;
+       public $statut;            // Préparation/Déposé/Accepté/Refusé/Versé
+       public $echeances = array();
+       public $justificatifs = array();
+       
+       // Méthodes spécifiques
+       public function generateDossierFinancement() { ... }
+       public function addJustificatif($doc_id, $type) { ... }
+       public function updateStatus($new_status, $comment) { ... }
+   }
+   ```
+
+2. **Tableau de bord suivi Financements:**
+   ```jsx
+   const TableauFinancements = ({ associationId }) => {
+     const { data: financements, isLoading } = useQuery(
+       ['financements', associationId],
+       () => fetchFinancements(associationId)
+     );
+     
+     const calculateStats = (data) => {
+       return {
+         totalDemande: data.reduce((sum, f) => sum + f.montant_demande, 0),
+         totalObtenu: data.reduce((sum, f) => sum + (f.montant_obtenu || 0), 0),
+         enCours: data.filter(f => ['preparation', 'depose'].includes(f.statut)).length,
+         acceptes: data.filter(f => f.statut === 'accepte').length,
+         refuses: data.filter(f => f.statut === 'refuse').length,
+       };
+     };
+     
+     const stats = !isLoading ? calculateStats(financements) : null;
+     
+     return (
+       <div className="financements-dashboard">
+         {!isLoading && stats && (
+           <div className="stats-row">
+             <StatCard 
+               title="Montant total demandé"
+               value={formatCurrency(stats.totalDemande)}
+             />
+             <StatCard 
+               title="Montant total obtenu"
+               value={formatCurrency(stats.totalObtenu)}
+               percentage={stats.totalDemande > 0 ? 
+                 Math.round((stats.totalObtenu / stats.totalDemande) * 100) : 0}
+             />
+             <StatCard 
+               title="Dossiers en cours"
+               value={stats.enCours}
+             />
+             <StatCard 
+               title="Taux de succès"
+               value={`${stats.acceptes}/${stats.acceptes + stats.refuses}`}
+               percentage={stats.acceptes + stats.refuses > 0 ? 
+                 Math.round((stats.acceptes / (stats.acceptes + stats.refuses)) * 100) : 0}
+             />
+           </div>
+         )}
+         
+         <DataTable
+           data={financements || []}
+           columns={[
+             { header: 'Référence', accessor: 'ref_elaska' },
+             { header: 'Financeur', accessor: 'financeur_nom' },
+             { header: 'Type', accessor: 'type_financement' },
+             { header: 'Montant', accessor: 'montant_demande', formatter: formatCurrency },
+             { header: 'Statut', accessor: 'statut', formatter: formatStatut },
+             { header: 'Date dépôt', accessor: 'date_depot', formatter: formatDate },
+             { header: 'Actions', accessor: 'id', formatter: (id) => (
+               <ActionButtons id={id} onEdit={handleEdit} onView={handleView} />
+             )}
+           ]}
+           isLoading={isLoading}
+         />
+         
+         <AddFinancementButton onClick={handleAddFinancement} />
+       </div>
+     );
+   };
+   ```
+
+3. **Fonctionnalités techniques:**
+   - Suivi des obligations légales (déclarations préfecture, assurances)
+   - Gestion complète des instances statutaires (convocations, PV)
+   - Pipeline de demandes de subvention/financement
+   - Suivi du collège de membres et des renouvellements
+   - Tableaux de bord financiers spécifiques
+   - Calendrier des obligations réglementaires
+
+### 4.3. Module Création d'Entreprise
+
+Module dédié aux créateurs d'entreprise en phase de projet et de lancement.
+
+**Spécifications techniques:**
+
+1. **Structure de données principale:**
+   ```php
+   class ElaskaDossierCreation extends ElaskaDossier {
+       public $type_projet;       // Commerce/Artisan/Service/etc.
+       public $forme_juridique;   // EURL/SASU/SAS/etc.
+       public $stade_avancement;  // Idée/Étude/Formalisation/etc.
+       public $financement_prev;  // Montant nécessaire estimé
+       public $apport_personnel;
+       public $chiffre_prev;      // CA prévisionnel annuel
+       public $aides_visees = array(); // Aides visées
+       public $date_demarrage_prev;
+       public $activites = array(); // Codes APE visés
+       
+       // Méthodes spécialisées
+       public function generateBusinessPlan() { ... }
+       public function calculateFinancialViability() { ... }
+       public function listCompatibleAides() { ... }
+   }
+   
+   class ElaskaAideCreation extends CommonObject {
+       public $db;
+       public $id;
+       public $fk_dossier_creation;
+       public $organisme;
+       public $dispositif;
+       public $montant_potentiel;
+       public $conditions = array();
+       public $statut;            // Éligible/Demandé/Obtenu/Refusé
+       public $date_demande;
+       public $date_reponse;
+       public $montant_obtenu;
+       
+       // Méthodes
+       public function checkEligibility($dossier_id) { ... }
+       public function prepareDossierDemande() { ... }
+       public function trackStatus() { ... }
+   }
+   ```
+
+2. **Composant Timeline Parcours Création:**
+   ```jsx
+   const ParcoursCreation = ({ dossierId }) => {
+     const { data: parcours, isLoading } = useQuery(
+       ['parcours-creation', dossierId],
+       () => fetchParcoursCreation(dossierId)
+     );
+     
+     if (isLoading) return <LoadingSpinner />;
+     
+     // Sections du parcours création (personnalisable)
+     const sections = [
+       { id: 'etude', label: 'Étude de marché', icon: 'chart-line' },
+       { id: 'bp', label: 'Business Plan', icon: 'file-invoice-dollar' },
+       { id: 'juridique', label: 'Structure juridique', icon: 'balance-scale' },
+       { id: 'financier', label: 'Plan financier', icon: 'money-bill-wave' },
+       { id: 'aides', label: 'Aides & financements', icon: 'hand-holding-usd' },
+       { id: 'formalites', label: 'Formalités', icon: 'file-signature' },
+       { id: 'lancement', label: 'Lancement', icon: 'rocket' },
+     ];
+     
+     return (
+       <div className="parcours-creation">
+         <ProgressBar 
+           value={parcours.completion_percentage} 
+           label="Avancement global"
+         />
+         
+         <div className="parcours-sections">
+           {sections.map(section => (
+             <ParcoursSection
+               key={section.id}
+               icon={section.icon}
+               label={section.label}
+               steps={parcours.etapes.filter(e => e.section === section.id)}
+               completion={calculateSectionCompletion(
+                 parcours.etapes.filter(e => e.section === section.id)
+               )}
+               activeStep={parcours.etapes.find(
+                 e => e.section === section.id && e.statut === 'en_cours'
+               )}
+               onStepClick={handleStepClick}
+             />
+           ))}
+         </div>
+         
+         {parcours.aides_identifiees.length > 0 && (
+           <AidesCreationList aides={parcours.aides_identifiees} />
+         )}
+       </div>
+     );
+   };
+   ```
+
+3. **Fonctionnalités techniques:**
+   - Modèles de parcours création adaptés par secteur
+   - Suivi des démarches administratives de création
+   - Gestion des aides à la création (détection, demande, suivi)
+   - Outils simplifiés de business plan et prévisionnel
+   - Suivi des relations avec financeurs/banques
+   - Collection documents constitutifs
+   - Tableau de bord de lancement
+
+### 4.4. Module Conseil & Gestion TPE/PME
+
+Module dédié à l'accompagnement des TPE/PME pour leurs démarches et leur gestion.
+
+**Spécifications techniques:**
+
+1. **Structures de données spécifiques:**
+   ```php
+   // Gestion des contrats fournisseurs délégués
+   class ElaskaContratFournisseur extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;        // Format "eLSK-CFD-YYYY-NNN"
+       public $fk_soc_client;     // Entreprise cliente
+       public $fk_soc_fournisseur; // Fournisseur
+       public $type_contrat;      // Energie/Telecom/Assurance/etc.
+       public $reference_contrat;
+       public $date_debut;
+       public $date_fin;
+       public $montant_annuel;
+       public $periodicite;       // Mensuel/Trimestriel/Annuel
+       public $statut;            // Actif/Résilié/En transfert
+       public $conditions_resiliation;
+       public $date_alerte_reconduction;
+       public $notes_negociation;
+       
+       // Méthodes
+       public function generateResiliationCourrier() { ... }
+       public function calculateOptimisationPotentielle() { ... }
+       public function initiateSwitchProcedure($new_supplier_id) { ... }
+   }
+   
+   // Suivi obligations RH/fiscales
+   class ElaskaObligationEntreprise extends CommonObject {
+       public $db;
+       public $id;
+       public $fk_soc;            // Entreprise
+       public $type_obligation;   // DSN/TVA/IS/CFE/etc.
+       public $periodicite;       // Mensuelle/Trimestrielle/Annuelle
+       public $date_prochaine;
+       public $responsable;       // Cabinet/Entreprise
+       public $statut_periode;    // À faire/En cours/Complété
+       public $historique = array(); // Périodes passées
+       public $documents = array();
+       
+       // Méthodes
+       public function generateReminderNotification() { ... }
+       public function markCompleted($periode, $date_depot) { ... }
+       public function calculateNextDueDate() { ... }
+   }
+   ```
+
+2. **Tableau de bord Contrats Délégués:**
+   ```jsx
+   const ContratsDelegueDashboard = ({ clientId }) => {
+     const { data: contrats, isLoading } = useQuery(
+       ['contrats-delegues', clientId],
+       () => fetchContratsDelegues(clientId)
+     );
+     
+     const calculateEconomies = (data) => {
+       return data.reduce((sum, c) => sum + (c.economie_realisee || 0), 0);
+     };
+     
+     const groupByType = (data) => {
+       return data.reduce((acc, c) => {
+         if (!acc[c.type_contrat]) acc[c.type_contrat] = [];
+         acc[c.type_contrat].push(c);
+         return acc;
+       }, {});
+     };
+     
+     // Notifications pour contrats proches reconduction
+     const prochainesReconductions = !isLoading ? 
+       contrats
+         .filter(c => {
+           const alertDate = new Date(c.date_alerte_reconduction);
+           const today = new Date();
+           return alertDate > today && 
+                  alertDate <= new Date(today.setDate(today.getDate() + 60));
+         })
+         .sort((a, b) => 
+           new Date(a.date_alerte_reconduction) - new Date(b.date_alerte_reconduction)
+         ) : [];
+     
+     return (
+       <div className="contrats-delegues-dashboard">
+         {!isLoading && (
+           <>
+             <div className="stats-summary">
+               <StatCard 
+                 title="Contrats gérés"
+                 value={contrats.length}
+                 icon="file-contract"
+               />
+               <StatCard 
+                 title="Économies réalisées"
+                 value={formatCurrency(calculateEconomies(contrats))}
+                 icon="euro-sign"
+                 positive
+               />
+               <StatCard
+                 title="Reconductions à prévoir"
+                 value={prochainesReconductions.length}
+                 icon="calendar-alt"
+                 alert={prochainesReconductions.length > 0}
+               />
+             </div>
+             
+             {prochainesReconductions.length > 0 && (
+               <AlertBox title="Reconductions à surveiller">
+                 {prochainesReconductions.map(c => (
+                   <AlertItem
+                     key={c.id}
+                     title={`${c.fournisseur_nom} - ${c.type_contrat}`}
+                     subtitle={`Date limite: ${formatDate(c.date_alerte_reconduction)}`}
+                     onClick={() => handleContratClick(c.id)}
+                   />
+                 ))}
+               </AlertBox>
+             )}
+             
+             <ContratCategories
+               categories={groupByType(contrats)}
+               onCategoryClick={handleCategoryClick}
+             />
+           </>
+         )}
+       </div>
+     );
+   };
+   ```
+
+3. **Calendrier Obligations Fiscales/Sociales:**
+   ```jsx
+   const ObligationsCalendar = ({ clientId, month, year }) => {
+     const { data: obligations } = useQuery(
+       ['obligations', clientId, month, year],
+       () => fetchObligations(clientId, month, year)
+     );
+     
+     const renderCalendarDay = (day) => {
+       const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+       const dayObligations = obligations?.filter(o => 
+         o.date_prochaine === dateStr
+       );
+       
+       return (
+         <div className={`calendar-day ${dayObligations?.length ? 'has-obligations' : ''}`}>
+           <span className="day-number">{day}</span>
+           {dayObligations?.map(o => (
+             <ObligationPill
+               key={o.id}
+               type={o.type_obligation}
+               status={o.statut_periode}
+               onClick={() => handleObligationClick(o.id)}
+             />
+           ))}
+         </div>
+       );
+     };
+     
+     // Generate calendar grid...
+     
+     return (
+       <div className="obligations-calendar">
+         <MonthSelector
+           month={month}
+           year={year}
+           onChange={handleMonthChange}
+         />
+         
+         <div className="calendar-grid">
+           {/* Render days of week header */}
+           {/* Render calendar days with obligations */}
+         </div>
+         
+         <ObligationLegend />
+       </div>
+     );
+   };
+   ```
+
+4. **Fonctionnalités techniques:**
+   - Gestion délégation contrats fournisseurs
+   - Suivi obligations fiscales, sociales et réglementaires
+   - Tableau de bord de pilotage TPE
+   - Alertes intelligentes sur échéances fiscales/sociales
+   - Comparateurs contrats (énergie, télécom, assurances)
+   - Outils de diagnostic optimisation charges
+   - Workflow rappels déclaratifs personnalisés
+
+### 4.5. Module Conseil en Gestion de Patrimoine
+
+Module dédié à la gestion patrimoniale des clients particuliers et professionnels.
+
+**Spécifications techniques:**
+
+1. **Structures de données principales:**
+   ```php
+   // Bilan patrimonial global
+   class ElaskaBilanPatrimonial extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;        // Format "eLSK-PAT-YYYY-NNN"
+       public $fk_soc;            // Client (particulier/pro)
+       public $date_realisation;
+       public $situation_familiale;
+       public $revenus_annuels;
+       public $charges_fixes;
+       public $capacite_epargne;
+       public $actifs_immobiliers = array();
+       public $actifs_financiers = array();
+       public $actifs_professionnels = array();
+       public $passifs = array();  // Crédits et dettes
+       public $objectifs = array(); // Objectifs patrimoniaux
+       public $preconisations = array();
+       public $statut;            // Brouillon/Finalisé/Présenté
+       
+       // Méthodes d'analyse
+       public function calculateNetWorth() { ... }
+       public function analyzeAllocation() { ... }
+       public function identifyOptimisationAxes() { ... }
+       public function generateRecommendations() { ... }
+   }
+   
+   // Contrat d'assurance
+   class ElaskaContratAssurance extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;        // Format "eLSK-ASS-YYYY-NNN"
+       public $fk_soc_client;
+       public $fk_soc_assureur;
+       public $type_contrat;      // Vie/IARD/Prévoyance/etc.
+       public $reference_contrat;
+       public $date_souscription;
+       public $date_effet;
+       public $date_echeance;
+       public $prime_annuelle;
+       public $fractionnement;    // Mensuel/Trimestriel/Annuel
+       public $capitaux_garantis = array();
+       public $beneficiaires = array();
+       public $valeur_rachat;     // Pour assurance-vie
+       public $supports = array(); // UC, fonds euros, etc.
+       public $arbitrages = array();
+       public $clause_beneficiaire;
+       public $avenants = array();
+       
+       // Méthodes
+       public function calculatePerformance() { ... }
+       public function analyseFiscalite() { ... }
+       public function prepareArbitrage($from_support, $to_support, $amount) { ... }
+   }
+   
+   // Dossier de crédit
+   class ElaskaCredit extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;        // Format "eLSK-CRE-YYYY-NNN"
+       public $fk_soc_client;
+       public $fk_soc_preteur;
+       public $type_credit;       // Immo/Conso/Pro
+       public $objet_financement;
+       public $montant_demande;
+       public $duree_mois;
+       public $taux_propose;
+       public $mensualite;
+       public $assurance_credit;
+       public $garanties = array();
+       public $statut;            // Simulation/Demande/Accord/Refus/Débloqué
+       public $date_demande;
+       public $date_decision;
+       public $date_deblocage;
+       public $documents = array();
+       public $commentaires = array();
+       
+       // Méthodes
+       public function calculateLoanCapacity() { ... }
+       public function simulateAlternatives() { ... }
+       public function prepareLoanApplication() { ... }
+   }
+   
+   // Gestion des sinistres
+   class ElaskaSinistre extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;        // Format "eLSK-SIN-YYYY-NNN"
+       public $fk_soc_client;
+       public $fk_contrat_assurance;
+       public $date_sinistre;
+       public $type_sinistre;
+       public $description;
+       public $garanties_activees = array();
+       public $date_declaration;
+       public $montant_reclame;
+       public $statut;            // Déclaré/En instruction/Accepté/Refusé/Indemnisé
+       public $montant_propose;
+       public $montant_final;
+       public $date_reglement;
+       public $interlocuteurs = array(); // Experts, assureurs
+       public $timeline = array(); // Étapes procédure
+       public $documents = array();
+       
+       // Méthodes
+       public function declareSinistre() { ... }
+       public function addExpertise($expert_nom, $date, $observations) { ... }
+       public function contestProposal($motifs, $contre_proposition) { ... }
+   }
+   ```
+
+2. **Composant Vue Synthétique Patrimoine:**
+   ```jsx
+   const PatrimoineSynthese = ({ clientId }) => {
+     const { data: patrimoine, isLoading } = useQuery(
+       ['patrimoine-synthese', clientId],
+       () => fetchPatrimoineSynthese(clientId)
+     );
+     
+     if (isLoading) return <LoadingSpinner />;
+     
+     // Calculer la répartition du patrimoine
+     const calculateAllocation = () => {
+       const total = patrimoine.actifs.reduce((sum, a) => sum + a.valeur, 0);
+       return {
+         immobilier: patrimoine.actifs
+           .filter(a => a.type === 'immobilier')
+           .reduce((sum, a) => sum + a.valeur, 0) / total * 100,
+         financier: patrimoine.actifs
+           .filter(a => a.type === 'financier')
+           .reduce((sum, a) => sum + a.valeur, 0) / total * 100,
+         professionnel: patrimoine.actifs
+           .filter(a => a.type === 'professionnel')
+           .reduce((sum, a) => sum + a.valeur, 0) / total * 100,
+         autres: patrimoine.actifs
+           .filter(a => a.type === 'autre')
+           .reduce((sum, a) => sum + a.valeur, 0) / total * 100,
+       };
+     };
+     
+     const allocation = calculateAllocation();
+     
+     return (
+       <div className="patrimoine-synthese">
+         <div className="key-figures">
+           <KeyFigureCard
+             title="Patrimoine Net"
+             value={formatCurrency(patrimoine.actif_net)}
+             evolution={patrimoine.evolution_annuelle}
+           />
+           <KeyFigureCard
+             title="Revenus Annuels"
+             value={formatCurrency(patrimoine.revenus)}
+           />
+           <KeyFigureCard
+             title="Capacité d'épargne"
+             value={formatCurrency(patrimoine.capacite_epargne)}
+             subtitle={`${patrimoine.taux_epargne.
+
+Je vais terminer et livrer le cahier des charges technique complet.
+
+```jsx
+toFixed(1)}%`}
+           />
+         </div>
+         
+         <div className="allocation-chart">
+           <h3>Répartition du Patrimoine</h3>
+           <PieChart
+             data={[
+               { name: 'Immobilier', value: allocation.immobilier, color: '#4285F4' },
+               { name: 'Financier', value: allocation.financier, color: '#34A853' },
+               { name: 'Professionnel', value: allocation.professionnel, color: '#FBBC05' },
+               { name: 'Autres', value: allocation.autres, color: '#EA4335' },
+             ]}
+           />
+         </div>
+         
+         <div className="portfolio-summary">
+           <h3>Synthèse des Actifs</h3>
+           <div className="actifs-grid">
+             {patrimoine.actifs.map(actif => (
+               <ActifCard
+                 key={actif.id}
+                 type={actif.type}
+                 label={actif.libelle}
+                 value={formatCurrency(actif.valeur)}
+                 details={actif.details}
+                 onClick={() => handleActifClick(actif.id)}
+               />
+             ))}
+           </div>
+         </div>
+         
+         <div className="passifs-summary">
+           <h3>Synthèse des Passifs</h3>
+           <div className="passifs-grid">
+             {patrimoine.passifs.map(passif => (
+               <PassifCard
+                 key={passif.id}
+                 type={passif.type}
+                 label={passif.libelle}
+                 value={formatCurrency(passif.montant_restant)}
+                 progress={100 - (passif.montant_restant / passif.montant_initial * 100)}
+                 onClick={() => handlePassifClick(passif.id)}
+               />
+             ))}
+           </div>
+         </div>
+       </div>
+     );
+   };
+   ```
+
+3. **Composant Tableau de bord Assurances:**
+   ```jsx
+   const TableauAssurances = ({ clientId }) => {
+     const { data: contrats, isLoading } = useQuery(
+       ['contrats-assurance', clientId],
+       () => fetchContratsAssurance(clientId)
+     );
+     
+     if (isLoading) return <LoadingSpinner />;
+     
+     // Grouper par type d'assurance
+     const groupByType = () => {
+       return contrats.reduce((acc, contrat) => {
+         if (!acc[contrat.type_contrat]) acc[contrat.type_contrat] = [];
+         acc[contrat.type_contrat].push(contrat);
+         return acc;
+       }, {});
+     };
+     
+     const groupedContrats = groupByType();
+     
+     return (
+       <div className="assurances-dashboard">
+         <div className="assurances-stats">
+           <StatCard
+             title="Total Contrats"
+             value={contrats.length}
+             icon="shield-alt"
+           />
+           <StatCard
+             title="Primes Annuelles"
+             value={formatCurrency(
+               contrats.reduce((sum, c) => sum + c.prime_annuelle, 0)
+             )}
+             icon="euro-sign"
+           />
+           <StatCard
+             title="À Revoir"
+             value={contrats.filter(c => c.a_optimiser).length}
+             icon="exclamation-triangle"
+             alert={contrats.filter(c => c.a_optimiser).length > 0}
+           />
+         </div>
+         
+         {Object.keys(groupedContrats).map(type => (
+           <div key={type} className="assurance-category">
+             <h3>
+               <i className={`fas fa-${getAssuranceTypeIcon(type)}`}></i>
+               {getAssuranceTypeLabel(type)}
+             </h3>
+             
+             <div className="contracts-grid">
+               {groupedContrats[type].map(contrat => (
+                 <AssuranceContratCard
+                   key={contrat.id}
+                   contrat={contrat}
+                   onClick={() => handleContratClick(contrat.id)}
+                 />
+               ))}
+             </div>
+           </div>
+         ))}
+         
+         <div className="action-buttons">
+           <button onClick={handleAddContrat}>
+             <i className="fas fa-plus"></i> Ajouter un contrat
+           </button>
+           <button onClick={handleCompareContrats}>
+             <i className="fas fa-balance-scale"></i> Comparer
+           </button>
+           <button onClick={handleOptimiserContrats}>
+             <i className="fas fa-search-dollar"></i> Analyser / Optimiser
+           </button>
+         </div>
+       </div>
+     );
+   };
+   ```
+
+4. **Fonctionnalités techniques:**
+   - Modélisation du patrimoine global (actifs, passifs, revenus)
+   - Portefeuille de contrats d'assurance multi-compagnies
+   - Gestion complète des crédits (simulation, demande, suivi)
+   - Suivi des sinistres de A à Z
+   - Simulation fiscale et patrimoniale
+   - Tableaux de bord dynamiques avec visualisations
+   - Workflow d'audit patrimonial
+   - Alertes sur rendements et opportunités de renégociation
+
+### 4.6. Module Abonnements Clients
+
+Module dédié à la gestion des contrats d'abonnement aux services d'eLaska-ESaiko.
+
+**Spécifications techniques:**
+
+1. **Structure de données principale:**
+   ```php
+   class ElaskaAbonnement extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;        // Format "eLSK-ABO-YYYY-NNN"
+       public $fk_soc;            // Client
+       public $fk_user_gestionnaire;
+       public $libelle;
+       public $description;
+       public $date_debut;
+       public $date_fin;          // Null si tacite reconduction
+       public $tacite_reconduction;
+       public $periodicite;       // Mensuel/Trimestriel/Annuel
+       public $montant_periode;
+       public $services_inclus = array(); // Détail services
+       public $pack_type;         // Essentiel/Premium/Sur-mesure
+       public $heures_incluses;   // Heures de service incluses
+       public $heures_consommees; // Suivi conso
+       public $documents = array();
+       public $statut;            // Brouillon/Actif/Suspendu/Résilié
+       public $date_prochain_paiement;
+       public $date_dernier_paiement;
+       public $mode_paiement;
+       public $remise_commerciale;
+       
+       // Méthodes
+       public function renewSubscription($months) { ... }
+       public function addHoursConsumed($hours, $dossier_id) { ... }
+       public function generateInvoice($period) { ... }
+       public function calculateRemainingHours() { ... }
+   }
+   ```
+
+2. **Composant Suivi Consommation Heures:**
+   ```jsx
+   const AbonnementConsommation = ({ abonnementId }) => {
+     const { data: abonnement, isLoading } = useQuery(
+       ['abonnement', abonnementId],
+       () => fetchAbonnement(abonnementId)
+     );
+     
+     const { data: consommation, isLoading: loadingConso } = useQuery(
+       ['consommation', abonnementId],
+       () => fetchConsommationAbonnement(abonnementId)
+     );
+     
+     if (isLoading || loadingConso) return <LoadingSpinner />;
+     
+     const heuresRestantes = abonnement.heures_incluses - abonnement.heures_consommees;
+     const pourcentageConsommation = Math.min(
+       (abonnement.heures_consommees / abonnement.heures_incluses) * 100, 
+       100
+     );
+     
+     // Calculer consommation par mois sur les 6 derniers mois
+     const derniersMois = consommation.historique_mensuel
+       .slice(-6)
+       .reverse();
+     
+     return (
+       <div className="abonnement-consommation">
+         <div className="stats-row">
+           <StatCard 
+             title="Heures Incluses"
+             value={`${abonnement.heures_incluses}h`}
+             icon="clock"
+           />
+           <StatCard 
+             title="Heures Consommées"
+             value={`${abonnement.heures_consommees.toFixed(1)}h`}
+             icon="hourglass-half"
+           />
+           <StatCard 
+             title="Heures Restantes"
+             value={`${heuresRestantes.toFixed(1)}h`}
+             icon="hourglass-end"
+             alert={heuresRestantes < 5}
+           />
+         </div>
+         
+         <div className="progress-container">
+           <ProgressBar 
+             percentage={pourcentageConsommation} 
+             label="Consommation"
+             color={getColorByPercentage(pourcentageConsommation)}
+           />
+         </div>
+         
+         <div className="consumption-chart">
+           <h3>Évolution de la consommation</h3>
+           <BarChart
+             data={derniersMois.map(m => ({
+               month: formatMonthYear(m.mois),
+               value: m.heures_consommees
+             }))}
+             xKey="month"
+             yKey="value"
+             color="#4285F4"
+             unit="h"
+           />
+         </div>
+         
+         <div className="consumption-breakdown">
+           <h3>Répartition par service</h3>
+           <TableauRepartition data={consommation.repartition_services} />
+         </div>
+         
+         {heuresRestantes < 5 && (
+           <AlertBox title="Attention">
+             Votre forfait d'heures est presque épuisé. 
+             <button onClick={() => handleComplement()}>
+               Commander un complément d'heures
+             </button>
+           </AlertBox>
+         )}
+       </div>
+     );
+   };
+   ```
+
+3. **Logique de facturation automatique:**
+   ```php
+   class ElaskaAbonnementBilling {
+       private $db;
+       
+       public function __construct($db) {
+           $this->db = $db;
+       }
+       
+       /**
+        * Génère les factures d'abonnement pour la période donnée
+        * @param string $period Format YYYY-MM
+        */
+       public function generateMonthlyInvoices($period) {
+           // Récupérer les abonnements actifs avec échéance dans la période
+           $sql = "SELECT rowid FROM llx_elaska_abonnement 
+                   WHERE statut = 'actif' 
+                   AND DATE_FORMAT(date_prochain_paiement, '%Y-%m') = '".$period."'";
+           $result = $this->db->query($sql);
+           
+           $processed = 0;
+           $errors = 0;
+           
+           if ($result) {
+               $num = $this->db->num_rows($result);
+               $i = 0;
+               
+               while ($i < $num) {
+                   $obj = $this->db->fetch_object($result);
+                   try {
+                       $abonnement = new ElaskaAbonnement($this->db);
+                       $abonnement->fetch($obj->rowid);
+                       
+                       // Générer la facture
+                       $invoice_id = $abonnement->generateInvoice($period);
+                       
+                       // Mettre à jour la date du prochain paiement
+                       $abonnement->updateNextPaymentDate();
+                       
+                       $processed++;
+                   } catch (Exception $e) {
+                       $errors++;
+                       // Log error
+                   }
+                   $i++;
+               }
+           }
+           
+           return [
+               'processed' => $processed,
+               'errors' => $errors
+           ];
+       }
+       
+       /**
+        * Vérifie les abonnements en fin de période et gère les renouvellements
+        */
+       public function handleSubscriptionRenewals() {
+           // Récupérer les abonnements qui arrivent à échéance dans 30 jours
+           $date = dol_now() + (30 * 24 * 3600);
+           $expiry_date = dol_print_date($date, '%Y-%m-%d');
+           
+           $sql = "SELECT rowid FROM llx_elaska_abonnement 
+                   WHERE date_fin = '".$expiry_date."'";
+           
+           $result = $this->db->query($sql);
+           
+           if ($result) {
+               $num = $this->db->num_rows($result);
+               $i = 0;
+               
+               while ($i < $num) {
+                   $obj = $this->db->fetch_object($result);
+                   $abonnement = new ElaskaAbonnement($this->db);
+                   $abonnement->fetch($obj->rowid);
+                   
+                   // Envoyer notification de fin d'abonnement
+                   $this->sendRenewalNotification($abonnement);
+                   
+                   // Si tacite reconduction, planifier le renouvellement
+                   if ($abonnement->tacite_reconduction) {
+                       // Créer une tâche de renouvellement pour le jour d'expiration
+                       $this->scheduleRenewalTask($abonnement);
+                   }
+                   
+                   $i++;
+               }
+           }
+       }
+       
+       // Autres méthodes utilitaires...
+   }
+   ```
+
+4. **Fonctionnalités techniques:**
+   - Modèles d'abonnements packagés et sur-mesure
+   - Gestion des périodicités et tacite reconduction
+   - Suivi des heures incluses/consommées avec alertes
+   - Génération automatique des factures périodiques
+   - Gestion des renouvellements et fins de contrat
+   - Tableaux de bord de consommation et rentabilité
+   - Facturation des dépassements d'heures
+   - Reporting client sur utilisation des services
+
+### 4.7. Module Recouvrements
+
+Module dédié à la gestion des dossiers de recouvrement de créances pour les clients.
+
+**Spécifications techniques:**
+
+1. **Structure de données principale:**
+   ```php
+   class ElaskaRecouvrement extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;        // Format "eLSK-REC-YYYY-NNN"
+       public $fk_soc_client;     // Client qui nous mandate
+       public $type_creance;      // Commercial/Locatif/Personnel
+       public $fk_soc_debiteur;   // Débiteur (tiers)
+       public $montant_initial;
+       public $montant_frais;
+       public $montant_total;     // Initial + frais
+       public $montant_recouvre;  // Sommes récupérées
+       public $date_creance;
+       public $date_echeance;
+       public $justificatifs = array(); // Factures, contrats
+       public $demarches = array();  // Actions entreprises
+       public $statut;            // Ouvert/Mise en demeure/Contentieux/Recouvré/Abandonné
+       public $probabilite;       // 1-5 étoiles
+       public $commission_cabinet; // % ou montant fixe
+       public $commentaires = array();
+       
+       // Méthodes
+       public function calculateRemainingAmount() { ... }
+       public function addPayment($date, $amount, $mode) { ... }
+       public function generateLegalLetter($type) { ... }
+       public function addProcedureStep($type, $date, $comment) { ... }
+   }
+   
+   class ElaskaDemarcheRecouvrement extends CommonObject {
+       public $db;
+       public $id;
+       public $fk_recouvrement;
+       public $type_demarche;     // Relance/LRAR/Huissier/Contentieux
+       public $date;
+       public $description;
+       public $cout;
+       public $reponse_obtenue;
+       public $document_genere;   // ID document
+       public $statut;            // Planifiée/Effectuée/Échec
+       public $resultat;
+       
+       // Méthodes
+       public function executeAction() { ... }
+       public function scheduleNextAction() { ... }
+       public function recordResponse($response_text, $success) { ... }
+   }
+   ```
+
+2. **Composant Tableau de Bord Recouvrements:**
+   ```jsx
+   const RecouvrementsDashboard = ({ clientId }) => {
+     const { data: recouvrements, isLoading } = useQuery(
+       ['recouvrements', clientId],
+       () => fetchRecouvrements(clientId)
+     );
+     
+     if (isLoading) return <LoadingSpinner />;
+     
+     const calculateStats = () => {
+       const total = recouvrements.reduce((sum, r) => sum + r.montant_total, 0);
+       const recouvre = recouvrements.reduce((sum, r) => sum + r.montant_recouvre, 0);
+       const enCours = recouvrements.filter(r => 
+         ['ouvert', 'mise_en_demeure', 'contentieux'].includes(r.statut)
+       ).length;
+       const succes = recouvrements.filter(r => r.statut === 'recouvre').length;
+       const tauxReussite = recouvrements.length > 0 ? 
+         (succes / recouvrements.length) * 100 : 0;
+       const tauxRecouvrement = total > 0 ? (recouvre / total) * 100 : 0;
+       
+       return { total, recouvre, enCours, succes, tauxReussite, tauxRecouvrement };
+     };
+     
+     const stats = calculateStats();
+     
+     const groupByStatus = () => {
+       return recouvrements.reduce((acc, rec) => {
+         if (!acc[rec.statut]) acc[rec.statut] = [];
+         acc[rec.statut].push(rec);
+         return acc;
+       }, {});
+     };
+     
+     const groupedRecouvrements = groupByStatus();
+     const statusOrder = ['ouvert', 'mise_en_demeure', 'contentieux', 'recouvre', 'abandonne'];
+     
+     return (
+       <div className="recouvrements-dashboard">
+         <div className="stats-row">
+           <StatCard 
+             title="Montant Total"
+             value={formatCurrency(stats.total)}
+             icon="file-invoice-dollar"
+           />
+           <StatCard 
+             title="Montant Recouvré"
+             value={formatCurrency(stats.recouvre)}
+             percentage={stats.tauxRecouvrement}
+             icon="hand-holding-usd"
+             positive
+           />
+           <StatCard 
+             title="Dossiers en Cours"
+             value={stats.enCours}
+             icon="spinner"
+           />
+           <StatCard 
+             title="Taux de Réussite"
+             value={`${stats.tauxReussite.toFixed(1)}%`}
+             icon="trophy"
+           />
+         </div>
+         
+         <RecouvrementsPieChart
+           totalAmount={stats.total}
+           recoveredAmount={stats.recouvre}
+         />
+         
+         {statusOrder.map(status => {
+           if (!groupedRecouvrements[status] || groupedRecouvrements[status].length === 0) return null;
+           return (
+             <div key={status} className="recouvrement-status-section">
+               <h3>{getRecouvrementStatusLabel(status)}</h3>
+               <div className="recouvrements-grid">
+                 {groupedRecouvrements[status].map(rec => (
+                   <RecouvrementCard
+                     key={rec.id}
+                     recouvrement={rec}
+                     onClick={() => handleRecouvrementClick(rec.id)}
+                   />
+                 ))}
+               </div>
+             </div>
+           );
+         })}
+         
+         <div className="action-buttons">
+           <button onClick={handleAddRecouvrement}>
+             <i className="fas fa-plus"></i> Nouveau dossier
+           </button>
+           <button onClick={handleBulkActions}>
+             <i className="fas fa-tasks"></i> Actions groupées
+           </button>
+         </div>
+       </div>
+     );
+   };
+   ```
+
+3. **Générateur de documents juridiques:**
+   ```php
+   class ElaskaRecouvrementDocument {
+       private $db;
+       private $recouvrement;
+       private $templates = array(
+           'relance_simple' => 'templates/recouvrements/relance_simple.docx',
+           'mise_en_demeure' => 'templates/recouvrements/mise_en_demeure.docx',
+           'commandement' => 'templates/recouvrements/commandement.docx',
+           'injonction' => 'templates/recouvrements/injonction.docx',
+       );
+       
+       public function __construct($db, $recouvrement) {
+           $this->db = $db;
+           $this->recouvrement = $recouvrement;
+       }
+       
+       /**
+        * Génère un document juridique basé sur le type et les données du recouvrement
+        * @param string $doc_type Type de document à générer
+        * @return int ID du document généré
+        */
+       public function generateDocument($doc_type) {
+           // Vérifier que le type est supporté
+           if (!array_key_exists($doc_type, $this->templates)) {
+               throw new Exception('Type de document non supporté: ' . $doc_type);
+           }
+           
+           // Récupérer les données nécessaires
+           $client = new Societe($this->db);
+           $client->fetch($this->recouvrement->fk_soc_client);
+           
+           $debiteur = new Societe($this->db);
+           $debiteur->fetch($this->recouvrement->fk_soc_debiteur);
+           
+           // Préparer les variables de remplacement
+           $vars = array(
+               '{DATE}' => dol_print_date(dol_now(), 'day'),
+               '{CLIENT_NOM}' => $client->name,
+               '{CLIENT_ADRESSE}' => $client->address,
+               '{CLIENT_CP}' => $client->zip,
+               '{CLIENT_VILLE}' => $client->town,
+               '{DEBITEUR_NOM}' => $debiteur->name,
+               '{DEBITEUR_ADRESSE}' => $debiteur->address,
+               '{DEBITEUR_CP}' => $debiteur->zip,
+               '{DEBITEUR_VILLE}' => $debiteur->town,
+               '{MONTANT}' => price($this->recouvrement->montant_total),
+               '{MONTANT_LETTRE}' => $this->numberToWords($this->recouvrement->montant_total),
+               '{DATE_CREANCE}' => dol_print_date($this->recouvrement->date_creance, 'day'),
+               '{DATE_ECHEANCE}' => dol_print_date($this->recouvrement->date_echeance, 'day'),
+               '{REF_CREANCE}' => $this->recouvrement->ref_elaska,
+               // Etc.
+           );
+           
+           // Générer le document
+           return $this->processTemplate(
+               $this->templates[$doc_type], 
+               'RECOUVREMENT_' . strtoupper($doc_type) . '_' . $this->recouvrement->ref_elaska, 
+               $vars
+           );
+       }
+       
+       /**
+        * Traite un template pour remplacer les variables et générer le document final
+        * @return int ID du document généré dans la GED
+        */
+       private function processTemplate($template_path, $output_name, $vars) {
+           // Implémentation avec librairie de traitement docx
+           // ...
+       }
+       
+       /**
+        * Convertit un nombre en lettres (pour montants juridiques)
+        */
+       private function numberToWords($number) {
+           // Implémentation de l'algorithme de conversion
+           // ...
+       }
+   }
+   ```
+
+4. **Fonctionnalités techniques:**
+   - Workflow de recouvrement configurable
+   - Modèles de documents juridiques prêts à l'emploi
+   - Suivi des échéanciers de paiement
+   - Calcul automatique des intérêts de retard
+   - Génération de courriers LRAR
+   - Gestion des commissions de recouvrement
+   - Tableau de bord de performance des recouvrements
+   - Alertes sur délais de prescription
+
+### 4.8. Module Prospection & CRM
+
+Module dédié à la gestion des prospects, leads et opportunités commerciales.
+
+**Spécifications techniques:**
+
+1. **Structure de données principale:**
+   ```php
+   class ElaskaOpportunite extends CommonObject {
+       public $db;
+       public $id;
+       public $ref_elaska;        // Format "eLSK-OPP-YYYY-NNN"
+       public $titre;
+       public $fk_soc_prospect;   // Lien prospect (tiers)
+       public $fk_user_responsable;
+       public $source;            // Web/Téléphone/Salon/Apporteur/etc.
+       public $fk_soc_apporteur;  // Si source = Apporteur
+       public $type_besoin;       // Admin/Patrimoine/Fiscalité/etc.
+       public $description;
+       public $montant_estime;
+       public $probabilite;       // 0-100%
+       public $etape;             // Qualification/Proposition/Négociation/Gagné/Perdu
+       public $date_creation;
+       public $date_cloture_prevue;
+       public $date_cloture_reelle;
+       public $commentaires = array();
+       public $interactions = array();
+       public $tags = array();
+       public $documents = array();
+       
+       // Méthodes
+       public function moveToNextStage() { ... }
+       public function calculateScore() { ... }
+       public function convertToClient() { ... }
+       public function getConversionRate() { ... }
+   }
+   
+   class ElaskaInteractionCRM extends CommonObject {
+       public $db;
+       public $id;
+       public $fk_opportunite;
+       public $type;              // Email/Appel/RDV/etc.
+       public $date;
+       public $duree;             // En minutes (pour RDV/Appel)
+       public $description;
+       public $resultat;
+       public $suite_a_donner;
+       public $fk_user_createur;
+       public $documents = array();
+       
+       // Méthodes
+       public function scheduleFollowUp($date, $type) { ... }
+       public function linkToCalendar() { ... }
+       public function sendRecap() { ... }
+   }
+   
+   class ElaskaApporteurAffaires extends CommonObject {
+       public $db;
+       public $id;
+       public $fk_soc;            // Lien tiers apporteur
+       public $contrat_cadre;     // Référence contrat
+       public $date_debut;
+       public $date_fin;
+       public $statut;            // Actif/Inactif
+       public $taux_commission;   // % de commission standard
+       public $commissions_variables = array(); // Commission par type d'offre
+       public $montant_verse;     // Total commissions versées
+       public $montant_a_verser;  // Commissions à payer
+       public $leads = array();   // Opportunités apportées
+       public $conversions = array(); // Opportunités converties
+       
+       // Méthodes
+       public function calculateCommission($opportunity_id) { ... }
+       public function generateCommissionReport() { ... }
+       public function processPayment($amount, $period) { ... }
+   }
+   ```
+
+2. **Composant Pipeline CRM:**
+   ```jsx
+   const OpportunitiesPipeline = ({ userId = null }) => {
+     // Si userId est fourni, filtre pour ce commercial, sinon toutes les opportunités
+     const { data: opportunities, isLoading } = useQuery(
+       ['opportunities', userId],
+       () => fetchOpportunities(userId)
+     );
+     
+     if (isLoading) return <LoadingSpinner />;
+     
+     // Définir les étapes du pipeline
+     const stages = [
+       { id: 'qualification', label: 'Qualification', icon: 'filter' },
+       { id: 'proposition', label: 'Proposition', icon: 'file-contract' },
+       { id: 'negotiation', label: 'Négociation', icon: 'handshake' },
+       { id: 'won', label: 'Gagné', icon: 'trophy' },
+       { id: 'lost', label: 'Perdu', icon: 'times-circle' }
+     ];
+     
+     // Trier les opportunités par étape
+     const opportunitiesByStage = stages.reduce((acc, stage) => {
+       acc[stage.id] = opportunities.filter(opp => opp.etape === stage.id);
+       return acc;
+     }, {});
+     
+     // Calculer les statistiques par étape
+     const calculateStageStats = (stageId) => {
+       const stageOpportunities = opportunitiesByStage[stageId];
+       return {
+         count: stageOpportunities.length,
+         value: stageOpportunities.reduce((sum, opp) => 
+           sum + (opp.montant_estime * opp.probabilite / 100), 0)
+       };
+     };
+     
+     // Calculer les conversions entre étapes
+     const calculateConversionRates = () => {
+       // Logique de calcul des taux de conversion
+       // ...
+     };
+     
+     const conversionRates = calculateConversionRates();
+     
+     return (
+       <div className="opportunities-pipeline">
+         <div className="pipeline-header">
+           <h2>Pipeline Commercial</h2>
+           <div className="pipeline-filters">
+             <UserSelector
+               selectedUser={userId}
+               onChange={handleUserChange}
+             />
+             <DateRangeSelector
+               onChange={handleDateRangeChange}
+             />
+           </div>
+         </div>
+         
+         <div className="pipeline-stats">
+           <StatCard 
+             title="Opportunités actives"
+             value={opportunities.filter(o => !['won', 'lost'].includes(o.etape)).length}
+             icon="bolt"
+           />
+           <StatCard 
+             title="Valeur potentielle"
+             value={formatCurrency(
+               opportunities
+                 .filter(o => !['won', 'lost'].includes(o.etape))
+                 .reduce((sum, opp) => sum + (opp.montant_estime * opp.probabilite / 100), 0)
+             )}
+             icon="chart-line"
+           />
+           <StatCard 
+             title="Taux de conversion"
+             value={`${calculateOverallConversionRate()}%`}
+             icon="percentage"
+           />
+         </div>
+         
+         <div className="pipeline-container">
+           {stages.map((stage, index) => (
+             <React.Fragment key={stage.id}>
+               {index > 0 && (
+                 <div className="pipeline-connector">
+                   <div className="connector-stats">
+                     {conversionRates[index - 1] && (
+                       <span>{conversionRates[index - 1]}%</span>
+                     )}
+                   </div>
+                   <div className="connector-line"></div>
+                 </div>
+               )}
+               
+               <div className="pipeline-stage">
+                 <div className="stage-header">
+                   <i className={`fas fa-${stage.icon}`}></i>
+                   <h3>{stage.label}</h3>
+                   <div className="stage-stats">
+                     <span>{calculateStageStats(stage.id).count}</span>
+                     <span>{formatCurrency(calculateStageStats(stage.id).value)}</span>
+                   </div>
+                 </div>
+                 
+                 <div className="stage-items">
+                   {opportunitiesByStage[stage.id].map(opp => (
+                     <OpportunityCard
+                       key={opp.id}
+                       opportunity={opp}
+                       onDragStart={handleDragStart}
+                       onClick={() => handleOpportunityClick(opp.id)}
+                     />
+                   ))}
+                   
+                   {stage.id !== 'won' && stage.id !== 'lost' && (
+                     <AddOpportunityButton 
+                       stage={stage.id} 
+                       onClick={() => handleAddOpportunity(stage.id)}
+                     />
+                   )}
+                 </div>
+               </div>
+             </React.Fragment>
+           ))}
+         </div>
+       </div>
+     );
+   };
+   ```
+
+3. **Tableau de bord Performance Apporteurs:**
+   ```jsx
+   const ApporteursDashboard = () => {
+     const { data: apporteurs, isLoading } = useQuery(
+       'apporteurs',
+       fetchApporteurs
+     );
+     
+     if (isLoading) return <LoadingSpinner />;
+     
+     // Calculer les statistiques globales
+     const calculateGlobalStats = () => {
+       const totalLeads = apporteurs.reduce((sum, a) => sum + a.leads.length, 0);
+       const totalConversions = apporteurs.reduce((sum, a) => sum + a.conversions.length, 0);
+       const totalCommissions = apporteurs.reduce((sum, a) => sum + a.montant_verse + a.montant_a_verser, 0);
+       const averageConversionRate = totalLeads > 0 ? 
+         (totalConversions / totalLeads) * 100 : 0;
+       
+       return {
+         totalLeads,
+         totalConversions,
+         totalCommissions,
+         averageConversionRate
+       };
+     };
+     
+     const globalStats = calculateGlobalStats();
+     
+     // Calculer le classement des apporteurs par performance
+     const apporteursRanking = [...apporteurs].sort((a, b) => {
+       const convRateA = a.leads.length > 0 ? 
+         (a.conversions.length / a.leads.length) * 100 : 0;
+       const convRateB = b.leads.length > 0 ? 
+         (b.conversions.length / b.leads.length) * 100 : 0;
+       return convRateB - convRateA;
+     }).slice(0, 5);  // Top 5
+     
+     return (
+       <div className="apporteurs-dashboard">
+         <div className="stats-row">
+           <StatCard 
+             title="Leads Apportés"
+             value={globalStats.totalLeads}
+             icon="users"
+           />
+           <StatCard 
+             title="Taux de Conversion"
+             value={`${globalStats.averageConversionRate.toFixed(1)}%`}
+             icon="chart-pie"
+           />
+           <StatCard 
+             title="Commissions"
+             value={formatCurrency(globalStats.totalCommissions)}
+             icon="money-bill-wave"
+           />
+         </div>
+         
+         <div className="dashboard-row">
+           <div className="top-apporteurs">
+             <h3>Top 5 Apporteurs</h3>
+             <table className="data-table">
+               <thead>
+                 <tr>
+                   <th>Apporteur</th>
+                   <th>Leads</th>
+                   <th>Conversions</th>
+                   <th>Taux</th>
+                   <th>Commissions</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 {apporteursRanking.map(apporteur => {
+                   const convRate = apporteur.leads.length > 0 ? 
+                     (apporteur.conversions.length / apporteur.leads.length) * 100 : 0;
+                   
+                   return (
+                     <tr key={apporteur.id} onClick={() => handleApporteurClick(apporteur.id)}>
+                       <td>{apporteur.nom}</td>
+                       <td>{apporteur.leads.length}</td>
+                       <td>{apporteur.conversions.length}</td>
+                       <td>{`${convRate.toFixed(1)}%`}</td>
+                       <td>{formatCurrency(apporteur.montant_verse + apporteur.montant_a_verser)}</td>
+                     </tr>
+                   );
+                 })}
+               </tbody>
+             </table>
+           </div>
+           
+           <div className="commissions-chart">
+             <h3>Commissions par Mois</h3>
+             <BarChart
+               data={getCommissionsByMonth()}
+               xKey="month"
+               yKey="amount"
+             />
+           </div>
+         </div>
+         
+         <div className="dashboard-row">
+           <div className="leads-by-source">
+             <h3>Leads par Source</h3>
+             <PieChart
+               data={getLeadsBySource()}
+             />
+           </div>
+           
+           <div className="pending-commissions">
+             <h3>Commissions à Verser</h3>
+             <table className="data-table">
+               <thead>
+                 <tr>
+                   <th>Apporteur</th>
+                   <th>Montant</th>
+                   <th>Actions</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 {apporteurs
+                   .filter(a => a.montant_a_verser > 0)
+                   .sort((a, b) => b.montant_a_verser - a.montant_a_verser)
+                   .map(apporteur => (
+                     <tr key={apporteur.id}>
+                       <td>{apporteur.nom}</td>
+                       <td>{formatCurrency(apporteur.montant_a_verser)}</td>
+                       <td>
+                         <button 
+                           onClick={() => handleProcessPayment(apporteur.id)}
+                           className="btn-sm"
+                         >
+                           <i className="fas fa-money-bill-wave"></i> Payer
+                         </button>
+                       </td>
+                     </tr>
+                   ))}
+               </tbody>
+             </table>
+           </div>
+         </div>
+       </div>
+     );
+   };
+   ```
+
+4. **Fonctionnalités techniques:**
+   - Pipeline commercial visuel et interactif
+   - Scoring des leads basé sur critères configurables
+   - Workflow de conversion prospect → client
+   - Gestion des interactions multi-canal
+   - Suivi des apporteurs d'affaires et calcul des commissions
+   - Portail limité pour apporteurs (suivi leads/commissions)
+   - Rapports de performance commerciale
+   - Intégration formulaires web pour capture leads
+
+## 5. PORTAIL CLIENT SPA
+
+### 5.1. Architecture du Portail React
+
+Le portail client est développé comme une Single Page Application (SPA) React, hébergée sur le même serveur web que Dolibarr mais fonctionnant de manière indépendante et communiquant via API REST.
+
+**Spécifications techniques:**
+
+1. **Structure du projet React:**
+   ```
+   portail/
+   ├── public/                      # Ressources statiques
+   │   ├── index.html               # Point d'entrée HTML
+   │   ├── favicon.ico              # Favicon
+   │   └── assets/                  # Images, fonts, etc.
+   ├── src/                         # Code source
+   │   ├── App.jsx                  # Composant racine
+   │   ├── index.jsx                # Point d'entrée JS
+   │   ├── components/              # Composants réutilisables
+   │   │   ├── common/              # Composants génériques
+   │   │   ├── layout/              # Composants de mise en page
+   │   │   └── domain/              # Composants spécifiques domaine
+   │   ├── pages/                   # Conteneurs de pages
+   │   ├── hooks/                   # Hooks personnalisés
+   │   ├── services/                # Services API et utilitaires
+   │   │   ├── api.js               # Configuration Axios
+   │   │   ├── auth.js              # Gestion authentification
+   │   │   └── endpoints/           # Endpoints API par domaine
+   │   ├── context/                 # Contextes React
+   │   ├── utils/                   # Fonctions utilitaires
+   │   ├── styles/                  # Styles globaux
+   │   └── constants/               # Constantes
+   ├── package.json                 # Dépendances
+   ├── vite.config.js               # Configuration Vite
+   └── .eslintrc.js                 # Configuration ESLint
+   ```
+
+2. **Configuration du build:**
+   ```js
+   // vite.config.js
+   import { defineConfig } from 'vite';
+   import react from '@vitejs/plugin-react';
+   import path from 'path';
+   
+   export default defineConfig({
+     plugins: [react()],
+     resolve: {
+       alias: {
+         '@': path.resolve(__dirname, './src'),
+         '@components': path.resolve(__dirname, './src/components'),
+         '@pages': path.resolve(__dirname, './src/pages'),
+         '@hooks': path.resolve(__dirname, './src/hooks'),
+         '@services': path.resolve(__dirname, './src/services'),
+         '@utils': path.resolve(__dirname, './src/utils'),
+         '@styles': path.resolve(__dirname, './src/styles'),
+         '@context': path.resolve(__dirname, './src/context'),
+       },
+     },
+     build: {
+       outDir: 'build',
+       sourcemap: process.env.NODE_ENV !== 'production',
+       minify: process.env.NODE_ENV === 'production',
+     },
+     server: {
+       proxy: {
+         '/api': {
+           target: 'http://localhost/dolibarr',
+           changeOrigin: true,
+           rewrite: (path) => path.replace(/^\/api/, '/htdocs/custom/elaska/api')
+         }
+       }
+     }
+   });
+   ```
+
+3. **Routage SPA:**
+   ```jsx
+   // src/App.jsx
+   import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+   import { QueryClient, QueryClientProvider } from 'react-query';
+   import { Suspense, lazy } from 'react';
+   import { AuthProvider, useAuth } from '@context/AuthContext';
+   import Layout from '@components/layout/Layout';
+   import LoadingScreen from '@components/common/LoadingScreen';
+   
+   // Lazy-loaded pages
+   const Login = lazy(() => import('@pages/Login'));
+   const Dashboard = lazy(() => import('@pages/Dashboard'));
+   const Dossiers = lazy(() => import('@pages/Dossiers'));
+   const DossierDetail = lazy(() => import('@pages/DossierDetail'));
+   const Documents = lazy(() => import('@pages/Documents'));
+   const CoffreFort = lazy(() => import('@pages/CoffreFort'));
+   const Messagerie = lazy(() => import('@pages/Messagerie'));
+   const Echeances = lazy(() => import('@pages/Echeances'));
+   const RDV = lazy(() => import('@pages/RDV'));
+   const Profil = lazy(() => import('@pages/Profil'));
+   const ObjectifsVie = lazy(() => import('@pages/ObjectifsVie'));
+   const Patrimoine = lazy(() => import('@pages/Patrimoine'));
+   const Assurances = lazy(() => import('@pages/Assurances'));
+   const Credits = lazy(() => import('@pages/Credits'));
+   
+   // Pages associatives
+   const Subventions = lazy(() => import('@pages/association/Subventions'));
+   const Instances = lazy(() => import('@pages/association/Instances'));
+   
+   // Pages entreprises
+   const ContratsGeres = lazy(() => import('@pages/entreprise/ContratsGeres'));
+   const ObligationsFiscales = lazy(() => import('@pages/entreprise/ObligationsFiscales'));
+   
+   // Page créateurs
+   const ParcoursCreation = lazy(() => import('@pages/createur/ParcoursCreation'));
+   const AidesCreation = lazy(() => import('@pages/createur/AidesCreation'));
+   
+   const queryClient = new QueryClient({
+     defaultOptions: {
+       queries: {
+         refetchOnWindowFocus: false,
+         retry: 1,
+         staleTime: 5 * 60 * 1000, // 5 minutes
+       },
+     },
+   });
+   
+   // Route protégée
+   const PrivateRoute = ({ children }) => {
+     const { isAuthenticated, loading } = useAuth();
+     
+     if (loading) return <LoadingScreen />;
+     
+     return isAuthenticated ? children : <Navigate to="/login" />;
+   };
+   
+   // Gestion des routes adaptées au type de client
+   const ClientSpecificRoute = ({ children, requiredTypes }) => {
+     const { user, loading } = useAuth();
+     
+     if (loading) return <LoadingScreen />;
+     
+     if (!user || !requiredTypes.includes(user.type_client)) {
+       return <Navigate to="/dashboard" />;
+     }
+     
+     return children;
+   };
+   
+   const App = () => {
+     return (
+       <QueryClientProvider client={queryClient}>
+         <AuthProvider>
+           <BrowserRouter basename="/portail">
+             <Suspense fallback={<LoadingScreen />}>
+               <Routes>
+                 <Route path="/login" element={<Login />} />
+                 
+                 <Route 
+                   path="/" 
+                   element={
+                     <PrivateRoute>
+                       <Layout />
+                     </PrivateRoute>
+                   }
+                 >
+                   <Route index element={<Navigate to="/dashboard" />} />
+                   <Route path="dashboard" element={<Dashboard />} />
+                   <Route path="dossiers" element={<Dossiers />} />
+                   <Route path="dossiers/:id" element={<DossierDetail />} />
+                   <Route path="documents" element={<Documents />} />
+                   <Route path="coffre-fort" element={<CoffreFort />} />
+                   <Route path="messagerie" element={<Messagerie />} />
+                   <Route path="echeances" element={<Echeances />} />
+                   <Route path="rdv" element={<RDV />} />
+                   <Route path="profil" element={<Profil />} />
+                   
+                   {/* Routes spécifiques aux particuliers */}
+                   <Route 
+                     path="objectifs-vie" 
+                     element={
+                       <ClientSpecificRoute requiredTypes={['particulier']}>
+                         <ObjectifsVie />
+                       </ClientSpecificRoute>
+                     } 
+                   />
+                   <Route 
+                     path="patrimoine" 
+                     element={
+                       <ClientSpecificRoute requiredTypes={['particulier']}>
+                         <Patrimoine />
+                       </ClientSpecificRoute>
+                     } 
+                   />
+                   <Route 
+                     path="assurances" 
+                     element={
+                       <ClientSpecificRoute requiredTypes={['particulier', 'entreprise']}>
+                         <Assurances />
+                       </ClientSpecificRoute>
+                     } 
+                   />
+                   <Route path="credits" element={<Credits />} />
+                   
+                   {/* Routes spécifiques aux associations */}
+                   <Route 
+                     path="subventions" 
+                     element={
+                       <ClientSpecificRoute requiredTypes={['association']}>
+                         <Subventions />
+                       </ClientSpecificRoute>
+                     } 
+                   />
+                   <Route 
+                     path="instances" 
+                     element={
+                       <ClientSpecificRoute requiredTypes={['association']}>
+                         <Instances />
+                       </ClientSpecificRoute>
+                     } 
+                   />
+                   
+                   {/* Routes spécifiques aux entreprises */}
+                   <Route 
+                     path="contrats-geres" 
+                     element={
+                       <ClientSpecificRoute requiredTypes={['entreprise']}>
+                         <ContratsGeres />
+                       </ClientSpecificRoute>
+                     } 
+                   />
+                   <Route 
+                     path="obligations-fiscales" 
+                     element={
+                       <ClientSpecificRoute requiredTypes={['entreprise']}>
+                         <ObligationsFiscales />
+                       </ClientSpecificRoute>
+                     } 
+                   />
+                   
+                   {/* Routes spécifiques aux créateurs */}
+                   <Route 
+                     path="parcours-creation" 
+                     element={
+                       <ClientSpecificRoute requiredTypes={['createur']}>
+                         <ParcoursCreation />
+                       </ClientSpecificRoute>
+                     } 
+                   />
+                   <Route 
+                     path="aides-creation" 
+                     element={
+                       <ClientSpecificRoute requiredTypes={['createur']}>
+                         <AidesCreation />
+                       </ClientSpecificRoute>
+                     } 
+                   />
+                 </Route>
+               </Routes>
+             </Suspense>
+           </BrowserRouter>
+         </AuthProvider>
+       </QueryClientProvider>
+     );
+   };
+   
+   export default App;
+   ```
+
+4. **Gestion d'état avec React Query:**
+   ```jsx
+   // src/hooks/useClient.js
+   import { useQuery, useMutation, useQueryClient } from 'react-query';
+   import { getClientData, updateClientData } from '@services/endpoints/clients';
+   
+   export const useClientData = (clientId) => {
+     return useQuery(
+       ['client', clientId],
+       () => getClientData(clientId),
+       {
+         enabled: !!clientId,
+         staleTime: 5 * 60 * 1000, // 5 minutes
+       }
+     );
+   };
+   
+   export const useUpdateClient = () => {
+     const queryClient = useQueryClient();
+     
+     return useMutation(
+       updateClientData,
+       {
+         onSuccess: (data, variables) => {
+           queryClient.invalidateQueries(['client', variables.id]);
+           // Afficher notification succès
+         },
+         onError: (error) => {
+           // Gérer erreur et afficher notification
+           console.error('Error updating client:', error);
+         }
+       }
+     );
+   };
+   ```
+
+5. **Structure dynamique du menu:**
+   ```jsx
+   // src/components/layout/Sidebar.jsx
+   import { useAuth } from '@context/AuthContext';
+   import { NavLink } from 'react-router-dom';
+   
+   const Sidebar = () => {
+     const { user } = useAuth();
+     
+     // Menu commun pour tous les types de clients
+     const commonMenu = [
+       { path: '/dashboard', label: 'Tableau de bord', icon: 'home' },
+       { path: '/dossiers', label: 'Mes dossiers', icon: 'folder-open' },
+       { path: '/documents', label: 'Mes documents', icon: 'file-alt' },
+       { path: '/messagerie', label: 'Messagerie', icon: 'envelope' },
+       { path: '/echeances', label: 'Échéances & RDV', icon: 'calendar-alt' },
+     ];
+     
+     // Menus spécifiques par type de client
+     const specificMenus = {
+       particulier: [
+         { path: '/coffre-fort', label: 'Coffre-fort numérique', icon: 'lock' },
+         { path: '/objectifs-vie', label: 'Mes objectifs de vie', icon: 'bullseye' },
+         { path: '/patrimoine', label: 'Mon patrimoine', icon: 'chart-pie' },
+         { path: '/assurances', label: 'Mes assurances', icon: 'shield-alt' },
+         { path: '/credits', label: 'Mes crédits', icon: 'money-bill' },
+       ],
+       association: [
+         { path: '/subventions', label: 'Suivi des subventions', icon: 'hand-holding-usd' },
+         { path: '/instances', label: 'Instances statutaires', icon: 'users' },
+       ],
+       entreprise: [
+         { path: '/contrats-geres', label: 'Contrats délégués', icon: 'file-contract' },
+         { path: '/obligations-fiscales', label: 'Obligations fiscales', icon: 'balance-scale' },
+         { path: '/assurances', label: 'Assurances professionnelles', icon: 'shield-alt' },
+       ],
+       createur: [
+         { path: '/parcours-creation', label: 'Mon parcours création', icon: 'road' },
+         { path: '/aides-creation', label: 'Aides à la création', icon: 'hands-helping' },
+       ],
+     };
+     
+     // Déterminer les éléments de menu à afficher selon le type du client
+     const menuItems = [
+       ...commonMenu,
+       ...(user && specificMenus[user.type_client] ? specificMenus[user.type_client] : []),
+     ];
+     
+     return (
+       <div className="sidebar">
+         <div className="logo-container">
+           <img src="/portail/assets/logo.png" alt="eLaska" />
+         </div>
+         
+         <nav className="sidebar-nav">
+           <ul>
+             {menuItems.map((item) => (
+               <li key={item.path}>
+                 <NavLink 
+                   to={item.path} 
+                   className={({ isActive }) => isActive ? 'active' : ''}
+                 >
+                   <i className={`fas fa-${item.icon}`}></i>
+                   <span>{item.label}</span>
+                 </NavLink>
+               </li>
+             ))}
+           </ul>
+         </nav>
+         
+         <div className="sidebar-footer">
+           <NavLink to="/profil" className="profile-link">
+             <i className="fas fa-user-circle"></i>
+             <span>Mon profil</span>
+           </NavLink>
+           <button onClick={handleLogout} className="logout-button">
+             <i className="fas fa-sign-out-alt"></i>
+             <span>Déconnexion</span>
+           </button>
+         </div>
+       </div>
+     );
+   };
+   
+   export default Sidebar;
+   ```
+
+### 5.2. Sections et fonctionnalités
+
+Le portail client propose des sections et fonctionnalités adaptées à chaque type de client, avec un socle commun et des modules spécialisés.
+
+**Spécifications techniques:**
+
+1. **Tableau de bord adaptatif:**
+   ```jsx
+   // src/pages/Dashboard.jsx
+   import { useAuth } from '@context/AuthContext';
+   import { useQuery } from 'react-query';
+   import { fetchDashboardData } from '@services/endpoints/dashboard';
+   
+   // Widgets spécifiques
+   import DossiersActifsWidget from '@components/domain/dashboard/DossiersActifsWidget';
+   import MessagesNonLusWidget from '@components/domain/dashboard/MessagesNonLusWidget';
+   import EcheancesWidget from '@components/domain/dashboard/EcheancesWidget';
+   import DocumentsRecentsWidget from '@components/domain/dashboard/DocumentsRecentsWidget';
+   import ProchainsRdvWidget from '@components/domain/dashboard/ProchainsRdvWidget';
+   
+   // Widgets spécifiques Particulier
+   import ObjectifsVieWidget from '@components/domain/dashboard/ObjectifsVieWidget';
+   import PatrimoineWidget from '@components/domain/dashboard/PatrimoineWidget';
+   
+   // Widgets spécifiques Association
+   import SubventionsWidget from '@components/domain/dashboard/SubventionsWidget';
+   import InstancesWidget from '@components/domain/dashboard/InstancesWidget';
+   
+   // Widgets spécifiques Entreprise
+   import ContratsWidget from '@components/domain/dashboard/ContratsWidget';
+   import ObligationsWidget from '@components/domain/dashboard/ObligationsWidget';
+   
+   // Widgets spécifiques Créateur
+   import ParcoursCreationWidget from '@components/domain/dashboard/ParcoursCreationWidget';
+   import AidesCreationWidget from '@components/domain/dashboard/AidesCreationWidget';
+   
+   const Dashboard = () => {
+     const { user } = useAuth();
+     const clientId = user?.id;
+     const clientType = user?.type_client;
+     
+     const { data, isLoading } = useQuery(
+       ['dashboard', clientId],
+       () => fetchDashboardData(clientId),
+       { enabled: !!clientId }
+     );
+     
+     if (isLoading) return <PageLoader />;
+     
+     // Widgets communs pour tous les types de clients
+     const commonWidgets = (
+       <>
+         <DossiersActifsWidget dossiers={data.dossiers} />
+         <EcheancesWidget echeances={data.echeances} />
+         <MessagesNonLusWidget messages={data.messages} />
+         <DocumentsRecentsWidget documents={data.documents} />
+         <ProchainsRdvWidget rdv={data.rdv} />
+       </>
+     );
+     
+     // Widgets spécifiques selon le type de client
+     const renderSpecificWidgets = () => {
+       switch(clientType) {
+         case 'particulier':
+           return (
+             <>
+               <ObjectifsVieWidget objectifs={data.objectifs} />
+               <PatrimoineWidget patrimoine={data.patrimoine} />
+             </>
+           );
+         case 'association':
+           return (
+             <>
+               <SubventionsWidget subventions={data.subventions} />
+               <InstancesWidget instances={data.instances} />
+             </>
+           );
+         case 'entreprise':
+           return (
+             <>
+               <ContratsWidget contrats={data.contrats} />
+               <ObligationsWidget obligations={data.obligations} />
+             </>
+           );
+         case 'createur':
+           return (
+             <>
+               <ParcoursCreationWidget parcours={data.parcours} />
+               <AidesCreationWidget aides={data.aides} />
+             </>
+           );
+         default:
+           return null;
+       }
+     };
+     
+     return (
+       <div className="dashboard-page">
+         <header className="page-header">
+           <h1>Tableau de bord</h1>
+           <LastConnection date={data.last_connection} />
+         </header>
+         
+         <section className="welcome-section">
+           <WelcomePanel 
+             userName={user?.name}
+             conseillerName={data.conseiller?.name}
+             conseillerPhoto={data.conseiller?.photo}
+           />
+           <AlertPanel alerts={data.alerts} />
+         </section>
+         
+         <section className="widgets-grid">
+           {commonWidgets}
+           {renderSpecificWidgets()}
+         </section>
+       </div>
+     );
+   };
+   
+   export default Dashboard;
+   ```
+
+2. **Timeline de dossier interactive:**
+   ```jsx
+   // src/components/domain/dossier/DossierTimeline.jsx
+   import { useState, useEffect } from 'react';
+   import { useQuery } from 'react-query';
+   import { fetchDossierTimeline } from '@services/endpoints/dossiers';
+   import TimelineStep from '@components/domain/dossier/TimelineStep';
+   import TimelineStepDetail from '@components/domain/dossier/TimelineStepDetail';
+   
+   const DossierTimeline = ({ dossierId }) => {
+     const [selectedStepId, setSelectedStepId] = useState(null);
+     
+     const { data: timeline, isLoading, error } = useQuery(
+       ['dossier-timeline', dossierId],
+       () => fetchDossierTimeline(dossierId),
+       { enabled: !!dossierId }
+     );
+     
+     useEffect(() => {
+       // Sélectionner automatiquement l'étape en cours
+       if (timeline && !selectedStepId) {
+         const currentStep = timeline.etapes.find(e => e.statut === 'en_cours');
+         if (currentStep) {
+           setSelectedStepId(currentStep.id);
+         } else {
+           // Sinon dernière étape ou première
+           const lastCompletedStep = [...timeline.etapes]
+             .reverse()
+             .find(e => e.statut === 'terminee');
+           
+           setSelectedStepId(lastCompletedStep?.id || timeline.etapes[0]?.id);
+         }
+       }
+     }, [timeline, selectedStepId]);
+     
+     if (isLoading) return <TimelineSkeleton />;
+     if (error) return <ErrorMessage error={error} />;
+     
+     const getSelectedStep = () => {
+       return timeline?.etapes.find(e => e.id === selectedStepId);
+     };
+     
+     const handleStepClick = (stepId) => {
+       setSelectedStepId(stepId);
+     };
+     
+     return (
+       <div className="dossier-timeline-container">
+         <div className="timeline-header">
+           <h3>Suivi de votre dossier</h3>
+           <span className="dossier-ref">{timeline?.ref_dossier}</span>
+         </div>
+         
+         <div className="timeline-content">
+           <div className="timeline-steps">
+             {timeline?.etapes.map(etape => (
+               <TimelineStep
+                 key={etape.id}
+                 step={etape}
+                 isSelected={etape.id === selectedStepId}
+                 onClick={() => handleStepClick(etape.id)}
+               />
+             ))}
+           </div>
+           
+           <div className="timeline
