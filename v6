@@ -1,0 +1,1206 @@
+Voici le Cahier des Charges Technique et Fonctionnel consolidé et restructuré, intégrant l'ensemble des informations fournies :
+
+**Cahier des Charges Technique et Fonctionnel – Module eLaska-ESaiko pour Dolibarr (Version Consolidée EXHAUSTIVE 6.1)**
+
+**Date de consolidation :** 2025-05-27 [cite: 241]
+**Auteurs :** GitHub Copilot (ESaiko), Kylian65 (eLaska) [cite: 241]
+**Version :** 6.1 (Fusion ESaiko + eLaska enrichi et complété) [cite: 289]
+**Client :** eLaska (Kylian65) [cite: 14]
+
+**Note :** Ce document est une version enrichie et consolidée, intégrant des propositions d'amélioration, de nouvelles fonctionnalités et une roadmap détaillée, issues d'une analyse approfondie des missions du cabinet eLaska et des spécifications techniques du module ESaiko. [cite: 14, 241, 289]
+
+## Table des Matières
+
+1.  Vue d'ensemble du module
+    1.1. Mission principale et Objectif du module
+    1.2. Valeur ajoutée de la fusion
+    1.3. Modules principaux
+    1.4. Intégration avec les modules natifs Dolibarr
+    1.5. Public Cible (Utilisateurs)
+    1.6. Périmètre du Module
+2.  Architecture technique
+    2.1. Structure des répertoires et fichiers unifiée
+    2.2. Principes d'Architecture Générale
+    2.3. Approche UI/UX : Portail Client en SPA et Backoffice Amélioré
+    2.4. Stack technologique unifié
+    2.5. Sécurité et Chiffrement
+    2.6. Responsive design et Icônes
+3.  Modules Fonctionnels Consolidés et Structure détaillée des interfaces
+    3.1. Menu principal eLaska (Backoffice)
+    3.2. Tableaux de bord eLaska (Backoffice)
+    3.3. Module Cœur : Gestion des Tiers 360°
+    3.4. Module Gestion Centralisée des Dossiers Généraux avec Timeline Intelligente
+    3.5. Module Portail Client SPA Unifié - SPÉCIFICATIONS COMPLÈTES
+        3.5.1. Architecture du Portail
+        3.5.2. Page d'Accueil / Tableau de Bord Principal Personnalisé (Portail Client SPA)
+        3.5.3. Section "Mes Dossiers" / "Mes Missions" (Portail Client SPA)
+        3.5.4. Section "Mes Documents" (GED Intégrée - Portail Client SPA)
+        3.5.5. Section "Ma Messagerie" (Portail Client SPA)
+        3.5.6. Section "Mes Échéances & Rendez-vous" (Portail Client SPA)
+        3.5.7. Section "Mon Profil" / "Mes Paramètres" (Portail Client SPA)
+        3.5.8. Section "Prendre Rendez-vous" (Portail Client SPA)
+        3.5.9. Pages et Sections Spécialisées DÉTAILLÉES (Portail Client SPA)
+    3.6. Accompagnement Spécifique des Particuliers
+        3.6.1. Gestion administrative personnelle & suivi budgétaire (Backoffice & Portail)
+        3.6.2. Accompagnement démarches spécifiques (Backoffice & Portail)
+        3.6.3. Conseil en abonnements & assurances (Backoffice & Portail)
+    3.7. Accompagnement Spécifique des Associations
+        3.7.1. Création, structuration et évolution (Backoffice & Portail)
+        3.7.2. Gouvernance & vie associative (Backoffice & Portail)
+        3.7.3. Recherche de financements (Backoffice & Portail)
+        3.7.4. Gestion administrative & comptable (Backoffice)
+        3.7.5. Stratégie & communication (Backoffice)
+        3.7.6. Partenariats & réseaux (Backoffice)
+    3.8. Conseil & Gestion Externalisée TPE/PME
+        3.8.1. Conseil en organisation & optimisation processus (Backoffice)
+        3.8.2. Externalisation administrative (Office Management) (Backoffice & Portail)
+        3.8.3. Gestion externalisée RH (Backoffice)
+        3.8.4. Suivi de gestion & reporting (Backoffice & Portail)
+        3.8.5. Gestion de projets transversaux (Backoffice)
+        3.8.6. Abonnements & assurances professionnels (Backoffice)
+    3.9. Module Conseil en Gestion de Patrimoine, Assurances, Crédits & Sinistres
+    3.10. Module Gestion des Services/Prestations
+    3.11. Module Tâches et Suivi Opérationnel
+    3.12. Module Abonnements Clients
+    3.13. Module Recouvrements
+    3.14. Module de Pilotage Interne Avancé
+    3.15. Module Base de Connaissances Interne & Veille Réglementaire COMPLET
+    3.16. Module Prospection & Gestion des Opportunités (CRM Interne eLaska) COMPLET
+    3.17. Module Enquêtes de Satisfaction Client
+4.  Systèmes transversaux Renforcés
+    4.1. Paramètres Étendus et Personnalisation Totale
+    4.2. Système de champs dynamiques et conditionnels
+    4.3. Système de Tags/Étiquettes personnalisables
+    4.4. Historique et Suivi Détaillé des Communications et Envois
+    4.5. Système de Notifications & Alertes Intelligentes
+    4.6. Suivi des Consommations et Frais Engagés
+    4.7. Workflows d'Automatisation Évolués Basés sur Déclencheurs
+    4.8. Gestion Affinée des Consentements RGPD
+    4.9. Système de Templates Emails HTML
+    4.10. Gestion des Mandats & Autorisations
+    4.11. Système de Numérotation Avancé
+    4.12. Intelligence Artificielle Light (Assistance Conseiller & Client)
+    4.13. Simulateurs Portail Client
+    4.14. Gamification Client
+5.  Structure des données Consolidée
+    5.1. Tables principales unifiées et étendues
+    5.2. Tables spécifiques à l'accompagnement des Particuliers
+    5.3. Tables spécifiques à l'accompagnement des Entreprises (TPE/PME)
+    5.4. Tables spécifiques à l'accompagnement des Associations
+    5.5. Vues de synthèse pour indicateurs de pilotage (KPIs)
+6.  API REST COMPLÈTE et Intégrations
+    6.1. Endpoints API Exhaustifs
+    6.2. Intégration Google Drive (Optionnelle)
+    6.3. Intégration Email IMAP
+    6.4. Notifications Push
+    6.5. Intégration Google Agenda (pour Prise de RDV en Ligne)
+    6.6. Intégration Signature Électronique (Optionnelle)
+    6.7. Intégration avec autres systèmes (API Publique)
+7.  Roadmap de développement Unifiée et Phasée
+8.  Spécifications techniques
+    8.1. Exigences système et Dépendances
+    8.2. Performance
+    8.3. Sécurité (Approfondi)
+    8.4. Compatibilité mobile et Responsive Design
+    8.5. Maintenance et mises à jour
+    8.6. Backup et récupération
+    8.7. Monitoring et journalisation
+9.  Indicateurs de Succès
+10. Conclusion de la Fusion
+
+---
+
+## 1. Vue d'ensemble du module
+
+### 1.1 Mission principale et Objectif du module
+Le module eLaska-ESaiko est une solution complète de gestion des services d'accompagnement administratif, financier, de gestion et de conseil, destinée à optimiser les processus métier d'un cabinet spécialisé dans l'accompagnement de :
+* Particuliers (démarches complexes, patrimoine, objectifs de vie) [cite: 241, 55]
+* Associations (subventions, instances, obligations) [cite: 241, 55]
+* Créateurs d'entreprises (parcours de création, aides) [cite: 241, 55, 61]
+* TPE/PME (conseil RH, fiscal, gestion externalisée) [cite: 241, 55]
+
+Il permet le suivi des dossiers via des timelines hautement personnalisables avec étapes progressives (modifiables par instance) et badges modernes (indiquant clairement leur statut, ex: grisées si non actives/terminées), la gestion des tâches, le stockage documentaire (avec option Google Drive et Coffre-Fort Numérique Avancé pour particuliers), la gestion des communications (avec templates emails HTML personnalisables et sujets dynamiques, et suivi des échanges avec intervenants externes) et offre une vision client à 360° via un portail web client SPA. [cite: 56]
+Le module vise l'optimisation du temps de traitement, l'amélioration de la qualité du suivi, la traçabilité des échanges, et intègre des fonctionnalités avancées de recouvrement, de numérotation personnalisable des objets métier (incluant des variables dynamiques), de personnalisation totale (icônes Font Awesome, champs, vues, menus/tableaux de bord par rôle) et de pilotage interne. [cite: 57]
+Il inclut des outils spécialisés pour le conseil en gestion de patrimoine, la gestion des contrats d'assurances, le montage et le suivi de dossiers de crédit, ainsi que la gestion des sinistres. [cite: 58] La prise de rendez-vous en ligne (avec synchronisation Google Agenda et référence ID événement), un accompagnement basé sur les objectifs de vie des clients particuliers, et une gestion fine des consentements RGPD sont également prévus. [cite: 59] Le suivi détaillé des consommations (frais, fournitures) et des heures de travail (avec granularité fine) par dossier, prestation, tâche et étape est aussi intégré, avec des outils de veille sur les dispositifs locaux/régionaux (Occitanie/Tarbes) et un annuaire de partenaires. [cite: 60]
+
+### 1.2 Valeur ajoutée de la fusion
+La combinaison des forces d'ESaiko (architecture technique robuste) et eLaska (fonctionnalités métier avancées) offre : [cite: 241]
+
+* **Architecture technique solide :** [cite: 242]
+    * Structure de fichiers complète (100+ fichiers organisés) [cite: 3, 242]
+    * Sécurité renforcée (chiffrement AES-256, 2FA) [cite: 4, 242]
+    * API REST complète pour SPA React [cite: 3, 242]
+    * Responsive design "Mobile First" [cite: 4, 242]
+* **Fonctionnalités métier enrichies :** [cite: 242]
+    * Portail client SPA avec sections spécialisées [cite: 242]
+    * Gestion des intervenants externes [cite: 4, 242]
+    * Workflows automatisés [cite: 4, 242]
+    * CRM intégré pour prospection [cite: 38, 242]
+    * Veille réglementaire locale (Occitanie/Tarbes) [cite: 60, 242]
+
+### 1.3 Modules principaux (Étendus et Précisés)
+Le module se compose des sous-modules interconnectés suivants[cite: 3, 61, 62, 63, 253]:
+* **Cœur : Gestion des Tiers 360°** (Particuliers, Associations, Créateurs d'entreprises, TPE/PME, Intervenants externes, Organismes locaux/régionaux, Apporteurs d'affaires) [cite: 61, 253]
+* **Gestion Centralisée des Dossiers Généraux** (avec références eLaska personnalisables et modèles de timelines par type de dossier, y compris Création d'Entreprise) [cite: 61]
+* **Portail Web Client & Communication (SPA React)** (avec sections et fonctionnalités enrichies) [cite: 61]
+* **Accompagnement Spécifique des Particuliers** (incluant Coffre-Fort Numérique Avancé, Module "Mes Objectifs de Vie & Projets", et suivi "Démarches Complexes en Cours") [cite: 61, 3]
+* **Accompagnement Spécifique des Associations** (incluant Instances Statutaires, Obligations Réglementaires, et module "Demandes de Financement/Subvention") [cite: 61, 3]
+* **Accompagnement Spécifique des Créateurs d'Entreprises** (Suivi parcours création, aides) – Gestion via type de Tiers et modèles de dossiers/timelines dédiés [cite: 61, 62]
+* **Conseil & Gestion Externalisée TPE/PME** (incluant Gestion Déléguée Contrats Fournisseurs) [cite: 62]
+* **Module Conseil en Gestion de Patrimoine, Assurances, Crédits & Sinistres** [cite: 62]
+    * Sous-module : Bilan & Stratégie Patrimoniale [cite: 62]
+    * Sous-module : Contrats d'Assurance [cite: 62]
+    * Sous-module : Dossiers de Crédit [cite: 62]
+    * Sous-module : Gestion des Sinistres [cite: 62]
+* **Gestion des Services/Prestations** (transversal, avec suivi détaillé temps/coûts par étape) [cite: 3, 62]
+* **Tâches et Suivi Opérationnel** (transversal, incluant suivi détaillé heures/consommations par étape et granularité fine) [cite: 3, 62]
+* **Abonnements Clients** (hors contrats d'assurance/crédit gérés spécifiquement, gestion des abonnements clients avec analyse budgétaire) [cite: 3, 62]
+* **Recouvrements** (transversal) [cite: 62]
+* **[NOUVEAU] Prospection & Gestion des Opportunités (CRM Interne eLaska)** [cite: 38, 62]
+* **Pilotage Interne & Rapports Avancés** (incluant performance des services) [cite: 62, 63]
+* **Base de Connaissances Interne & Veille Réglementaire** (enrichie : liaisons intelligentes, extraits clients, veille dispositifs locaux Occitanie/Tarbes) [cite: 63]
+* **Gestion des Partenariats & Apporteurs d'Affaires** (avec Annuaire Dynamique des Partenaires Locaux/Régionaux) [cite: 63]
+* **Enquêtes de Satisfaction Client** [cite: 63]
+* **Paramètres et Personnalisation Approfondie du module eLaska** (incluant workflows automatisés et gestion des consentements RGPD) [cite: 63]
+
+### 1.4 Intégration avec les modules natifs Dolibarr
+L'objectif est une fusion totale avec les données de Dolibarr. [cite: 63] Le module eLaska-ESaiko s'intégrera de manière transparente et complète avec les modules natifs suivants : [cite: 64]
+* **Tiers (Clients, Prospects, Partenaires, Fournisseurs) :** Utilisation du module "Tiers" de Dolibarr comme base. [cite: 64] Synchronisation et enrichissement des fiches tiers (avec typologies eLaska : Particulier, Association, Entreprise, Créateur, Intervenant Externe, Organisme, etc.). [cite: 65] Gestion des mandats. [cite: 66]
+* **Facturation :** Génération de propositions, commandes, factures depuis les prestations eLaska, incluant les temps passés facturables et les consommations/frais refacturables (avec granularité fine). [cite: 66] Lien temps passé/facturation. Suivi des statuts. Utilisation du module "Factures" pour la gestion des paiements. [cite: 67]
+* **Projets et Tâches / Feuilles de temps :** Création de projets/tâches Dolibarr pour dossiers/tâches eLaska. [cite: 68] Assignation, suivi de statut, checklists, lien avec "Feuilles de temps" de Dolibarr pour le suivi des heures, avec liens vers les objets eLaska (dossiers, prestations, étapes de timeline). [cite: 69]
+* **Gestion Documentaire (GED) :** Utilisation du module GED de Dolibarr pour stockage, classement, prévisualisation, versioning. [cite: 70] Distinction et sécurisation pour le Coffre-Fort Numérique Avancé. [cite: 71]
+* **Messagerie et Communication (Notes/Tickets/Email) :** Utilisation de "Notes" ou "Tickets" comme base pour le fil de discussion par dossier (y compris avec intervenants externes), notifications. [cite: 71] Intégration IMAP pour emails. [cite: 72]
+* **Agenda et Échéances :** Ajout des échéances eLaska dans l'"Agenda" Dolibarr. Rappels et alertes. [cite: 72] La planification de RDV par les clients via le portail se synchronisera avec les Google Agendas des conseillers (avec ID événement Google Calendar stocké) et pourra être reflétée dans l'agenda Dolibarr interne. [cite: 73]
+* **Produits/Services :** Pour le catalogue des prestations eLaska. [cite: 74]
+* **Contrats :** Pour formaliser les accords de services et abonnements eLaska. [cite: 74]
+* **Banque :** Pour le suivi des règlements. [cite: 75]
+* **Notes de frais :** Si applicable aux prestations ou consommations eLaska. [cite: 75]
+
+### 1.5 Public Cible (Utilisateurs)
+* **Gestionnaires / Conseillers du Cabinet eLaska (Utilisateurs Internes) :** Utilisent le back-office Dolibarr enrichi par eLaska. [cite: 76] Bénéficient d'un design amélioré, de composants interactifs, et de tableaux de bord/menus personnalisés selon leur rôle. [cite: 77]
+* **Clients du Cabinet (Utilisateurs Externes via Portail Web SPA) :** [cite: 78]
+    * Particuliers [cite: 78, 3]
+    * Créateurs d'Entreprises (en phase de pré-création/lancement) [cite: 78]
+    * Représentants d'Associations [cite: 78, 3]
+    * Représentants d'Entreprises (TPE/PME, Artisans, Professions Libérales) [cite: 78, 3]
+    Ils accèdent à un portail web SPA sécurisé, offrant une expérience utilisateur fluide et moderne, pour consulter leurs informations, dossiers (avec timelines et commentaires conseiller), documents (y compris Coffre-Fort), échanger avec le cabinet, suivre l'avancement, prendre des rendez-vous, gérer leurs consentements, et interagir avec des fonctionnalités spécifiques à leur profil (ex: Objectifs de Vie, Parcours Création). [cite: 78, 79]
+* **[Optionnel] Apporteurs d'Affaires (Utilisateurs Externes via Portail Limité) :** Pour suivi de leurs leads et commissions, si cette fonctionnalité est développée. [cite: 79]
+
+### 1.6 Périmètre du Module
+Le module couvrira de manière exhaustive la gestion des tiers (tous types), le suivi détaillé des dossiers multi-domaines (administratif, social, fiscal, RH, financier, conseil en patrimoine, assurances, crédits, sinistres, création d'entreprise), la gestion documentaire avancée (avec option Google Drive et Coffre-Fort Numérique), la communication multicanale intégrée (avec templates emails HTML personnalisables, suivi des échanges avec clients et intervenants externes, et options de "lu/pris en compte"), le suivi des tâches (avec granularité fine) et des échéances (avec lien vers temps et consommations), la gestion des prestations et abonnements, les processus de facturation et de recouvrement, la numérotation automatique et personnalisable des objets métier (avec variables dynamiques). [cite: 80, 81] Il comprendra un portail client SPA riche en fonctionnalités (incluant prise de RDV, suivi d'objectifs de vie, parcours création, simulateurs simples, gestion des consentements), des outils de pilotage interne performants (incluant des composants interactifs et rapports sur la performance des services), une base de connaissances enrichie (avec veille locale Occitanie/Tarbes et annuaire de partenaires), des outils de veille, des workflows automatisés, et des options de personnalisation étendues pour le module et ses interfaces (y compris les icônes de menu et les vues par rôle). [cite: 81]
+
+## 2. Architecture technique
+
+### 2.1 Structure des répertoires et fichiers unifiée
+La structure sera basée sur celle détaillée dans le document "Technique.txt" (ESaiko)[cite: 3, 82], avec les adaptations de nommage pour "elaska" et des ajouts pour les fonctionnalités étendues[cite: 82, 242]:
+
+```
+htdocs/custom/elaska/
+├── admin/                          # Configuration avancée [cite: 83, 242]
+│   ├── setup.php                   # Configuration générale [cite: 83, 243]
+│   ├── dynamicfields.php           # Champs dynamiques [cite: 83, 243]
+│   ├── workflows.php               # Workflows automatisés [cite: 83, 243]
+│   ├── numbering_models.php        # Modèles de numérotation [cite: 83, 243]
+│   ├── templates.php               # Modèles de documents et emails HTML [cite: 83]
+│   ├── permissions.php             # Gestion des permissions [cite: 83]
+│   ├── consent_management.php      # Gestion RGPD [cite: 83, 243]
+│   ├── role_dashboard_config.php   # Tableaux de bord et menus par rôle [cite: 83, 243]
+│   └── ...                         # Autres configurations (types consommations, etc.) [cite: 83]
+├── api/                            # API REST complète [cite: 83, 244]
+│   ├── clients.php                 # Endpoints clients [cite: 244]
+│   ├── dossiers.php                # Endpoints dossiers [cite: 244]
+│   ├── portail.php                 # Endpoints portail SPA [cite: 244]
+│   ├── rdv.php                     # Prise de rendez-vous [cite: 244, 245]
+│   ├── opportunities.php           # CRM prospection [cite: 245]
+│   └── ...                         # Autres endpoints (tâches, objectifs de vie, etc.) [cite: 83]
+├── class/                          # Classes métier [cite: 84, 245]
+│   ├── core/                       # Classes métier principales [cite: 245]
+│   │   ├── elaskaclient.class.php      # Client unifié [cite: 84, 245]
+│   │   ├── elaskadossier.class.php     # Dossier centralisé [cite: 84, 246]
+│   │   └── elaskaprestation.class.php  # Prestation/Service [cite: 246]
+│   ├── specialized/                # Classes pour modules spécialisés [cite: 246]
+│   │   ├── elaskaparticulier.class.php # Spécialisation particulier [cite: 246]
+│   │   ├── elaskaassociation.class.php # Spécialisation association [cite: 246]
+│   │   ├── elaskacreateur.class.php    # Créateur d'entreprise [cite: 84, 246]
+│   │   └── elaskaentreprise.class.php  # TPE/PME [cite: 246]
+│   ├── patrimoine/                 # Classes pour gestion de patrimoine [cite: 84, 246]
+│   │   ├── elaskapatrimoine.class.php  # Gestion patrimoine [cite: 84, 246]
+│   │   ├── elaskaassurance.class.php   # Contrats assurance [cite: 84, 247]
+│   │   ├── elaskacredit.class.php      # Dossiers crédit [cite: 84, 247]
+│   │   └── elaskasinistre.class.php    # Gestion sinistres [cite: 84, 247]
+│   └── utils/                      # Classes utilitaires [cite: 84, 247]
+│       ├── elaskahelper.class.php      # Fonctions d'aide [cite: 84]
+│       ├── elaskamail.class.php        # Gestion emails [cite: 84]
+│       ├── elaskanumero.class.php      # Gestion numérotation [cite: 84]
+│       ├── elaskaworkflow.class.php    # Moteur de workflows [cite: 84, 247]
+│       ├── elaskagoogle.class.php      # Intégrations Google (Calendar, Drive) [cite: 84, 247]
+│       ├── elaskaconsent.class.php     # Gestion RGPD [cite: 84, 247, 248]
+│       └── elaskanotification.class.php # Notifications [cite: 248]
+├── core/                           # Descripteurs de module, triggers, etc. [cite: 85]
+│   ├── modelaska.php               # Descripteur principal [cite: 85]
+│   └── ...                         # Sous-modules, triggers, boîtes dashboard [cite: 85]
+├── css/                            # Feuilles de style [cite: 86, 250]
+│   ├── elaska.css                  # Styles généraux [cite: 86, 250]
+│   ├── elaska-responsive.css       # Responsive design [cite: 86, 251]
+│   ├── elaska-portail.css          # Styles spécifiques portail [cite: 251]
+│   ├── elaska-icons.css            # Font Awesome intégré et icônes personnalisées [cite: 86, 251]
+│   └── elaska-colors.css           # Thèmes de couleurs [cite: 86]
+├── img/                            # Icônes et images spécifiques [cite: 86]
+├── js/                             # Scripts JavaScript [cite: 87, 251]
+│   ├── components/                 # Composants React backoffice (Kanban, timeline, etc.) [cite: 87, 251, 252]
+│   │   ├── timeline.jsx            # Timeline interactive [cite: 251]
+│   │   ├── kanban.jsx              # Tableau Kanban [cite: 252]
+│   │   └── dashboard.jsx           # Widgets dashboard [cite: 252]
+│   └── utils/                      # Utilitaires JS (API, notifications) [cite: 252]
+│       ├── api.js                  # Utilitaires API [cite: 252]
+│       └── notifications.js        # Système notifications [cite: 252]
+├── langs/                          # Fichiers de traduction [cite: 88]
+│   └── fr_FR/elaska.lang           # Exemple pour français [cite: 88]
+├── lib/                            # Bibliothèques tierces (SDK Google API, etc.) [cite: 88]
+├── sql/                            # Scripts SQL (installation, mise à jour, données initiales) [cite: 89]
+│   └── llx_elaska_*.sql            # Pattern des fichiers SQL [cite: 89]
+├── tpl/                            # Templates HTML (Smarty/Twig) pour backoffice [cite: 90]
+├── portail/                        # Application React SPA pour le portail client [cite: 91, 248]
+│   ├── build/                      # Build de production [cite: 248]
+│   ├── src/                        # Code source de l'application React [cite: 248]
+│   │   ├── components/             # Composants React réutilisables [cite: 248, 249]
+│   │   ├── pages/                  # Pages du portail (voir section Portail Client pour détails) [cite: 249, 250]
+│   │   ├── hooks/                  # Hooks React personnalisés [cite: 250]
+│   │   └── ...                     # Autres (services, contexts, etc.)
+│   └── package.json                # Dépendances React [cite: 250]
+├── *.php                           # Fichiers PHP principaux pour chaque page/vue backoffice [cite: 92]
+├── changelog.md                    # Journal des modifications [cite: 92]
+├── README.md                       # Fichier README [cite: 92]
+└── COPYING                         # Informations de licence [cite: 92]
+```
+
+### 2.2 Principes d'Architecture Générale
+* Développement en tant qu'extension (module externe) de Dolibarr. [cite: 93]
+* Langage PHP, respectant les standards de Dolibarr pour le backoffice. [cite: 94]
+* Utilisation des objets, classes, hooks et API natifs de Dolibarr autant que possible. [cite: 95]
+
+### 2.3 Approche UI/UX : Portail Client en SPA et Backoffice Amélioré
+* **Portail Client Web :** [cite: 96]
+    * Développé en tant que Single Page Application (SPA). [cite: 96]
+    * Technologie privilégiée : ReactJS avec bibliothèques UI modernes, react-router-dom, React Query/SWR, axios. [cite: 97]
+    * Hébergé sur le même serveur web que Dolibarr, communiquant via API REST eLaska. [cite: 98]
+    * Utilisation d'icônes (ex: Font Awesome) pour une interface claire et esthétique. [cite: 99]
+* **Backoffice Dolibarr (Interfaces du Module eLaska) :** [cite: 100]
+    * **Amélioration du Design :** Design soigné et modernisé grâce à CSS personnalisé et templates bien structurés. [cite: 100]
+    * **Utilisation d'Icônes :** Intégration de Font Awesome pour enrichir visuellement les menus, boutons, et autres éléments d'interface du module eLaska. [cite: 101]
+    * **"Îlots d'Interactivité" React :** Pour fonctionnalités spécifiques (Kanban, timelines, dashboards avancés), des composants React pourront être intégrés. [cite: 102, 252] Les timelines de suivi de dossier (ou prestation/formulaire), hautement configurables et modifiables par instance, seront des candidats de choix pour cette approche. [cite: 103]
+    * **Tableaux de Bord et Menus Adaptatifs :** Configuration possible de l'affichage en fonction du rôle de l'utilisateur interne eLaska. [cite: 104]
+
+### 2.4 Stack technologique unifié
+* **Backend :** [cite: 252]
+    * PHP 8.1+ (compatibilité Dolibarr) [cite: 252]
+    * MySQL/MariaDB avec chiffrement AES-256 pour les données sensibles. [cite: 4, 253]
+    * API REST sécurisée (tokens JWT ou sessions Dolibarr sécurisées). [cite: 106, 253]
+* **Frontend :** [cite: 253]
+    * Portail Client : React 18+ SPA (Vite, React Router, React Query). [cite: 253]
+    * Backoffice : PHP/HTML amélioré + composants React intégrés. [cite: 253]
+* **UI/UX :** Font Awesome, CSS moderne, design responsive. [cite: 253]
+* **Intégrations :** [cite: 253]
+    * Google Calendar API (OAuth2) [cite: 253]
+    * Google Drive API (optionnel) [cite: 253]
+    * IMAP/SMTP sécurisé [cite: 253]
+    * Signature électronique (DocuSign/similaire, optionnel) [cite: 253]
+
+### 2.5 Sécurité et Chiffrement
+* Authentification à double facteur (2FA) pour les gestionnaires. [cite: 4, 105]
+* Authentification robuste pour le portail client SPA (tokens JWT ou sessions Dolibarr sécurisées via API). [cite: 106]
+* **Chiffrement AES-256 des données sensibles identifiées :** NIR, identifiants CAF/Pôle Emploi, numéro fiscal, détails bancaires avancés (RIB si stocké en dehors du module Banque natif), mots de passe d'espaces clients tiers si stockés, informations médicales sensibles (ex: pour dossiers MDPH), contenu du Coffre-Fort Numérique Avancé. [cite: 4, 107, 268]
+* **Stratégie de Chiffrement :** Discussion approfondie pour définir la stratégie optimale (chiffrement au niveau champ pour certains éléments, chiffrement de tables dédiées pour d'autres). [cite: 108] Étude de l'utilisation des capacités de chiffrement de Dolibarr ou du SGBD. [cite: 109] Gestion sécurisée et robuste des clés de chiffrement/déchiffrement, en considérant les impacts sur la performance et la recherche. [cite: 110]
+    * Exemple de gestion des clés (conceptuel) :
+        ```php
+        // class ElaskaSecurityManager { // Conceptual
+        //     private $encryption_key;
+        //     public function encryptSensitiveData($data, $field_type) { [cite: 269]
+        //         $key = $this->getFieldSpecificKey($field_type); [cite: 269]
+        //         return openssl_encrypt($data, 'AES-256-CBC', $key, 0, $this->getIV()); [cite: 270]
+        //     }
+        //     // ...
+        // }
+        ```
+* Système de permissions granulaires, configurable par l'administrateur du module, basé sur les rôles Dolibarr et extensible pour les spécificités eLaska. [cite: 4, 111]
+* Journal d'audit complet pour la traçabilité des accès et modifications de données sensibles, y compris la gestion des consentements. [cite: 112, 270]
+    ```php
+    // Conceptual audit logging
+    // public function auditAccess($user_id, $data_type, $record_id) { [cite: 270]
+    //     // Journal d'audit complet [cite: 270]
+    //     $this->logAccess($user_id, $data_type, $record_id, date('Y-m-d H:i:s')); [cite: 271]
+    // }
+    ```
+* Protection contre les failles web courantes (CSRF sur tous les formulaires Dolibarr, XSS, Injections SQL) en suivant les bonnes pratiques de Dolibarr et pour les API. [cite: 113]
+* Validation et nettoyage systématique des entrées utilisateur. [cite: 114]
+* Niveaux de confidentialité pour documents et notes. [cite: 114]
+* Gestion sécurisée des tokens OAuth2 pour intégrations Google Drive et Google Agenda. [cite: 115]
+
+### 2.6 Responsive design et Icônes
+* Portail Client SPA : Approche "Mobile First", adaptation à toutes tailles d'écran. [cite: 4, 116, 242]
+* Backoffice Module eLaska : Pages eLaska responsives via CSS dédié (`elaska-responsive.css`). [cite: 117] Composants React intégrés également responsives. [cite: 117]
+* Icônes : Bibliothèque Font Awesome intégrée (`elaska-icons.css` ou via CDN) pour une richesse et cohérence visuelle. [cite: 86, 118, 251]
+
+## 3. Modules Fonctionnels Consolidés et Structure détaillée des interfaces
+
+### 3.1 Menu principal eLaska (Backoffice)
+Accessible depuis le menu Dolibarr, structuré et personnalisable (avec possibilité de variations par rôle utilisateur interne) : [cite: 119]
+* Tableau de bord eLaska [cite: 119]
+* [NOUVEAU] Prospection & Opportunités [cite: 119]
+* Tiers (Clients, Créateurs, Partenaires, Organismes, Intervenants Externes, Apporteurs d'Affaires) [cite: 119]
+* Prestations/Services eLaska [cite: 119]
+* Dossiers (avec sous-menus par type : Particulier, Association, Création d'Entreprise, TPE/PME, Recouvrement, etc.) [cite: 119]
+* Gestion de Patrimoine & Financier [cite: 119]
+    * Bilans Patrimoniaux [cite: 119]
+    * Contrats d'Assurance [cite: 119]
+    * Dossiers de Crédit [cite: 119]
+    * Gestion des Sinistres [cite: 119]
+    * Suivi des Investissements [cite: 119]
+* Accompagnement Spécifique (raccourcis ou sections dédiées) [cite: 119, 120]
+    * Associations (Financements, Instances) [cite: 120]
+* Tâches & Suivi Opérationnel [cite: 120]
+* Abonnements Clients eLaska [cite: 120]
+* Communications (avec suivi des échanges avec intervenants externes) [cite: 120]
+* Base de Connaissances & Veille Réglementaire (incluant veille locale et dispositifs Occitanie/Tarbes) [cite: 120]
+* Partenariats & Apporteurs d'Affaires (avec Annuaire Partenaires Locaux) [cite: 120]
+* Enquêtes de Satisfaction [cite: 120]
+* Configuration eLaska (incluant personnalisation des menus/tableaux de bord par rôle) [cite: 120]
+* Icônes personnalisables pour chaque entrée (Font Awesome via config eLaska). [cite: 120]
+
+### 3.2 Tableaux de bord eLaska (Backoffice)
+* **Widgets standards et configurables par rôle :** Tâches (mes tâches, tâches en retard), Dossiers actifs/récents, Échéances critiques, Alertes/notifications, Communications récentes, Dossiers bloqués, Activité récente du portail client, Indicateurs de performance clés (KPIs) adaptés au rôle, Nuage de Tags pertinents, Dernières fiches de Veille Réglementaire/Locale, Activité des Apporteurs d'Affaires, Synthèse Satisfaction Client, RDV à venir (synchronisés Google Agenda). [cite: 121]
+* **Vue Gestionnaire :** Accès à des widgets de pilotage global du cabinet (charge de travail par conseiller, performance des services, etc.). [cite: 122]
+
+### 3.3 Module Cœur : Gestion des Tiers 360°
+Fusion des typologies ESaiko + eLaska : Particuliers (avec objectifs de vie, patrimoine), Associations (instances, financements), Créateurs d'entreprises (parcours, aides), TPE/PME (conseil, gestion externalisée), Intervenants externes (partenaires métier), Organismes locaux/régionaux (Occitanie/Tarbes), Apporteurs d'affaires (CRM). [cite: 253, 3]
+
+* **3.3.1 Liste des Tiers (Backoffice) :** Filtres avancés par type de Tiers eLaska (Particulier, Association, Entreprise, Créateur, Intervenant Externe, Organisme Local/Régional, Partenaire, Apporteur d'Affaires). [cite: 123]
+* **3.3.2 Fiche Tiers eLaska (Backoffice) :** [cite: 124]
+    * Onglets et champs spécifiques en fonction du type de Tiers. [cite: 124]
+    * Pour "Créateur d'Entreprise" : Section dédiée au suivi du parcours de création, aides visées/obtenues (avant formalisation en dossier). [cite: 125]
+    * Pour "Intervenant Externe" : Champs pour spécialité, coordonnées directes, notes sur la collaboration. [cite: 126]
+    * Pour "Organisme Local/Régional" : Champs pour services offerts, contacts clés, procédures spécifiques (lien vers Base de Connaissances). [cite: 127]
+    * Onglet "eLaska - Informations Détaillées" (pour Particuliers) : [cite: 128]
+        * Section "Patrimoine & Objectifs" : Profil investisseur, Objectifs patrimoniaux (texte/sélection), Horizon, Connaissance produits, Situation nette estimée. [cite: 128]
+        * Lien vers le module "Mes Objectifs de Vie & Projets" du client. [cite: 129]
+    * Onglet "Paramètres de Rendez-vous en Ligne" (pour Conseillers) : Lien Google Agenda, types RDV proposables, plages dispo, temps tampon. [cite: 130]
+    * Onglet "Consentements RGPD" : Historique et statut des consentements obtenus. [cite: 131]
+    * Onglet "Dossiers Associés" : Liste de tous les dossiers eLaska liés à ce tiers. [cite: 132]
+    * Onglet "Intervenants Externes Associés" : Sur la fiche client, liste des intervenants externes impliqués dans ses dossiers, avec leur rôle. [cite: 133]
+* **3.3.3 Fiche Tiers Enrichie (Structure de données unifiée) :**
+    ```php
+    // Exemple de structure de données unifiée pour un client
+    class ElaskaClient extends CommonObject { // Nom de classe adapté
+        public $ref_elaska;             // Numérotation personnalisable [cite: 253, 254]
+        public $type_client;            // Particulier/Association/Entreprise/Créateur [cite: 254]
+        public $mandats_accordes;       // Autorisations RGPD, etc. [cite: 254]
+        public $preferences_comm;       // Canal préféré (email/tél/rdv) [cite: 255]
+        public $contraintes_accessibilite; [cite: 255]
+        public $objectifs_patrimoniaux; // Pour particuliers [cite: 255, 256]
+        public $statut_creation;        // Pour créateurs [cite: 256]
+        public $instances_statutaires;  // Pour associations [cite: 256, 257]
+        public $intervenants_externes;  // Liaisons métier [cite: 257]
+        // ... autres champs spécifiques par type de tiers (Particulier, Association, Entreprise, Créateur)
+    }
+    ```
+
+### 3.4 Module Gestion Centralisée des Dossiers Généraux avec Timeline Intelligente
+Synthèse ESaiko + eLaska : Timeline configurable par type (modèles BDF, CAF, Création entreprise), étapes progressives avec badges visuels (statut couleur, grisé si terminé), suivi granulaire temps/coûts par étape, gestion des dépendances vers intervenants externes, commentaires conseiller avec option partage client. [cite: 257, 3]
+
+* **3.4.1 Liste des Dossiers (Backoffice) :** Filtres par type (Particulier, Association, Création d'Entreprise, TPE/PME, etc.), statut, conseiller. [cite: 134] Référence eLaska (avec numérotation personnalisable). [cite: 135]
+* **3.4.2 Fiche Dossier Complète (Vue 360° Interne - Backoffice) :** [cite: 135]
+    * En-tête : Référence eLaska, Tiers principal, Conseiller référent, Statut global. [cite: 135]
+    * **Onglet Principal "Suivi / Timeline" :** Timeline verticale dynamique, personnalisable (modèles par type de dossier, modifiable par instance), progressive, étapes avec badges/statuts visuels (ex: grisées si non actives/terminées, couleurs selon criticité/retard), commentaires conseiller (avec option de visibilité client). [cite: 136]
+        * **Interface Timeline React (conceptuel) :**
+            ```jsx
+            // Composant Timeline unifié pour un dossier
+            // const TimelineDossier = ({ dossierId, editable = false }) => {
+            //   const { data: timeline } = useTimelineData(dossierId); // Hook à créer [cite: 257, 258]
+            //   return (
+            //     <div className="elaska-timeline">
+            //       {timeline.etapes.map(etape => (
+            //         <TimelineEtape 
+            //           key={etape.id}
+            //           etape={etape}
+            //           status={etape.status} // 'attente', 'en_cours', 'terminee', 'bloquee', 'annulee' [cite: 275]
+            //           commentaire={etape.commentaire_conseiller}
+            //           visibleClient={etape.visible_portail} // Boolean [cite: 275]
+            //           onUpdate={editable ? handleUpdate : null} // Fonction de mise à jour
+            //         />
+            //       ))}
+            //     </div>
+            //   );
+            // };
+            ```
+    * Onglet "Tâches Associées" : Liste des tâches eLaska liées au dossier. [cite: 137]
+    * Onglet "Documents (GED)" : Accès aux documents du dossier. [cite: 138]
+    * Onglet "Communications" : Historique des échanges (emails, notes d'appels, courriers, messages portail) avec le client ET les intervenants externes liés au dossier. [cite: 139]
+    * **Onglet "Temps Passé & Consommations" :** Tableau récapitulatif des heures saisies et des consommations (frais, fournitures) spécifiquement pour ce dossier, avec possibilité de lier chaque entrée à une tâche ou une étape de la timeline. [cite: 140] Granularité fine du suivi. [cite: 141]
+    * Onglet "Intervenants Externes" : Gestion des liaisons avec les intervenants externes pour ce dossier spécifique (rôle, contact). [cite: 141]
+    * Onglets spécifiques selon le type de dossier (ex: onglet "Financements" pour un dossier Association). [cite: 142]
+* **3.4.3 Gestion Déléguée des Contrats Fournisseurs du Client** (Pour TPE/PME, intégré dans leurs dossiers spécifiques). [cite: 143]
+
+### 3.5 Module Portail Client SPA Unifié - SPÉCIFICATIONS COMPLÈTES
+[cite: 289]
+* **3.5.1 Architecture du Portail (Structure des fichiers) :**
+    ```
+    portail/
+    ├── src/
+    │   ├── pages/
+    │   │   ├── auth/
+    │   │   │   ├── Login.jsx [cite: 289]
+    │   │   │   ├── ForgotPassword.jsx [cite: 289]
+    │   │   │   └── ResetPassword.jsx [cite: 289]
+    │   │   ├── dashboard/
+    │   │   │   ├── DashboardParticulier.jsx [cite: 289, 290]
+    │   │   │   ├── DashboardAssociation.jsx [cite: 290]
+    │   │   │   ├── DashboardCreateur.jsx [cite: 290]
+    │   │   │   └── DashboardEntreprise.jsx [cite: 290]
+    │   │   ├── dossiers/
+    │   │   │   ├── ListeDossiers.jsx [cite: 290]
+    │   │   │   ├── DetailDossier.jsx [cite: 290]
+    │   │   │   └── TimelineInteractive.jsx [cite: 290]
+    │   │   ├── documents/
+    │   │   │   ├── GEDClient.jsx [cite: 290]
+    │   │   │   ├── CoffreFortNumerique.jsx [cite: 290, 291]
+    │   │   │   └── UploadDocuments.jsx [cite: 291]
+    │   │   ├── communication/
+    │   │   │   ├── Messagerie.jsx [cite: 291]
+    │   │   │   ├── HistoriqueEchanges.jsx [cite: 291]
+    │   │   │   └── NotificationsClient.jsx [cite: 291]
+    │   │   ├── rdv/
+    │   │   │   ├── PriseRendezVous.jsx [cite: 291]
+    │   │   │   ├── CalendrierDispo.jsx [cite: 291]
+    │   │   │   └── GestionRdv.jsx [cite: 291]
+    │   │   ├── profil/
+    │   │   │   ├── MonProfil.jsx [cite: 291, 292]
+    │   │   │   ├── Preferences.jsx [cite: 292]
+    │   │   │   └── ConsentementRGPD.jsx [cite: 292]
+    │   │   └── specialise/  # Pages spécifiques par type de client [cite: 292]
+    │   │       ├── particuliers/ [cite: 292]
+    │   │       │   ├── ObjectifsVie.jsx [cite: 249, 292]
+    │   │       │   ├── MonPatrimoine.jsx [cite: 292]
+    │   │       │   ├── MesAssurances.jsx [cite: 292]
+    │   │       │   ├── MesCredits.jsx [cite: 292]
+    │   │       │   ├── MesSinistres.jsx [cite: 292, 293]
+    │   │       │   ├── MonBudget.jsx [cite: 293]
+    │   │       │   └── DemarchesComplexes.jsx [cite: 293]
+    │   │       ├── associations/ [cite: 293]
+    │   │       │   ├── SubventionsFinancements.jsx [cite: 250, 293]
+    │   │       │   ├── InstancesStatutaires.jsx [cite: 293]
+    │   │       │   └── ObligationsReglementaires.jsx [cite: 293]
+    │   │       ├── createurs/ [cite: 293, 294]
+    │   │       │   ├── ParcoursCreation.jsx [cite: 250, 294]
+    │   │       │   ├── AidesCreation.jsx [cite: 294]
+    │   │       │   └── SimulateurBP.jsx # Simulateur Business Plan [cite: 294]
+    │   │       └── entreprises/ [cite: 294]
+    │   │           ├── ContratsDelegues.jsx [cite: 294] # Gestion Déléguée Contrats Fournisseurs
+    │   │           ├── ObligationsRH.jsx [cite: 294]
+    │   │           └── TableauBordGestion.jsx [cite: 294]
+    │   ├── components/ # Composants React réutilisables [cite: 248, 249]
+    │   ├── hooks/      # Hooks React personnalisés [cite: 250]
+    │   └── ...
+    └── package.json    # Dépendances React [cite: 250]
+    ```
+* **3.5.1 Gestion des Comptes Utilisateurs du Portail (Backoffice) :** Création, activation, gestion des droits d'accès aux sections spécifiques. [cite: 143]
+* **3.5.2 Page d'Accueil / Tableau de Bord Principal Personnalisé (Portail Client SPA) :** [cite: 144]
+    * Accès Rapides : Bouton "Prendre Rendez-vous", "Mes Messages Non Lus", "Prochaine Échéance". [cite: 144]
+    * Widgets personnalisables : Synthèse des dossiers en cours, dernières communications, documents récents à valider/consulter. [cite: 145]
+    * Section "Ma Situation en un Clin d'Œil" (Phase avancée, tableau de bord global client). [cite: 146, 232]
+* **3.5.3 Section "Mes Dossiers" / "Mes Missions" (Portail Client SPA) :** [cite: 147]
+    * Liste des dossiers actifs et archivés. [cite: 147]
+    * Vue Détaillée : Timeline interactive avec affichage des étapes, de leur statut, et des commentaires du conseiller (si partagés). [cite: 148]
+* **3.5.4 Section "Mes Documents" (GED Intégrée - Portail Client SPA) :** [cite: 149]
+    * Accès sécurisé aux documents partagés par le cabinet. [cite: 149]
+    * Espace "Coffre-Fort Numérique Avancé" (pour Particuliers) avec sécurité renforcée et chiffrement. [cite: 150, 259, 351]
+    * Option d'intégration Google Drive si activée. [cite: 150]
+    * Possibilité pour le client d'uploader des documents (avec notification au conseiller). [cite: 151]
+* **3.5.5 Section "Ma Messagerie" (Portail Client SPA) :** [cite: 152]
+    * Interface pour envoyer/recevoir des messages sécurisés avec le cabinet, liés à des dossiers spécifiques. [cite: 152]
+    * Notification de "Lu / Pris en Compte" par le conseiller (et vice-versa pour le client). [cite: 153]
+* **3.5.6 Section "Mes Échéances & Rendez-vous" (Portail Client SPA) :** [cite: 154]
+    * Visualisation des échéances importantes (liées aux dossiers, tâches client) et des rendez-vous planifiés. [cite: 154]
+* **3.5.7 Section "Mon Profil" / "Mes Paramètres" (Portail Client SPA) :** [cite: 155]
+    * Modification des informations personnelles de base. [cite: 155]
+    * Gestion des préférences de notification. [cite: 156]
+    * Section "Mes Consentements RGPD". [cite: 156, 202]
+* **3.5.8 Section "Prendre Rendez-vous" (Portail Client SPA) :** [cite: 167, 259, 260]
+    * Choix Conseiller/Service, Type de RDV (avec durée). [cite: 167]
+    * Affichage Disponibilités (lues depuis Google Agenda conseiller via API sécurisée). [cite: 168, 260, 261]
+    * Réservation Créneau (note optionnelle pour le client). [cite: 168]
+    * Confirmation (email client avec .ics), RDV créé dans Google Agenda conseiller et synchronisé avec l'agenda Dolibarr/eLaska (avec référence ID externe Google Calendar). [cite: 169, 261]
+    * Annulation/Reprogrammation par le client (selon règles configurables par eLaska). [cite: 170]
+        ```jsx
+        // // Composant de prise de RDV unifié (conceptuel)
+        // const PriseRendezVous = () => {
+        //   const { conseillers, disponibilites } = useRdvData(); // Hook à créer [cite: 260]
+        //   return (
+        //     <div className="rdv-booking">
+        //       <ConseillerSelector conseillers={conseillers} />
+        //       <CalendrierDispo 
+        //         disponibilites={disponibilites}
+        //         onSelect={handleRdvSelection} // Fonction de sélection
+        //       /> [cite: 261]
+        //       <ConfirmationRdv 
+        //         integration="google-calendar" // Indique l'intégration [cite: 261]
+        //         notificationEmail={true}      // Envoi d'email de confirmation [cite: 261]
+        //       />
+        //     </div>
+        //   );
+        // };
+        ```
+* **3.5.9 Pages et Sections Spécialisées DÉTAILLÉES (Portail Client SPA) :** [cite: 157, 294] (Modulables selon le type de client)
+    * **A. Pour Particuliers :** [cite: 157, 158, 259, 295]
+        * Page "Mes Objectifs de Vie & Projets" : Création, suivi, échanges avec le conseiller. [cite: 160, 259, 295]
+            ```jsx
+            // const ObjectifsVie = () => { /* ... */ }; // Structure détaillée dans [cite: 295, 296, 297]
+            ```
+        * Page "Mon Patrimoine" : Consultation des informations gérées par eLaska, conseils, graphiques. [cite: 158, 259, 297]
+            ```jsx
+            // const MonPatrimoine = () => { /* ... */ }; // Structure détaillée dans [cite: 297, 298, 299, 300]
+            ```
+        * Pages "Mes Assurances", "Mes Crédits", "Mes Sinistres" : Consultation. [cite: 158, 292, 293]
+        * Page "Mon Budget & Mes Abonnements" : Visualisation, outils de suivi simples. [cite: 159, 293, 370]
+        * Page "Mes Démarches Complexes en Cours" : Retraite, MDPH, Surendettement, etc. – aperçu simplifié du statut, timeline, documents. [cite: 161, 259, 300]
+            ```jsx
+            // const DemarchesComplexes = () => { /* ... */ }; // Structure détaillée dans [cite: 300, 301, 302, 303]
+            ```
+    * **B. Pour Associations :** [cite: 161, 162, 259, 303]
+        * Page "Suivi Subventions & Financements" : Dossiers déposés, statuts, échéances, statistiques. [cite: 162, 259, 303]
+            ```jsx
+            // const SubventionsFinancements = () => { /* ... */ }; // Structure détaillée dans [cite: 303, 304, 305, 306]
+            ```
+        * Page "Mes Instances Statutaires" : Calendrier AG/CA, accès aux documents partagés, checklist obligations. [cite: 163, 259, 306]
+            ```jsx
+            // const InstancesStatutaires = () => { /* ... */ }; // Structure détaillée dans [cite: 306, 307, 308]
+            ```
+        * Page "Obligations Réglementaires" (si distincte). [cite: 293]
+    * **C. Pour Entreprises (TPE/PME) :** [cite: 163, 164, 259]
+        * "Suivi des Obligations Réglementaires Clés". [cite: 164]
+        * "Mes Contrats Fournisseurs Délégués". [cite: 165, 294]
+        * "Tableau de Bord de Gestion" (KPIs, etc.). [cite: 294]
+    * **D. Pour Créateurs d'Entreprises :** [cite: 165, 259, 308]
+        * Page "Mon Parcours Création" : Timeline interactive, étapes, documents, suivi conseiller. [cite: 165, 259, 308]
+            ```jsx
+            // const ParcoursCreation = () => { /* ... */ }; // Structure détaillée dans [cite: 308, 309, 310]
+            ```
+        * Page "Mes Aides à la Création" : Suivi des dispositifs, aides demandées/obtenues, simulateur éligibilité. [cite: 166, 259, 310]
+            ```jsx
+            // const AidesCreation = () => { /* ... */ }; // Structure détaillée dans [cite: 310, 311, 312]
+            ```
+        * Simulateur Business Plan (outils simples). [cite: 294]
+    * **E. Section Commune :** "Mes Paiements et Recouvrements." [cite: 166]
+    * **F. [Optionnel] Simulateurs Simplifiés** (ex: patrimoine, fiscal, investissement, capacité d'emprunt). [cite: 167, 342]
+        ```jsx
+        // // Concept de page de simulateurs
+        // const SimulateurPatrimoine = () => {
+        //   return (
+        //     <div className="simulateur-patrimoine">
+        //       <SimulateurRetraite />
+        //       <SimulateurFiscal />
+        //       <SimulateurInvestissement />
+        //       <SimulateurCapaciteEmprunt />
+        //     </div>
+        //   );
+        // };
+        ```
+* **3.5.10 Fonctionnalités Transversales du Portail (SPA React) :** Notifications push, recherche, etc. [cite: 167]
+
+### 3.6 Accompagnement Spécifique des Particuliers
+Ce module intègre et gère de manière approfondie les besoins spécifiques des clients particuliers. [cite: 171] Il comprend des modèles de dossiers et timelines pour les "Démarches Administratives Spécifiques et Complexes" (surendettement, retraite, MDPH, etc.), avec checklists et liaisons vers la base de connaissances. [cite: 172]
+
+* **3.6.1 Gestion administrative personnelle & suivi budgétaire (Backoffice & Portail)** [cite: 345]
+    * **Audit des Systèmes de Classement :** [cite: 345]
+        * Fiche "Audit Classement" avec analyse de l'organisation physique/numérique, outils utilisés, points forts/faibles, documents égarés, sources de stress, temps de recherche estimé et recommandations. [cite: 345, 346, 347, 348, 349, 350, 351]
+        * Interface Backoffice "Audit de Classement" avec onglets : Situation Actuelle, Analyse, Recommandations. [cite: 351]
+    * **Coffre-Fort Numérique Avancé (GED Particuliers) :** [cite: 351]
+        * Extension de la GED Dolibarr avec niveaux de sécurité, type de document légal, durée de conservation légale, accès héritiers, chiffrement renforcé (AES-256 spécifique), signature numérique/horodatage, historique d'accès. [cite: 351, 352, 353, 354, 355]
+        * Portail Client - Section "Mon Coffre-Fort" avec documents par catégorie (Identité, Bancaire, Santé) et suivi de la conservation légale. [cite: 355, 356, 357, 358]
+    * **Échéancier Intelligent :** [cite: 358]
+        * Table `llx_elaska_echeancier_particulier` pour stocker les échéances (impôts, assurance, prêt, etc.) avec type, libellé, organisme, date, périodicité, montant, statut, paramètres et canaux de rappel, documents nécessaires, compte à provisionner, contact organisme, notes. [cite: 358, 359, 360]
+        * Système de rappels automatisés (J-30, J-15, J-7, J-1) par email, SMS (optionnel), notification portail. [cite: 361, 362, 363, 364, 365, 366, 367]
+    * **Gestion Budgétaire Avancée :** [cite: 367]
+        * Module Budget Particulier avec table `llx_elaska_budget_particulier` (période, statut, revenus détaillés, charges fixes détaillées, charges variables détaillées, calculs de reste à vivre, capacité d'épargne, taux d'endettement, analyse avec postes d'optimisation, alertes, objectifs d'épargne). [cite: 367, 368, 369]
+        * Portail Client - Section "Mon Budget" avec aperçu, sections revenus/charges, suggestions d'optimisation, objectifs d'épargne. [cite: 370, 371, 372, 373]
+* **3.6.2 Accompagnement démarches spécifiques (Backoffice & Portail)** [cite: 373]
+    * **Procédure de Surendettement :** [cite: 373]
+        * Dossier Surendettement (table `llx_elaska_dossier_surendettement`) avec lien dossier général, numéro dossier BDF, étapes procédure (diagnostic à clôture), dates clés, décision recevabilité, situation financière détaillée, documents joints, suivi créanciers, type et détails du plan de redressement. [cite: 373, 374, 375]
+        * Interface Timeline Surendettement (Backoffice et Portail) avec étapes, documents requis, durées estimées. [cite: 376, 377, 378]
+    * **Droits Sociaux :** [cite: 378]
+        * Module Droits Sociaux (table `llx_elaska_droits_sociaux`) : situation familiale, droits identifiés (RSA, APL, AAH, etc.), plafonds et calculs, dispositifs locaux Occitanie (FSL, aide transport, etc.), suivi des demandes. [cite: 378, 379, 380]
+        * Portail Client - Section "Mes Droits Sociaux" avec score d'éligibilité, droits identifiés, montants estimés, statut des demandes, aides locales. [cite: 381, 382, 383, 384, 385]
+    * **Formation Numérique :** [cite: 385]
+        * Module Formation Numérique (table `llx_elaska_formation_numerique`) : évaluation initiale (niveau, équipements, besoins), objectifs personnalisés (France Connect, CAF, impôts en ligne, etc.), progression (séances, compétences acquises), support continu. [cite: 385, 386, 387]
+* **3.6.3 Conseil en abonnements & assurances (Backoffice & Portail)** [cite: 387]
+    * **Audit Abonnements :** [cite: 387]
+        * Module Audit Abonnements (table `llx_elaska_abonnement_audit`) : abonnements énergie (électricité, gaz), télécommunications (mobile, internet), médias & streaming, analyse des coûts, postes de surconsommation, recommandations, économies potentielles. [cite: 387, 388, 389]
+        * Portail Client - Section "Mes Abonnements" avec synthèse financière, détails par catégorie, recommandations et planificateur d'optimisation. [cite: 390, 391, 392, 393]
+    * **Courtage Assurances (si ORIAS) :** [cite: 394]
+        * Module Analyse Risques Assurance (table `llx_elaska_analyse_risques_assurance`) : profil assuré, patrimoine à assurer, besoins identifiés (habitation, auto, santé, prévoyance, etc.), risques spécifiques, budget assurance souhaité. [cite: 394, 395, 396]
+
+### 3.7 Accompagnement Spécifique des Associations
+Ce module est conçu pour répondre aux besoins uniques des associations, depuis leur création jusqu'à leur gestion quotidienne et stratégique. [cite: 173, 226, 303, 460]
+
+* **3.7.1 Création, structuration et évolution (Backoffice & Portail)** [cite: 460]
+    * **Phase de Pré-création :** [cite: 460]
+        * Module Projet Associatif (table `llx_elaska_projet_associatif`) : dénomination, secteur, territoire, objet social, buts, public cible, valeurs, activités, fondateurs, maturité du projet, moyens envisagés, conseiller référent. [cite: 460, 461, 462]
+        * Interface Backoffice "Accompagnement Pré-création" avec formulaire progressif (Vision, Opérationnel, Fondateurs, Suite). [cite: 463, 464, 465, 466, 467]
+    * **Documents Fondateurs & Formalités :** [cite: 467]
+        * Module Documents Fondateurs (table `llx_elaska_documents_fondateurs`) : statuts (rédaction, version, conformité), règlement intérieur, AG constitutive (date, PV), formalités déclaration (dossier, dépôt préfecture, RNA, JOAFE), immatriculation complémentaire (SIREN/SIRET), lancement (compte bancaire, registres). [cite: 467, 468, 469]
+        * Portail Association - "Suivi de ma Création" avec barre de progression, étapes (Définition Projet, Statuts, AG, Déclaration, Lancement), documents associés, contact conseiller. [cite: 470, 471, 472, 473, 474, 475]
+* **3.7.2 Gouvernance & vie associative (Backoffice & Portail)** [cite: 475]
+    * **Gestion des Instances Statutaires (AG, CA, Bureau) :** [cite: 173, 475]
+        * Module Instances Associatives (table `llx_elaska_instances_associatives`) : configuration (fréquence AG/CA, bureau), membres du bureau (président, trésorier, secrétaire), calendrier (dernières/prochaines AG/CA), outils collaboratifs. [cite: 475, 476, 477]
+        * Table `llx_elaska_reunion_instance` pour suivi des réunions : type, date/lieu/mode, convocation, ordre du jour, participants, quorum, décisions (résolutions, élections), PV, actions. [cite: 477, 478]
+        * Portail Association - Section "Instances Statutaires" : Calendrier AG/CA, accès aux documents partagés. [cite: 163, 306, 307, 308]
+    * **Gestion des Membres & Bénévoles :** [cite: 479]
+        * Module Membres & Bénévoles (table `llx_elaska_membres_association`) : identité, adhésion (type, dates, cotisation), bénévolat (actif, compétences, disponibilités, formations), engagements, communication (newsletter, relances), RGPD. [cite: 479, 480, 481]
+        * Portail Association - "Mes Membres" avec statistiques, actions rapides (nouveau membre, relance cotisations, export), filtres, liste des membres, gestion du bénévolat. [cite: 482, 483, 484, 485]
+    * **Suivi des Obligations Réglementaires Spécifiques aux Associations.** [cite: 174]
+* **3.7.3 Recherche de financements (Backoffice & Portail)** [cite: 485]
+    * **Veille Financements Associatifs :** [cite: 485]
+        * Module Veille Financements (table `llx_elaska_veille_financements`) : nom dispositif, organisme financeur (Etat, Région Occitanie, Département 65, Tarbes, Europe, fondations), éligibilité (secteurs, projets, territoires, taille asso), calendrier (type appel, dates), montants, spécificités locales (Occitanie), statut. [cite: 485, 486, 487, 488]
+    * **[NOUVEAU - B.3] Suivi des Demandes de Financement/Subvention :** [cite: 175, 226]
+        * Module Dossiers Subventions (table `llx_elaska_dossier_subvention`) : lien dispositif, projet financé (intitulé, description, objectifs, public, territoire), calendrier projet, budget projet (coût total, montant demandé, autofinancement, budget détaillé), indicateurs, suivi administratif (cahier des charges, argumentaire, pièces), dépôt et suivi (date, mode, AR), décision (commission, montant accordé, conditions), versements, bilan d'action. [cite: 175, 488, 489, 490, 491]
+        * Tableaux de bord de suivi des financements. [cite: 176]
+        * Portail Association - "Mes Demandes de Financement" avec statistiques, dossiers en cours, nouvelles opportunités, financements obtenus, calendrier des échéances. [cite: 162, 492, 493, 494, 495, 496, 497]
+    * **Diversification des Ressources :** [cite: 497]
+        * Module Développement Ressources (table `llx_elaska_developpement_ressources`) : stratégie globale (objectif, répartition), dons et mécénat (reçu fiscal, campagnes, objectifs), financement participatif, mécénat entreprises, événements collecte, activités lucratives, suivi global. [cite: 497, 498, 499]
+        * Table `llx_elaska_donateur` pour suivi des donateurs (identité, historique dons, caractéristiques, communication, reçus fiscaux). [cite: 500, 501]
+* **3.7.4 Gestion administrative & comptable (Backoffice)** [cite: 502]
+    * **Pré-comptabilité Associative :** [cite: 502]
+        * Module Comptabilité Association (table `llx_elaska_comptabilite_association`) : type comptabilité, expert-comptable, logiciel, recettes par nature (cotisations, subventions, dons, etc.), dépenses par nature (personnel, fournitures, etc.), résultat, obligations (dépôt comptes, AG approbation), contrôles. [cite: 502, 503, 504]
+    * **Obligations Légales :** [cite: 505]
+        * Module Obligations Associatives (table `llx_elaska_obligations_legales`) : déclarations obligatoires (modificatives, dirigeants), rapports annuels, RGPD, assurances obligatoires, spécificités sectorielles, obligations employeur (si applicable), alertes échéances/non-conformité. [cite: 505, 506, 507]
+* **3.7.5 Stratégie & communication (Backoffice)** [cite: 508]
+    * **Projet Associatif Pluriannuel :** [cite: 508]
+        * Module Stratégie Association (table `llx_elaska_strategie_association`) : horizon stratégique, vision/mission/valeurs, objectifs (quantitatifs, qualitatifs, organisationnels), axes de développement, ressources nécessaires, indicateurs de réussite, suivi. [cite: 508, 509, 510]
+    * **Communication & Visibilité :** [cite: 511]
+        * Module Communication Association (table `llx_elaska_communication_asso`) : stratégie (objectifs, cibles, messages), supports (site web, newsletter), réseaux sociaux (Facebook, Instagram, etc.), supports print, relations presse, événements, mesure d'impact. [cite: 511, 512, 513]
+* **3.7.6 Partenariats & réseaux (Backoffice)** [cite: 514]
+    * Module Partenariats Associatifs (table `llx_elaska_partenariat_asso`) : partenaire (interne/externe), nature (projet commun, mutualisation), formalisation (convention, dates), engagements, suivi (bilan, satisfaction), ancrage local. [cite: 514, 515, 516]
+
+### 3.8 Conseil & Gestion Externalisée TPE/PME
+Ce module regroupe les fonctionnalités pour les entreprises, incluant le conseil en organisation, l'externalisation administrative, RH, le suivi de gestion et la gestion de projets spécifiques. [cite: 30, 226, 401]
+
+* **3.8.1 Conseil en organisation & optimisation processus (Backoffice)** [cite: 401]
+    * **Diagnostic Organisationnel :** [cite: 401]
+        * Module Diagnostic Organisationnel (table `llx_elaska_diagnostic_organisationnel`) : profil entreprise, analyse workflows (points friction, tâches chronophages), évaluation outils, temps/coûts administratifs, potentiel d'optimisation, recommandations, plan d'action, budget transformation, suivi. [cite: 401, 402, 403]
+        * Interface Backoffice "Diagnostic Organisationnel" avec onglets (Situation actuelle, Analyse, Recommandations, Suivi). [cite: 404, 405, 406, 407]
+    * **Conseil Outils Numériques :** [cite: 407]
+        * Module Conseil Outils TPE (table `llx_elaska_conseil_outils_numeriques`) : lien diagnostic, besoins identifiés (ERP, CRM, etc.), outils comparés, critères d'évaluation, recommandations, plan déploiement, formation, budget, suivi. [cite: 407, 408, 409]
+* **3.8.2 Externalisation administrative (Office Management) (Backoffice & Portail)** [cite: 409]
+    * **Gestion Administrative Générale :** [cite: 409]
+        * Module Office Management Externalisé (table `llx_elaska_office_management`) : services activés (courrier, emails, agendas, déplacements, fournitures), paramètres spécifiques, statistiques, satisfaction client. [cite: 409, 410, 411]
+        * Table `llx_elaska_office_task_log` pour traçabilité des tâches (type, description, temps passé, statut, facturable). [cite: 412]
+    * **Gestion Commerciale Externalisée :** [cite: 413]
+        * Module Gestion Commerciale (table `llx_elaska_gestion_commerciale`) : services (devis, facturation, suivi encaissements, relances, commandes fournisseurs, MàJ CRM), paramètres devis/facturation, paramètres encaissements, intégrations (compta, banque, CRM), indicateurs (nb devis, taux transfo, DSO, etc.). [cite: 413, 414, 415]
+        * Portail Entreprise - "Mon Activité Commerciale" avec indicateurs, devis en cours, aperçu facturation, suivi impayés, trésorerie prévisionnelle. [cite: 416, 417, 418, 419, 420]
+    * **Pré-comptabilité :** [cite: 420]
+        * Module Pré-comptabilité (table `llx_elaska_pre_comptabilite`) : période, expert-comptable, fréquence transmission, pièces collectées, contrôles effectués, transmission, trésorerie, alertes. [cite: 420, 421, 422]
+* **3.8.3 Gestion externalisée RH (Backoffice)** [cite: 423]
+    * **Administration du Personnel :** [cite: 423]
+        * Module RH Externalisé (table `llx_elaska_rh_externalise`) : services (embauches, contrats, absences, visites médicales, fin contrat), paramètres (convention collective, organismes), effectif, suivi périodes essai, suivi absences, visites médicales. [cite: 423, 424, 425]
+        * Table `llx_elaska_salarie_suivi` pour détails par salarié (identité, contrat, suivi administratif, période essai, absences). [cite: 425, 426]
+    * **Recrutement Externalisé :** [cite: 427]
+        * Module Recrutement (table `llx_elaska_recrutement`) : besoin (poste, profil, contrat, salaire), diffusion (canaux, dates), candidatures (reçues, préselect, entretiens), suivi (statut, candidat retenu), satisfaction. [cite: 427, 428]
+        * Table `llx_elaska_candidat` pour suivi des candidats (identité, candidature, CV/LM, évaluation, entretien, statut). [cite: 429, 430]
+* **3.8.4 Suivi de gestion & reporting (Backoffice & Portail)** [cite: 431]
+    * **Budget Prévisionnel & Suivi :** [cite: 431]
+        * Module Budget Entreprise (table `llx_elaska_budget_entreprise`) : exercice, version, CA prévisionnel (total, mensuel, par activité), charges variables, charges fixes, amortissements, charges financières, résultat prévisionnel, suivi réalisé vs prévisionnel. [cite: 431, 432, 433, 434]
+    * **Tableaux de Bord KPI :** [cite: 434]
+        * Module Tableau de Bord Entreprise (table `llx_elaska_kpi_entreprise`) : période, KPI commerciaux (CA, nouveaux clients, panier moyen), KPI financiers (trésorerie, DSO, rotation stocks), KPI RH (effectif, absentéisme, turnover), KPI opérationnels (taux service, satisfaction client), alertes. [cite: 434, 435]
+        * Portail Entreprise - "Tableau de Bord Dirigeant" avec sélecteur période, bannières d'alertes, grille de KPIs, graphiques (CA, trésorerie), actions de reporting. [cite: 436, 437, 438, 439, 440, 441]
+* **3.8.5 Gestion de projets transversaux (Backoffice)** [cite: 441]
+    * **Appels d'Offres :** [cite: 441]
+        * Module Appels d'Offres (table `llx_elaska_appel_offres`) : identification AO, calendrier, analyse opportunité (montant, probabilité, adéquation), constitution dossier (pièces admin/tech/fin), documents requis, dépôt, résultat. [cite: 441, 442, 443]
+    * **Dossiers de Financement (Entreprise) :** [cite: 444]
+        * Module Financement Entreprise (table `llx_elaska_dossier_financement`) : type financement (subvention, prêt, BPI, etc.), organisme, projet financé, éligibilité, constitution dossier (BP, prévisionnel), suivi (dépôt, décision, montant accordé), versements. [cite: 444, 445, 446]
+* **3.8.6 Abonnements & assurances professionnels (Backoffice)** [cite: 447]
+    * **Audit Abonnements Professionnels :** [cite: 447]
+        * Module Abonnements Pro (table `llx_elaska_abonnements_pro`) : télécommunications (fixe, mobile, internet), énergie pro (électricité, gaz), logiciels & licences, services professionnels (maintenance, cloud), analyse (coûts, sur-abonnements, économies). [cite: 447, 448, 449]
+    * **Assurances Professionnelles (si ORIAS) :** [cite: 450]
+        * Module Assurances Pro (table `llx_elaska_assurances_pro`) : risques analysés (activité, CA, effectif), biens à assurer (locaux, matériel, stocks, flotte), besoins identifiés (RC Pro, multirisque, cyber), contrats actuels, recommandations. [cite: 450, 451]
+
+### 3.9 Module Conseil en Gestion de Patrimoine, Assurances, Crédits & Sinistres
+Fusion des fonctionnalités ESaiko patrimoine + eLaska finance. [cite: 262] Chaque objet principal (bilan, contrat, dossier crédit, sinistre) avec Référence eLaska personnalisable. [cite: 176]
+* Sous-modules unifiés : [cite: 262]
+    * **Bilan Patrimonial :** Analyse situation, recommandations. [cite: 62, 262]
+    * **Contrats d'Assurance :** Vie, IARD, prévoyance. [cite: 62, 262]
+    * **Dossiers de Crédit :** Immobilier, consommation, professionnel. [cite: 62, 262]
+    * **Gestion des Sinistres :** Déclaration, suivi, indemnisation. [cite: 62, 262]
+    * **Investissements :** PEA, assurance-vie, SCPI, immobilier. [cite: 262]
+* Exemple de classe unifiée pour une opération patrimoniale :
+    ```php
+    // class ElaskaPatrimoine extends CommonObject {
+    //     public $fk_client;
+    //     public $type_operation; // bilan/assurance/credit/sinistre/investissement [cite: 263]
+    //     public $ref_elaska;       // Référence eLaska [cite: 263]
+    //     public $statut_dossier;
+    //     public $montant_concerne;
+    //     public $organisme_financier; // Lien vers tiers partenaire [cite: 263, 264]
+    //     public $echeances_importantes;
+    //     public $documents_associes; // Liens vers GED [cite: 264]
+    //     public $timeline_progression; // JSON ou lien vers timeline dédiée [cite: 264, 265]
+    // }
+    ```
+
+### 3.10 Module Gestion des Services/Prestations (Backoffice)
+* Fiche Prestation eLaska avec Référence eLaska personnalisable. [cite: 177]
+* Onglet "Temps Passé & Consommations" pour lier les heures et frais à une prestation spécifique. [cite: 177]
+* Classe PHP `elaskaprestation.class.php`. [cite: 246]
+
+### 3.11 Module Tâches et Suivi Opérationnel (Backoffice)
+* **Gestion des Tâches eLaska :** Création, assignation, description, échéance, priorité, statut, liaison à dossier/prestation/client. [cite: 177]
+* **Suivi du Temps et Checklists :** [cite: 178]
+    * Saisie de Temps : Liaison à Dossier, Prestation, Tâche, et **Étape de Timeline spécifique**. [cite: 178] Granularité fine.
+    * Checklists dynamiques par type de tâche ou configurables.
+* **Vues des Tâches :** Liste filtrable/triable, Kanban (React), Calendrier. [cite: 179]
+
+### 3.12 Module Abonnements Clients (Backoffice)
+* Pour les abonnements aux services eLaska (hors contrats financiers spécifiques comme assurances/crédits). [cite: 62, 180]
+* Fiche Abonnement avec Référence eLaska personnalisable, client, service(s) inclus, périodicité, montant, dates début/fin, statut. [cite: 180]
+
+### 3.13 Module Recouvrements (Backoffice)
+* Dossier Recouvrement Client et Dossier Dette Organisme avec Référence eLaska personnalisable. [cite: 180]
+* **Structure Complète (Classe `ElaskaRecouvrement`) :** [cite: 322]
+    * Référence eLaska, lien vers facture Dolibarr, débiteur, montants (initial, restant), statut (amiable, pré-contentieux, contentieux). [cite: 322, 323]
+    * Timeline des actions de recouvrement, frais de recouvrement, provisions pour risque. [cite: 323, 324]
+    * Avocat mandaté (si contentieux), date de prescription, historique des paiements, plan d'échelonnement. [cite: 324, 325, 326]
+* **Pages Backoffice :** `recouvrement/dossiers.php`, `recouvrement/card.php`, `recouvrement/procedures.php`, `recouvrement/reporting.php`, `recouvrement/modeles.php` (modèles de courriers). [cite: 326]
+
+### 3.14 Module de Pilotage Interne Avancé (Backoffice - Vue Gestionnaire)
+* Rapports incluant temps passé par étape, consommations par dossier/type. [cite: 180]
+* Analyse de la performance des services : temps moyen réel vs. estimé par type de prestation/dossier, identification des goulets d'étranglement. [cite: 181]
+* Reporting sur la performance des services (KPIs). [cite: 231]
+
+### 3.15 Module Base de Connaissances Interne & Veille Réglementaire COMPLET
+* Articles et Fiches de veille avec Référence eLaska personnalisable. [cite: 182]
+* **Fonctionnalités enrichies / Structure Complète (Classe `ElaskaKnowledgeBase`) :** [cite: 183, 312]
+    * Articles de procédures, fiches organismes, modèles de documents, veille réglementaire. [cite: 312, 313]
+    * **Spécificités locales/régionales :** Dispositifs Occitanie, contacts Tarbes, partenaires locaux. [cite: 185, 230, 313]
+    * **Fonctionnalités avancées :** [cite: 314]
+        * Liaison intelligente des articles KB à des types de dossiers/prestations. [cite: 183, 314]
+        * Création d'"extraits client" (versions simplifiées) pour partage facile. [cite: 184, 314]
+        * Veille active avec possibilité de ciblage client pour communications. [cite: 184]
+        * Alertes sur les changements réglementaires. [cite: 315, 316]
+* **Pages Backoffice :** `knowledge/articles.php`, `knowledge/veille.php`, `knowledge/extraits.php`, `knowledge/organismes_locaux.php`, `knowledge/search.php`. [cite: 316]
+
+### 3.16 Module Prospection & Gestion des Opportunités (CRM Interne eLaska) COMPLET
+* **Description :** Suivi des leads (contacts non encore clients), sources (formulaires web, téléphone, apporteur d'affaires), étapes du cycle de vente/prospection eLaska (premier contact, RDV découverte, proposition envoyée, en négociation, gagnée, perdue), valeur estimée de l'opportunité, probabilité de conclusion. [cite: 188] Scoring des leads. [cite: 265]
+* **Gestion des Leads (Classe `ElaskaLead`) :** [cite: 316]
+    * Référence eLaska, civilité, nom, prénom, email, téléphone, source du lead, lien apporteur d'affaires. [cite: 316, 317, 318]
+    * Statut du lead (Nouveau, Contacté, Qualifié, Converti, Perdu), score de qualification (0-100). [cite: 319, 320]
+    * Besoins exprimés, budget estimé, échéance projet, notes de qualification, commercial assigné, dates contact/action, information de conversion. [cite: 320, 321, 322]
+* **Intégration :** Conversion d'une opportunité "gagnée" en Tiers client et création automatique d'un premier dossier/prestation. [cite: 189, 265] Lien avec le module "Gestion des Partenariats & Apporteurs d'Affaires". [cite: 190]
+* **Reporting :** Tableau de bord des opportunités, taux de conversion, performance par source. [cite: 191, 265]
+* **Pages CRM Backoffice :** `crm/leads.php`, `crm/lead_card.php`, `crm/pipeline.php` (Kanban), `crm/apporteurs.php`, `crm/conversion.php`, `crm/reporting.php`. [cite: 322]
+
+### 3.17 Module Enquêtes de Satisfaction Client (Backoffice & Portail)
+* Instance d'enquête avec Référence eLaska personnalisable. [cite: 188]
+* Configuration des questions, envoi ciblé, collecte des réponses (via portail ou lien direct).
+* Analyse des résultats, tableaux de bord de satisfaction. [cite: 121]
+
+## 4. Systèmes transversaux Renforcés
+
+### 4.1 Paramètres Étendus et Personnalisation Totale
+* Interface d'Administration eLaska (`admin/`) : [cite: 192]
+    * Configurations générales du module. [cite: 192]
+    * Configuration des modèles de numérotation avec variables dynamiques. [cite: 193]
+    * Configuration des vues de tableaux de bord et des menus par rôle utilisateur interne. [cite: 193]
+    * Configuration Prise RDV en Ligne (types de RDV, disponibilités par défaut). [cite: 193]
+    * Configuration Module "Objectifs de Vie". [cite: 194]
+    * Configuration des Workflows d'Automatisation. [cite: 194]
+    * Configuration des Consentements RGPD (types de consentement, textes). [cite: 195]
+    * Configuration des Simulateurs Simples du portail. [cite: 195]
+
+### 4.2 Système de champs dynamiques et conditionnels (Attributs Supplémentaires)
+* Permettre à l'administrateur de créer des champs personnalisés pour les objets eLaska (tiers, dossiers, prestations, etc.) sans modifier le code. [cite: 40, 196, 243]
+* Possibilité de rendre ces champs conditionnels (affichage dépendant de la valeur d'un autre champ). [cite: 40]
+
+### 4.3 Système de Tags/Étiquettes personnalisables
+* Possibilité de créer et d'assigner des tags/étiquettes colorées aux objets eLaska (tiers, dossiers, tâches) pour un classement et filtrage transversal. [cite: 40, 196]
+* Gestion centralisée des tags.
+
+### 4.4 Historique et Suivi Détaillé des Communications et Envois
+* Suivi de tous les échanges (emails entrants/sortants via IMAP, courriers, appels, messages portail) liés à un client ou un dossier. [cite: 41, 196]
+* Historique accessible depuis la fiche Tiers et la fiche Dossier. [cite: 41]
+* Inclusion des communications avec les intervenants externes pertinents pour un dossier. [cite: 41, 196]
+
+### 4.5 Système de Notifications & Alertes Intelligentes
+* Système unifié multi-canal : Backoffice (notifications Dolibarr, widgets dashboard), Portail (notifications push SPA, emails), Mobile (Push notifications PWA). [cite: 42, 197, 271]
+* Notifications configurables pour divers événements : nouvelle tâche assignée, échéance proche, document client uploadé, message portail reçu, etc. [cite: 42]
+* Alertes intelligentes basées sur des conditions (ex: dossier bloqué depuis X jours, absence de réponse client). [cite: 42]
+* Intégrations optionnelles : Slack, Teams. [cite: 271]
+
+### 4.6 Suivi des Consommations et Frais Engagés
+* Saisie des consommations (frais de déplacement, fournitures spécifiques, etc.) et liaison aux dossiers, prestations, tâches, et/ou **étapes de timeline spécifiques**. [cite: 43, 197]
+* Configuration des types de consommations et de leurs coûts unitaires. [cite: 83]
+* Reporting détaillé des consommations par projet/client. [cite: 43]
+* Intégration à la facturation pour refacturation au client si applicable. [cite: 43, 66]
+
+### 4.7 Workflows d'Automatisation Évolués Basés sur Déclencheurs
+* Moteur de règles unifié et interface de configuration pour définir des règles simples (SI condition ALORS action). [cite: 44, 198, 265]
+* **Déclencheurs possibles :** Changement de statut d'un dossier/tâche/étape de timeline, création d'un nouveau tiers d'un certain type, réception d'un document client, échéance proche, création de dispositif de financement éligible, fin de période d'essai, seuil de trésorerie atteint, etc. [cite: 199, 397, 453, 454, 456, 457, 517, 519, 520, 521, 522]
+* **Actions possibles :** Création automatique d'une tâche prédéfinie, envoi d'un email/notification type (interne ou client via templates), changement de statut d'un objet, alerte à un conseiller, création de dossier, planification de RDV, recalcul de droits, etc. [cite: 200, 266, 267, 397, 398, 399, 452, 453, 454, 455, 456, 457, 458, 517, 518, 519, 520, 521, 522, 523]
+    ```php
+    // // Exemple de moteur de workflow (conceptuel)
+    // class ElaskaWorkflowEngine {
+    //     public function defineRule($trigger, $conditions, $actions) { /* ... */ } [cite: 265]
+    //     // Exemple : Si dossier BDF passe en "Dépôt effectué"
+    //     // Alors créer tâche "Suivi réponse commission" à J+30 [cite: 265]
+    // }
+    // // Exemples de workflows spécifiques par type de client (Particuliers, Entreprises, Associations)
+    // // Voir sections 3.6, 3.7, 3.8 pour les PHP class ElaskaWorkflowParticulier, ElaskaWorkflowEntreprise, ElaskaWorkflowAssociation
+    ```
+
+### 4.8 Gestion Affinée des Consentements RGPD
+* Module de gestion des différents types de consentement (par finalité : newsletter, traitement données pour dossier X, etc.). [cite: 45, 200, 248]
+* Traçabilité de l'obtention du consentement : date, source (portail, backoffice, email), version du texte de consentement, adresse IP, user agent. [cite: 45, 201, 279]
+* Interface pour le client sur le portail pour consulter et gérer ses consentements. [cite: 45, 202, 292]
+* Outils en backoffice pour l'export et la suppression des données personnelles (droit à l'oubli, portabilité). [cite: 203]
+* Configuration des types de consentements et des textes associés dans l'admin eLaska. [cite: 83, 195]
+
+### 4.9 Système de Templates Emails HTML
+* Gestion centralisée des modèles d'emails HTML personnalisables.
+* Classe `ElaskaEmailTemplate` avec nom, sujet (avec variables dynamiques), corps HTML/texte, variables disponibles (ex: `[CLIENT_NOM]`, `[DOSSIER_REF]`, `[CONSEILLER_NOM]`), type de destinataire, déclencheur automatique optionnel. [cite: 326, 327, 328, 329]
+* Fonction de rendu pour remplacer les variables. [cite: 329, 330]
+* Templates spécifiques pour Particuliers, Entreprises, Associations. [cite: 396, 459, 524]
+
+### 4.10 Gestion des Mandats & Autorisations
+* Module pour gérer les mandats donnés par les clients. [cite: 66]
+* Classe `ElaskaMandat` avec référence, mandant (client), type de mandat (gestion administrative, représentation), périmètre autorisé, dates signature/échéance, lien vers document signé (GED), statut (actif, échu, révoqué), limitations. [cite: 330, 331, 332, 333, 334]
+
+### 4.11 Système de Numérotation Avancé
+* Configuration de modèles de numérotation personnalisables pour les objets métier eLaska (dossiers, prestations, etc.). [cite: 57, 83, 193]
+* Utilisation de variables dynamiques (année, mois, type d'objet, compteur, initiales conseiller, type client, etc.). [cite: 57, 193, 334, 335]
+* Classe `ElaskaNumbering` pour générer les références. [cite: 334]
+    ```php
+    // // Exemple de classe de numérotation
+    // class ElaskaNumbering {
+    //     public function generateRef($object_type, $variables = []) { /* ... */ } [cite: 334]
+    //     private function getPatternForType($type) {
+    //         // $patterns = [
+    //         //     'dossier_particulier' => 'EL-PART-{YEAR}-{COUNTER:4}', [cite: 335]
+    //         //     // ... autres patterns [cite: 335, 336]
+    //         // ];
+    //         // return $patterns[$type] ?? 'EL-{COUNTER:4}'; [cite: 336]
+    //     }
+    //     // ...
+    // }
+    ```
+
+### 4.12 Intelligence Artificielle Light (Assistance Conseiller & Client)
+* **Assistance à la Décision "Intelligente" pour le Conseiller (IA-Light) :** Suggestions d'actions, alertes proactives basées sur l'analyse des données du dossier ou du client. [cite: 232, 340]
+    ```javascript
+    // // Composant d'assistance IA pour conseillers (conceptuel)
+    // const AssistantConseiller = ({ dossierId }) => {
+    //   const { suggestions } = useAIAssistant(dossierId); // Hook à créer [cite: 340]
+    //   // Afficher les suggestions (type, priorité, action recommandée, justification) [cite: 341]
+    // };
+    ```
+* **Conseils Automatiques Personnalisés pour le client sur le portail** (basés sur ses objectifs, sa situation). [cite: 296]
+
+### 4.13 Simulateurs Portail Client
+* Mise à disposition de simulateurs simples sur le portail client (ex: calcul droits sociaux simplifiés, capacité d'emprunt, éligibilité aides, simulateur de budget, retraite, fiscal, investissement). [cite: 167, 294, 311, 342]
+* Configuration des simulateurs depuis le backoffice. [cite: 195]
+* Enregistrement optionnel des simulations (anonymisé ou lié au client si consentement). [cite: 205]
+    ```jsx
+    // // Exemple de page de simulateurs sur le portail (conceptuel)
+    // const SimulateursPortail = () => {
+    //   return (
+    //     <div>
+    //       <SimulateurRetraite /> [cite: 342]
+    //       <SimulateurFiscal /> [cite: 342]
+    //       <SimulateurInvestissement /> [cite: 342]
+    //       <SimulateurCapaciteEmprunt /> [cite: 342]
+    //       {/* Autres simulateurs */}
+    //     </div>
+    //   );
+    // };
+    ```
+
+### 4.14 Gamification Client
+* Introduction subtile d'éléments de gamification pour encourager l'engagement client sur le portail. [cite: 232, 343]
+* Système de progression (niveaux, points), badges pour accomplissements (ex: dossier complété, objectif atteint), défis personnalisés. [cite: 343, 344]
+    ```jsx
+    // // Composant de progression client (conceptuel)
+    // const ProgressionClient = ({ clientId }) => {
+    //   const { niveau, points, badges } = useClientProgression(clientId); // Hook à créer [cite: 343]
+    //   return (
+    //     <div className="client-progression">
+    //       <NiveauBar niveau={niveau} points={points} /> [cite: 344]
+    //       <BadgesCollection badges={badges} /> [cite: 344]
+    //       <DefisPersonnalises /> [cite: 344]
+    //     </div>
+    //   );
+    // };
+    ```
+
+## 5. Structure des données Consolidée
+Basée sur CdC V4.0 eLaska et "Technique.txt" ESaiko, en remplaçant `llx_esaiko_` par `llx_elaska_`. [cite: 204] Les nouvelles fonctionnalités impliquent de nouvelles tables ou des extensions de tables existantes. [cite: 204]
+
+### 5.1 Tables principales unifiées et étendues
+* **`llx_elaska_client_info` (extension de `llx_societe`) :**
+    * `fk_soc` (lien vers `llx_societe`), `type_client` (ENUM: particulier, association, entreprise, createur, intervenant, organisme), `ref_elaska`, `mandats_accordes` (TEXT), `objectifs_patrimoniaux` (TEXT ENCRYPTED), `contraintes_accessibilite` (TEXT), `preferences_communication` (JSON), champs spécialisés par type (ex: `statut_creation` pour créateurs, `instances_statutaires` JSON pour associations). [cite: 205, 271, 272]
+* **`llx_elaska_dossier` :**
+    * `ref_elaska` (UNIQUE), `fk_soc`, `fk_user_responsable`, `type_dossier`, `libelle`, `description`, `statut` (ENUM), `date_creation`, `date_echeance`, `confidentialite` (ENUM), `timeline_config` (JSON), `intervenants_externes` (JSON), `fk_patrimoine_dossier`, `montant_concerne`. [cite: 205, 273, 274]
+* **`llx_elaska_dossier_timeline_etape` (ou `llx_elaska_dossier_timeline`) :**
+    * `fk_dossier`, `numero_etape`, `libelle_etape`, `description_etape`, `statut_etape` (ENUM: attente, en_cours, terminee, bloquee, annulee), `date_prevue`, `date_realisee`, `commentaire_conseiller` (TEXT), `visible_portail` (BOOLEAN), `dependance_externe` (VARCHAR), suivi temps/coûts par étape (`temps_prevu_heures`, `temps_realise_heures`, `cout_estime`, `cout_realise`). [cite: 206, 275, 276]
+* **`llx_elaska_opportunite` (CRM) :**
+    * `ref_elaska` (UNIQUE), `titre`, `fk_soc_prospect`, `fk_user_responsable`, `source_lead`, `fk_apporteur`, `etape_prospection`, `montant_estime`, `probabilite` (%), `date_creation`, `date_cloture_prevue/reelle`, `statut` (ENUM: ouverte, gagnee, perdue, reportee), `notes`. [cite: 205, 277]
+* **`llx_elaska_workflow_rule` :**
+    * `nom_regle`, `declencheur_type`, `declencheur_condition` (JSON), `action_type`, `action_parametres` (JSON), `actif` (BOOLEAN), `date_creation`, `date_derniere_execution`. [cite: 204, 205, 278]
+* **`llx_elaska_consent_type` :** `code_consent`, `libelle`, `texte_consentement_version`. [cite: 205]
+* **`llx_elaska_client_consent` (ou `llx_elaska_consent_log`) :**
+    * `fk_soc`, `type_consentement` (ou `fk_consent_type`), `statut_consentement` (ENUM: accorde, refuse, retire), `date_consentement`, `source_consentement` (ENUM: portail, backoffice, email), `version_texte`, `adresse_ip`, `user_agent`. [cite: 205, 279]
+* `llx_elaska_client_objectif_vie` (tel que CdC V4.0) [cite: 204]
+* `llx_elaska_rdv_config_user` (tel que CdC V4.0, pour paramètres RDV conseiller) [cite: 204]
+* `llx_elaska_intervenant_externe_dossier` (fk_dossier, fk_soc_intervenant, role_intervenant) [cite: 204]
+* `llx_elaska_simulateur_log` (fk_soc_portail, type_simulateur, date_utilisation, parametres_entree_json, resultat_estime_json) [cite: 205]
+* **Tables à étendre :** `llx_societe` (pour types eLaska), `llx_actioncomm` (pour référence ID Google Calendar et lien intervenants externes). [cite: 205]
+* La liaison Temps Passé (`llx_projet_task_time` ou table dédiée `llx_elaska_temps_passe`) devra permettre un lien optionnel vers une `fk_elaska_dossier_timeline_etape`. [cite: 206]
+
+### 5.2 Tables spécifiques à l'accompagnement des Particuliers
+* `llx_elaska_audit_classement` [cite: 345, 346, 347, 348, 349, 350, 351]
+* `llx_elaska_coffre_fort_document` (extension GED) [cite: 351, 352, 353, 354, 355]
+* `llx_elaska_echeancier_particulier` [cite: 358, 359, 360]
+* `llx_elaska_budget_particulier` [cite: 367, 368, 369]
+* `llx_elaska_dossier_surendettement` [cite: 373, 374, 375]
+* `llx_elaska_droits_sociaux` [cite: 378, 379, 380]
+* `llx_elaska_formation_numerique` [cite: 385, 386]
+* `llx_elaska_abonnement_audit` (abonnements personnels) [cite: 387, 388, 389]
+* `llx_elaska_analyse_risques_assurance` (personnelle) [cite: 394, 395, 396]
+* `llx_elaska_email_template_particulier` [cite: 396]
+
+### 5.3 Tables spécifiques à l'accompagnement des Entreprises (TPE/PME)
+* `llx_elaska_diagnostic_organisationnel` [cite: 401, 402, 403]
+* `llx_elaska_conseil_outils_numeriques` [cite: 407, 408, 409]
+* `llx_elaska_office_management` [cite: 409, 410, 411]
+* `llx_elaska_office_task_log` [cite: 412]
+* `llx_elaska_gestion_commerciale` [cite: 413, 414, 415]
+* `llx_elaska_pre_comptabilite` (entreprise) [cite: 420, 421, 422]
+* `llx_elaska_rh_externalise` [cite: 423, 424, 425]
+* `llx_elaska_salarie_suivi` [cite: 425, 426]
+* `llx_elaska_recrutement` [cite: 427, 428]
+* `llx_elaska_candidat` [cite: 429, 430]
+* `llx_elaska_budget_entreprise` [cite: 431, 432, 433]
+* `llx_elaska_kpi_entreprise` [cite: 434, 435]
+* `llx_elaska_appel_offres` [cite: 441, 442, 443]
+* `llx_elaska_dossier_financement` (entreprise) [cite: 444, 445, 446]
+* `llx_elaska_abonnements_pro` [cite: 447, 448, 449]
+* `llx_elaska_assurances_pro` [cite: 450, 451]
+* `llx_elaska_email_template_entreprise` [cite: 459] (Ou une table générique de templates avec un champ type)
+
+### 5.4 Tables spécifiques à l'accompagnement des Associations
+* `llx_elaska_projet_associatif` (pré-création) [cite: 460, 461, 462]
+* `llx_elaska_documents_fondateurs` [cite: 467, 468, 469]
+* `llx_elaska_instances_associatives` [cite: 475, 476, 477]
+* `llx_elaska_reunion_instance` [cite: 477, 478]
+* `llx_elaska_membres_association` [cite: 479, 480, 481]
+* `llx_elaska_veille_financements` (associatifs) [cite: 485, 486, 487]
+* `llx_elaska_dossier_subvention` [cite: 488, 489, 490, 491]
+* `llx_elaska_developpement_ressources` [cite: 497, 498, 499]
+* `llx_elaska_donateur` [cite: 500, 501]
+* `llx_elaska_comptabilite_association` [cite: 502, 503, 504]
+* `llx_elaska_obligations_legales` (association) [cite: 505, 506, 507]
+* `llx_elaska_strategie_association` [cite: 508, 509, 510]
+* `llx_elaska_communication_asso` [cite: 511, 512, 513]
+* `llx_elaska_partenariat_asso` [cite: 514, 515, 516]
+* `llx_elaska_email_template_association` [cite: 524] (Ou une table générique)
+
+### 5.5 Vues de synthèse pour indicateurs de pilotage (KPIs)
+* `v_elaska_kpi_particuliers` [cite: 400]
+* `v_elaska_kpi_entreprises` (Similaire à `llx_elaska_kpi_entreprise`, peut-être une vue agrégée)
+* `v_elaska_kpi_associations` [cite: 525]
+
+## 6. API REST COMPLÈTE et Intégrations
+
+### 6.1 Endpoints API Exhaustifs
+Une API REST complète sera développée pour permettre la communication entre le backoffice Dolibarr et le portail client SPA, ainsi que pour d'éventuelles intégrations tierces. [cite: 3, 83, 244]
+Exemple de structure de routes (non exhaustif) :
+```php
+// // api/routes.php - Configuration des routes (illustratif)
+// $routes = [
+//     // Authentification
+//     'POST /auth/login' => 'ElaskaAuthController::login', [cite: 336]
+//     'POST /auth/refresh' => 'ElaskaAuthController::refresh', [cite: 336]
+//     // Clients/Tiers
+//     'GET /clients' => 'ElaskaClientController::list', [cite: 336]
+//     'GET /clients/{id}' => 'ElaskaClientController::get', [cite: 336]
+//     // Dossiers
+//     'GET /dossiers' => 'ElaskaDossierController::list', [cite: 336, 337]
+//     'GET /dossiers/{id}' => 'ElaskaDossierController::get', [cite: 337]
+//     'GET /dossiers/{id}/timeline' => 'ElaskaDossierController::getTimeline', [cite: 337]
+//     // Portail spécialisé (exemples)
+//     'GET /portail/objectifs-vie' => 'ElaskaPortailController::getObjectifsVie', [cite: 337]
+//     'GET /portail/patrimoine' => 'ElaskaPortailController::getPatrimoine', [cite: 337]
+//     'GET /portail/subventions' => 'ElaskaPortailController::getSubventions', [cite: 337]
+//     // Rendez-vous
+//     'GET /rdv/disponibilites/{conseiller}' => 'ElaskaRdvController::getDisponibilites', [cite: 337]
+//     'POST /rdv/reserver' => 'ElaskaRdvController::reserver', [cite: 337]
+//     // Documents
+//     'POST /documents/upload' => 'ElaskaDocumentController::upload', [cite: 338]
+//     // Communications (Messagerie)
+//     'POST /messages' => 'ElaskaMessageController::send', [cite: 338]
+//     // CRM
+//     'GET /crm/leads' => 'ElaskaCrmController::getLeads', [cite: 338]
+//     // Workflows
+//     'POST /workflows/trigger' => 'ElaskaWorkflowController::trigger', [cite: 338, 339]
+//     // ... et bien d'autres endpoints pour couvrir toutes les fonctionnalités du portail et des modules.
+// ];
+```
+L'API couvrira les clients, dossiers, tâches, portail, RDV, objectifs de vie, opportunités CRM, etc. [cite: 83, 244, 245]
+
+### 6.2 Intégration Google Drive (Optionnelle)
+* Permettre aux utilisateurs de lier leur compte Google Drive pour stocker/accéder à des documents liés aux dossiers eLaska. [cite: 48, 207]
+* Authentification OAuth2 sécurisée. [cite: 115]
+
+### 6.3 Intégration Email IMAP
+* Pour la récupération des emails entrants et leur liaison aux tiers/dossiers. [cite: 72, 207]
+* Envoi d'emails sortants via SMTP configuré dans Dolibarr.
+
+### 6.4 Notifications Push
+* Pour le portail client SPA et potentiellement applications mobiles (PWA). [cite: 49, 207, 271]
+* Utilisation de technologies standards (Web Push API).
+
+### 6.5 Intégration Google Agenda (pour Prise de RDV en Ligne)
+* **Objectif :** Synchronisation des disponibilités des conseillers et création automatique des RDV pris depuis le portail eLaska dans leurs agendas Google. [cite: 207]
+* **Technologie :** API Google Calendar, authentification OAuth2. [cite: 208, 115]
+* **Fonctionnalités :** [cite: 208]
+    * Lecture des disponibilités des agendas des conseillers. [cite: 208]
+    * Création d'événements dans Google Agenda du conseiller (avec infos client, motif, et **lien retour vers le dossier/RDV eLaska**). [cite: 208]
+    * Mise à jour/Annulation (synchronisation bidirectionnelle à étudier pour une phase ultérieure). [cite: 208]
+    * Notifications Google Agenda en complément des notifications eLaska. [cite: 208]
+* Stockage de l'ID de l'événement Google Calendar dans l'objet `llx_actioncomm` ou une table de liaison eLaska pour référence. [cite: 73, 169, 209]
+* **Configuration :** Liaison du compte Google Agenda par conseiller, configuration des calendriers à utiliser pour les disponibilités professionnelles. [cite: 130, 210]
+
+### 6.6 Intégration Signature Électronique (Optionnelle)
+* Intégration avec un service de signature électronique (ex: DocuSign, Yousign, ou autre compatible) pour la signature de mandats, contrats, etc. [cite: 50, 211, 253]
+* Suivi du statut de signature.
+
+### 6.7 Intégration avec autres systèmes (API Publique)
+* Le module eLaska-ESaiko pourra exposer sa propre API publique (en plus de celle pour le portail) pour permettre des intégrations avec d'autres logiciels métier si nécessaire (ex: outils comptables avancés, solutions RH spécifiques). [cite: 50, 211]
+
+## 7. Roadmap de développement Unifiée et Phasée
+Cette roadmap vise à livrer de la valeur progressivement, en commençant par le socle indispensable. [cite: 212, 280]
+
+* **Phase 0 : Préparation et Socle Technique (Durée estimée : 2-4 semaines)** [cite: 213]
+    * Installation/Configuration de l'environnement de développement Dolibarr. [cite: 213]
+    * Définition finale de l'architecture détaillée du module eLaska (structure des répertoires, classes principales). [cite: 214]
+    * Mise en place du versioning (Git) et des outils de gestion de projet. [cite: 215]
+    * Création du descripteur de module de base et des menus principaux eLaska (avec icônes Font Awesome). [cite: 216]
+    * Développement des Paramètres Étendus initiaux : bases pour la personnalisation (activation/désactivation de sous-modules eLaska, configuration des rôles et vues de tableau de bord/menu). [cite: 217]
+* **Phase 1 : Noyau Fonctionnel Essentiel / Socle Technique & Cœur Métier (Durée estimée : 4-6 mois)** [cite: 218, 280]
+    * Architecture de base (structure, sécurité, API). [cite: 280]
+    * Gestion des Tiers eLaska unifiée : Extension des fiches Tiers, typologies (Particulier, Association, Entreprise, Créateur, Intervenant Externe, Organisme Local/Régional, Partenaire/Apporteur). [cite: 218, 280]
+    * Gestion Centralisée des Dossiers Généraux : Création, suivi de base, système de numérotation personnalisable, timelines configurables (conception backoffice), gestion des statuts/badges. [cite: 219, 280]
+    * Module Tâches et Suivi Opérationnel de Base : Création, assignation, suivi de statut. [cite: 220]
+    * Gestion Documentaire (GED) de Base (intégration Dolibarr) et Coffre-Fort Numérique (principes de base, sécurité). [cite: 221]
+    * Systèmes Transversaux Clés : Champs dynamiques, Tags/Étiquettes, Historique Communications de base (emails IMAP). [cite: 221]
+    * Portail Client SPA – Version Initiale/Minimale : Authentification, tableau de bord simple, consultation "Mes Dossiers" (timeline en lecture), "Mes Documents", Messagerie simple. [cite: 222, 280]
+    * Sécurité de Base : Permissions, protections web. Discussions et prototypage pour le chiffrement des données sensibles. [cite: 223]
+    * Intégration Google Calendar (prise RDV depuis portail, création agenda conseiller, stockage ID). [cite: 224, 280]
+* **Phase 2 : Modules Métiers Spécialisés et Fonctionnalités Clés (Durée estimée : 5-7 mois)** [cite: 225, 280]
+    * Développement des Modules d'Accompagnement Spécifiques (Backoffice & Portail pour Particuliers, Associations, Créateurs d'Entreprises, TPE/PME), incluant "Objectifs de Vie", suivi instances/financements asso, parcours création. [cite: 225, 226, 227, 280]
+    * Module Conseil en Gestion de Patrimoine, Assurances, Crédits & Sinistres complet. [cite: 227, 280]
+    * Suivi du Temps et des Consommations/Frais : Saisie détaillée, liaison fine, préparation facturation. [cite: 227]
+    * Module Abonnements Clients & Recouvrements. [cite: 228]
+    * Portail Client SPA – Enrichissement : Sections spécifiques, interactivité timeline, bouton "Lu/Pris en Compte". [cite: 228]
+    * Gestion Structurée des Intervenants Externes : Liaison aux dossiers, suivi communications. [cite: 229]
+    * Base de Connaissances & Veille Réglementaire : Structure, saisie, consultation, intégration infos locales. [cite: 230]
+    * Workflows automatisés de base. [cite: 280]
+    * Chiffrement des données sensibles identifiées. [cite: 280]
+* **Phase 3 : Optimisation, Pilotage Avancé et Intelligence (Durée estimée : 4-6 mois)** [cite: 231, 280]
+    * Module Prospection & Gestion des Opportunités (CRM Interne eLaska) avancé. [cite: 231, 280]
+    * Module de Pilotage Interne Avancé & Reporting sur Performance des Services. [cite: 231]
+    * Gestion des Partenariats & Apporteurs d'Affaires & Annuaire Partenaires Locaux. [cite: 231]
+    * Système de Notifications & Alertes Intelligentes. [cite: 231]
+    * Workflows d'Automatisation Évolués et Intelligents Basés sur Déclencheurs. [cite: 231, 280]
+    * Gestion Affinée des Consentements RGPD (Portail & Backoffice). [cite: 231, 280]
+    * Enquêtes de Satisfaction Client. [cite: 231]
+    * Simulateurs Simplifiés sur Portail Client. [cite: 231]
+    * Veille sur Aides Spécifiques Occitanie/Tarbes. [cite: 231]
+    * Intégration Signature Électronique optionnelle. [cite: 231]
+* **Phase 4 : Fonctionnalités Visionnaires et Amélioration Continue (Itératif, à partir du 15ème mois / Continu)** [cite: 232, 280]
+    * Tableau de Bord Client Global "Ma Situation en un Clin d'Œil". [cite: 232]
+    * Assistance à la Décision "Intelligente" pour le Conseiller (IA-Light). [cite: 232, 280]
+    * Gamification Subtile pour Engagement Client. [cite: 232]
+    * Optimisation continue des performances, UX, et sécurité. [cite: 232]
+    * Développement de nouvelles fonctionnalités basées sur les retours et l'évolution des services eLaska. [cite: 233]
+    * Intégrations tierces (banques, assureurs). [cite: 280]
+    * Application mobile native (optionnel). [cite: 280, 281]
+    * Analytics prédictifs. [cite: 281]
+* **Points Transversaux à toutes les phases :** [cite: 234]
+    * **Sécurité :** Application continue des principes et implémentation progressive du chiffrement. [cite: 234]
+    * **Responsive Design & UI/UX :** Attention constante à l'ergonomie et à l'esthétique. [cite: 235]
+    * **Tests :** Unitaires, d'intégration, fonctionnels, et recettes utilisateurs régulières. [cite: 236]
+    * **Documentation :** Technique et utilisateur, mise à jour en continu. [cite: 237]
+    * **Formation des utilisateurs internes eLaska :** Sessions de formation et accompagnement au changement à chaque phase de livraison majeure. [cite: 238]
+
+## 8. Spécifications techniques
+
+### 8.1 Exigences système et Dépendances
+* Compatible avec Dolibarr v21. [cite: 1]
+* Serveur web (Apache, Nginx).
+* PHP 8.1+ (selon la version de Dolibarr ciblée et les dépendances). [cite: 252]
+* MySQL 5.7+ ou MariaDB 10.2+.
+* Dépendances PHP à gérer via Composer (ex: SDK Google API).
+* Pour le portail SPA: Node.js et npm/yarn pour le build.
+
+### 8.2 Performance
+* Temps de réponse API visé < 200ms pour les opérations courantes. [cite: 281]
+* Optimisation des requêtes SQL, utilisation de cache si nécessaire.
+* Code PHP optimisé.
+* Portail SPA performant (lazy loading des routes/composants, memoization).
+* Évolutivité pour supporter un grand nombre de dossiers et d'utilisateurs simultanés (cible 1000+ dossiers). [cite: 281]
+
+### 8.3 Sécurité (Approfondi)
+* Référence à la section 2.5 Sécurité et Chiffrement.
+* Audits de sécurité réguliers.
+* Conformité RGPD validée par audit. [cite: 281]
+
+### 8.4 Compatibilité mobile et Responsive Design
+* Portail client "Mobile First". [cite: 4, 116]
+* Backoffice eLaska responsive. [cite: 117]
+* Tests sur les navigateurs courants (Chrome, Firefox, Safari, Edge) et différentes tailles d'écran.
+
+### 8.5 Maintenance et mises à jour
+* Code modulaire et commenté pour faciliter la maintenance. [cite: 53]
+* Procédure de mise à jour claire pour les nouvelles versions du module. [cite: 53]
+* Gestion des migrations de base de données.
+
+### 8.6 Backup et récupération
+* Le module s'appuiera sur les mécanismes de backup de Dolibarr et de la base de données. [cite: 54]
+* Recommandations pour la sauvegarde des clés de chiffrement.
+
+### 8.7 Monitoring et journalisation
+* Journalisation des actions critiques et des erreurs du module. [cite: 54]
+* Journal d'audit détaillé pour les accès et modifications de données sensibles. [cite: 112]
+
+## 9. Indicateurs de Succès
+
+### 9.1 Métriques techniques [cite: 281]
+* **Performance :** Temps de réponse API < 200ms. [cite: 281]
+* **Sécurité :** 0 faille critique identifiée lors des audits, audit RGPD validé. [cite: 281]
+* **Disponibilité :** Objectif de 99.9% uptime pour le portail et les fonctionnalités clés. [cite: 281]
+* **Évolutivité :** Support de 1000+ dossiers simultanés et croissance du nombre d'utilisateurs. [cite: 281]
+
+### 9.2 Métriques métier [cite: 281]
+* **Adoption portail :** Objectif de 80%+ des clients actifs utilisant le portail dans les 6 mois post-lancement. [cite: 281]
+* **Efficacité :** Réduction visée de 30% du temps de traitement moyen des dossiers types. [cite: 281]
+* **Satisfaction Client :** Score NPS (Net Promoter Score) > 50. [cite: 281]
+* **Satisfaction Conseiller :** Amélioration mesurée de l'ergonomie et de l'efficacité des outils internes.
+* **ROI :** Retour sur investissement attendu en 18 mois. [cite: 281]
+
+## 10. Conclusion de la Fusion
+Cette consolidation des cahiers des charges ESaiko et eLaska offre une vision unifiée et ambitieuse pour un module Dolibarr de nouvelle génération, spécialisé dans les services d'accompagnement. [cite: 281, 282] La combinaison de :
+* ✅ Une architecture technique robuste et éprouvée (inspirée d'ESaiko). [cite: 282]
+* ✅ Des fonctionnalités métier avancées et ciblées (issues d'eLaska et enrichies). [cite: 282]
+* ✅ Une innovation technologique via un portail client SPA React moderne et des workflows intelligents. [cite: 282]
+* ✅ Une spécialisation sectorielle poussée pour un accompagnement personnalisé des particuliers, associations, et entreprises. [cite: 282]
+
+...crée une solution potentiellement unique sur le marché des logiciels métier pour les cabinets de conseil et d'accompagnement administratif. [cite: 282]
+La roadmap phasée permet une livraison de valeur progressive et une adaptation continue. [cite: 283] L'architecture modulaire garantit l'évolutivité future du module pour répondre aux nouveaux besoins. [cite: 283] Un focus constant sur la sécurité des données et la conformité RGPD est primordial et répond aux exigences strictes du secteur. [cite: 284]
+
+Ce document consolidé constitue le référentiel technique et fonctionnel pour le développement du module eLaska-ESaiko pour Dolibarr v21. [cite: 285]
