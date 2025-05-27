@@ -2939,891 +2939,2984 @@ INSERT INTO llx_elaska_email_template_entreprise VALUES
 ('rapport_mensuel_dirigeant', 'Votre rapport d\'activité [MOIS]', '...'),
 ('proposition_optimisation', 'Optimisations identifiées pour [ENTREPRISE]', '...');
 
-** ANALYSE TECHNIQUE - ACCOMPAGNEMENT DES ASSOCIATIONS
-Modules spécialisés et fonctionnalités dédiées au secteur associatif
-📋 1. CRÉATION, STRUCTURATION ET ÉVOLUTION
-1.1 Phase de Pré-création
-💡 Module Projet Associatif
+Parfait ! Je vais développer et corriger cette section en créant une **analyse technique complète et structurée pour l'accompagnement des associations**. Voici la version développée et corrigée :
 
-SQL
+```markdown name=Module_Associations_Technique_Complet.md
+# 🏛️ ANALYSE TECHNIQUE COMPLÈTE - ACCOMPAGNEMENT DES ASSOCIATIONS
+## Modules spécialisés et fonctionnalités dédiées au secteur associatif
+
+### **📋 SOMMAIRE TECHNIQUE**
+1. [Création, Structuration et Évolution](#1-création-structuration-et-évolution)
+2. [Gouvernance & Vie Associative](#2-gouvernance--vie-associative)
+3. [Recherche de Financements](#3-recherche-de-financements)
+4. [Gestion Administrative & Comptable](#4-gestion-administrative--comptable)
+5. [Stratégie & Communication](#5-stratégie--communication)
+6. [Partenariats & Réseaux](#6-partenariats--réseaux)
+7. [Workflows & Automatisations](#7-workflows--automatisations)
+8. [Interfaces Portail Spécialisées](#8-interfaces-portail-spécialisées)
+
+---
+
+## **1. CRÉATION, STRUCTURATION ET ÉVOLUTION**
+
+### **1.1 Phase de Pré-création**
+
+**💡 Module Projet Associatif**
+
+```sql
+-- Table principale du projet associatif
 CREATE TABLE llx_elaska_projet_associatif (
     rowid INT PRIMARY KEY AUTO_INCREMENT,
-    ref_elaska VARCHAR(50),
+    ref_elaska VARCHAR(50) UNIQUE NOT NULL,
     
-    -- IDENTIFICATION
-    denomination_envisagee VARCHAR(255),
+    -- IDENTIFICATION DU PROJET
+    denomination_envisagee VARCHAR(255) NOT NULL,
+    denomination_alternative VARCHAR(255), -- Plan B si refus
     secteur_activite ENUM(
         'culturel', 'sportif', 'social', 'educatif', 'environnemental',
-        'humanitaire', 'religieux', 'professionnel', 'autre'
-    ),
-    territoire_action VARCHAR(100), -- Tarbes, Occitanie, National, International
+        'humanitaire', 'religieux', 'professionnel', 'sante', 'autre'
+    ) NOT NULL,
+    sous_secteur VARCHAR(100), -- Spécialisation dans le secteur
+    territoire_action VARCHAR(100) NOT NULL, -- Tarbes, Occitanie, National, International
     
     -- DÉFINITION DU PROJET
-    objet_social TEXT, -- Raison d'être principale
-    buts_concrets JSON, -- Objectifs précis
-    public_cible TEXT, -- Bénéficiaires visés
+    objet_social TEXT NOT NULL, -- Raison d'être principale
+    buts_concrets JSON NOT NULL, -- Objectifs précis mesurables
+    public_cible TEXT NOT NULL, -- Bénéficiaires visés détaillés
     valeurs_fondamentales JSON, -- Principes directeurs
-    activites_envisagees JSON, -- Types d'actions prévues
+    activites_envisagees JSON NOT NULL, -- Types d'actions prévues
+    moyens_actions JSON, -- Comment ces actions seront menées
     
-    -- FONDATEURS
-    nb_membres_fondateurs INT,
-    fondateurs_info JSON, -- Nom, rôle, compétences
+    -- ÉTUDE DE FAISABILITÉ
+    analyse_besoins_territoire TEXT, -- Diagnostic local
+    concurrence_existante TEXT, -- Autres structures similaires
+    complementarite TEXT, -- En quoi le projet est différent/complémentaire
+    partenaires_potentiels JSON, -- Structures partenaires identifiées
+    
+    -- FONDATEURS & ÉQUIPE
+    nb_membres_fondateurs INT NOT NULL,
+    fondateurs_info JSON NOT NULL, -- Nom, rôle, compétences, motivation
+    competences_disponibles JSON, -- Inventaire des compétences de l'équipe
+    competences_manquantes JSON, -- Besoins identifiés
+    formation_gouvernance_necessaire BOOLEAN DEFAULT TRUE,
     
     -- MATURITÉ DU PROJET
     etape_reflexion ENUM(
-        'idee_initiale', 'reflexion_approfondie', 'projet_defini',
-        'statuts_en_cours', 'pret_creation'
-    ),
+        'idee_initiale', 'reflexion_approfondie', 'etude_faisabilite',
+        'projet_defini', 'statuts_en_cours', 'pret_creation'
+    ) NOT NULL DEFAULT 'idee_initiale',
     points_a_clarifier TEXT,
+    obstacles_identifies JSON,
+    solutions_envisagees JSON,
     
     -- MOYENS ENVISAGÉS
     budget_previsionnel_annuel DECIMAL(10,2),
-    besoins_locaux TEXT,
-    besoins_humains TEXT,
-    besoins_materiels TEXT,
+    budget_lancement DECIMAL(8,2), -- Coûts de démarrage
+    besoins_locaux TEXT, -- Locaux, équipements
+    besoins_humains TEXT, -- Bénévoles, salariés
+    besoins_materiels TEXT, -- Matériel, fournitures
+    plan_financement_initial JSON, -- Sources de financement envisagées
     
-    -- CONSEILLER
-    fk_user_accompagnant INT,
-    date_debut_accompagnement DATE,
+    -- CONSEIL & ACCOMPAGNEMENT
+    fk_user_accompagnant INT NOT NULL,
+    date_debut_accompagnement DATE NOT NULL,
+    type_accompagnement ENUM('conseil', 'formation', 'complet') DEFAULT 'conseil',
+    duree_accompagnement_mois INT DEFAULT 6,
     
-    INDEX idx_etape (etape_reflexion)
+    -- SUIVI
+    date_creation DATETIME DEFAULT CURRENT_TIMESTAMP,
+    date_derniere_maj DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    actif BOOLEAN DEFAULT TRUE,
+    
+    -- RÉSULTAT
+    association_creee BOOLEAN DEFAULT FALSE,
+    date_creation_effective DATE,
+    numero_rna_obtenu VARCHAR(20),
+    
+    INDEX idx_etape (etape_reflexion),
+    INDEX idx_secteur (secteur_activite),
+    INDEX idx_territoire (territoire_action),
+    INDEX idx_accompagnant (fk_user_accompagnant),
+    FOREIGN KEY (fk_user_accompagnant) REFERENCES llx_user(rowid)
 );
-🎯 Interface Backoffice - "Accompagnement Pré-création"
 
-PHP
-// Page association/precreation_card.php
-class PreCreationAssociationPage {
-    public function showProjectDefinitionForm($projet_id) {
+-- Table des sessions de travail sur le projet
+CREATE TABLE llx_elaska_session_projet_asso (
+    rowid INT PRIMARY KEY AUTO_INCREMENT,
+    fk_projet_associatif INT NOT NULL,
+    
+    -- SESSION
+    date_session DATETIME NOT NULL,
+    duree_minutes INT NOT NULL,
+    type_session ENUM('atelier', 'formation', 'coaching', 'validation') NOT NULL,
+    participants JSON, -- Qui était présent
+    
+    -- CONTENU
+    objectifs_session TEXT,
+    points_abordes JSON,
+    decisions_prises JSON,
+    actions_definies JSON,
+    
+    -- DOCUMENTATION
+    supports_utilises JSON, -- Documents, templates
+    documents_produits JSON, -- Ce qui est sorti de la session
+    
+    -- SUIVI
+    prochaines_actions JSON,
+    date_prochaine_session DATE,
+    
+    FOREIGN KEY (fk_projet_associatif) REFERENCES llx_elaska_projet_associatif(rowid)
+);
+```
+
+**🎯 Interface Backoffice - "Accompagnement Pré-création"**
+
+```php
+<?php
+// Classe pour la gestion de la pré-création associative
+class ElaskaPreCreationAssociation
+{
+    private $db;
+    private $projet;
+    
+    public function __construct($db)
+    {
+        $this->db = $db;
+    }
+    
+    /**
+     * Affiche le formulaire de définition du projet en mode progressif
+     */
+    public function showProjectDefinitionForm($projet_id)
+    {
         $sections = [
             'vision' => [
-                'objet_social' => 'Définition de l\'objet social',
-                'buts_concrets' => 'Objectifs concrets à atteindre',
-                'public_cible' => 'Public bénéficiaire',
-                'valeurs' => 'Valeurs fondamentales'
+                'title' => 'Vision & Mission',
+                'fields' => [
+                    'objet_social' => [
+                        'label' => 'Définition de l\'objet social',
+                        'type' => 'textarea',
+                        'required' => true,
+                        'help' => 'Décrivez en quelques phrases la raison d\'être de votre association'
+                    ],
+                    'buts_concrets' => [
+                        'label' => 'Objectifs concrets à atteindre',
+                        'type' => 'json_array',
+                        'required' => true,
+                        'help' => 'Listez 3-5 objectifs mesurables'
+                    ],
+                    'public_cible' => [
+                        'label' => 'Public bénéficiaire',
+                        'type' => 'textarea',
+                        'required' => true,
+                        'help' => 'Qui va bénéficier de vos actions ?'
+                    ],
+                    'valeurs_fondamentales' => [
+                        'label' => 'Valeurs fondamentales',
+                        'type' => 'json_array',
+                        'help' => 'Quels sont vos principes directeurs ?'
+                    ]
+                ]
             ],
             'operationnel' => [
-                'activites' => 'Activités envisagées',
-                'territoire' => 'Territoire d\'action',
-                'moyens' => 'Moyens nécessaires'
+                'title' => 'Aspects Opérationnels',
+                'fields' => [
+                    'activites_envisagees' => [
+                        'label' => 'Activités envisagées',
+                        'type' => 'json_array',
+                        'required' => true,
+                        'help' => 'Détaillez les types d\'actions que vous comptez mener'
+                    ],
+                    'territoire_action' => [
+                        'label' => 'Territoire d\'action',
+                        'type' => 'select',
+                        'options' => ['Tarbes', 'Hautes-Pyrénées', 'Occitanie', 'National', 'International'],
+                        'required' => true
+                    ],
+                    'budget_previsionnel_annuel' => [
+                        'label' => 'Budget prévisionnel annuel (€)',
+                        'type' => 'number',
+                        'help' => 'Estimation des besoins financiers annuels'
+                    ],
+                    'besoins_locaux' => [
+                        'label' => 'Besoins en locaux/équipements',
+                        'type' => 'textarea'
+                    ]
+                ]
             ],
-            'fondateurs' => [
-                'equipe' => 'Équipe fondatrice',
-                'competences' => 'Répartition des rôles'
+            'equipe' => [
+                'title' => 'Équipe Fondatrice',
+                'fields' => [
+                    'nb_membres_fondateurs' => [
+                        'label' => 'Nombre de membres fondateurs',
+                        'type' => 'number',
+                        'required' => true,
+                        'min' => 2
+                    ],
+                    'fondateurs_info' => [
+                        'label' => 'Informations sur les fondateurs',
+                        'type' => 'json_complex',
+                        'template' => 'fondateurs_form',
+                        'required' => true
+                    ],
+                    'competences_disponibles' => [
+                        'label' => 'Compétences disponibles dans l\'équipe',
+                        'type' => 'json_array',
+                        'help' => 'Inventaire des savoir-faire présents'
+                    ]
+                ]
             ],
-            'suite' => [
-                'statuts' => 'Préparation des statuts',
-                'formalites' => 'Planning des formalités'
+            'faisabilite' => [
+                'title' => 'Étude de Faisabilité',
+                'fields' => [
+                    'analyse_besoins_territoire' => [
+                        'label' => 'Analyse des besoins du territoire',
+                        'type' => 'textarea',
+                        'help' => 'Pourquoi ce projet est-il nécessaire ici ?'
+                    ],
+                    'concurrence_existante' => [
+                        'label' => 'Structures existantes similaires',
+                        'type' => 'textarea',
+                        'help' => 'Quelles autres associations interviennent dans ce domaine ?'
+                    ],
+                    'complementarite' => [
+                        'label' => 'Complémentarité/différenciation',
+                        'type' => 'textarea',
+                        'help' => 'En quoi votre projet apporte-t-il une plus-value ?'
+                    ]
+                ]
             ]
         ];
         
-        return $this->renderProgressiveForm($sections);
+        return $this->renderProgressiveForm($sections, $projet_id);
+    }
+    
+    /**
+     * Génère les recommandations personnalisées selon le profil du projet
+     */
+    public function generateRecommandations($projet_id)
+    {
+        $projet = $this->loadProjet($projet_id);
+        $recommandations = [];
+        
+        // Recommandations selon le secteur
+        switch ($projet->secteur_activite) {
+            case 'culturel':
+                $recommandations[] = [
+                    'type' => 'financement',
+                    'title' => 'Financements culturels Occitanie',
+                    'description' => 'Explorez les dispositifs régionaux pour la culture',
+                    'actions' => ['Contacter la DRAC Occitanie', 'Regarder les aides Région Occitanie culture']
+                ];
+                break;
+                
+            case 'sportif':
+                $recommandations[] = [
+                    'type' => 'reglementation',
+                    'title' => 'Affiliation fédération sportive',
+                    'description' => 'Pensez à l\'affiliation à la fédération concernée',
+                    'actions' => ['Identifier la fédération', 'Connaître les obligations']
+                ];
+                break;
+                
+            case 'social':
+                $recommandations[] = [
+                    'type' => 'agrement',
+                    'title' => 'Agrément possible',
+                    'description' => 'Certains agréments peuvent être nécessaires',
+                    'actions' => ['Vérifier les agréments requis', 'Préparer les dossiers']
+                ];
+                break;
+        }
+        
+        // Recommandations selon le budget
+        if ($projet->budget_previsionnel_annuel > 50000) {
+            $recommandations[] = [
+                'type' => 'comptabilite',
+                'title' => 'Expert-comptable recommandé',
+                'description' => 'Avec ce budget, un expert-comptable sera utile',
+                'actions' => ['Consulter nos partenaires experts-comptables']
+            ];
+        }
+        
+        // Recommandations selon le territoire
+        if ($projet->territoire_action === 'Tarbes' || $projet->territoire_action === 'Hautes-Pyrénées') {
+            $recommandations[] = [
+                'type' => 'reseau',
+                'title' => 'Maison des Associations de Tarbes',
+                'description' => 'Prenez contact avec la Maison des Associations',
+                'actions' => ['Rencontrer les responsables', 'Découvrir les services proposés']
+            ];
+        }
+        
+        return $recommandations;
     }
 }
-1.2 Documents Fondateurs & Formalités
-📄 Module Documents Fondateurs
+```
 
-SQL
+### **1.2 Documents Fondateurs & Formalités**
+
+**📄 Module Documents Fondateurs**
+
+```sql
+-- Table détaillée pour le suivi des documents fondateurs
 CREATE TABLE llx_elaska_documents_fondateurs (
     rowid INT PRIMARY KEY AUTO_INCREMENT,
-    fk_projet_associatif INT,
+    fk_projet_associatif INT NOT NULL,
     
     -- STATUTS
     statuts_rediges BOOLEAN DEFAULT FALSE,
     statuts_version INT DEFAULT 1,
-    statuts_document_id INT, -- Lien vers GED
+    statuts_document_id INT, -- Lien vers GED Dolibarr
+    statuts_modele_utilise VARCHAR(100), -- Référence du modèle
     conformite_loi_1901 BOOLEAN DEFAULT FALSE,
+    statuts_relus_juriste BOOLEAN DEFAULT FALSE,
+    date_validation_statuts DATE,
+    
+    -- SPÉCIFICITÉS STATUTS
+    duree_vie_association ENUM('illimitee', 'limitee') DEFAULT 'illimitee',
+    duree_annees INT, -- Si limitée
+    dissolution_clause TEXT,
+    modification_statuts_modalite ENUM('ag_simple', 'ag_qualifiee') DEFAULT 'ag_qualifiee',
     
     -- RÈGLEMENT INTÉRIEUR
     reglement_interieur_necessaire BOOLEAN DEFAULT FALSE,
     reglement_redige BOOLEAN DEFAULT FALSE,
     reglement_document_id INT,
+    reglement_sections JSON, -- Sections du règlement
     
     -- AG CONSTITUTIVE
     date_ag_constitutive DATE,
+    heure_ag_constitutive TIME,
     lieu_ag_constitutive VARCHAR(255),
+    adresse_ag_constitutive TEXT,
+    convocations_envoyees BOOLEAN DEFAULT FALSE,
+    quorum_respect BOOLEAN DEFAULT FALSE,
     pv_ag_constitutive_redige BOOLEAN DEFAULT FALSE,
     pv_document_id INT,
     
+    -- ÉLECTIONS BUREAU
+    president_elu VARCHAR(100),
+    president_adresse TEXT,
+    tresorier_elu VARCHAR(100),
+    secretaire_elu VARCHAR(100),
+    autres_membres_bureau JSON,
+    
     -- FORMALITÉS DÉCLARATION
     dossier_declaration_constitue BOOLEAN DEFAULT FALSE,
+    pieces_jointes_completes BOOLEAN DEFAULT FALSE,
     declaration_deposee BOOLEAN DEFAULT FALSE,
     date_depot_prefecture DATE,
-    prefecture_depot VARCHAR(100), -- Ex: Préfecture des Hautes-Pyrénées
+    prefecture_depot VARCHAR(100) DEFAULT 'Préfecture des Hautes-Pyrénées',
+    mode_depot ENUM('en_ligne', 'courrier', 'guichet') DEFAULT 'en_ligne',
     
     -- NUMÉROS OFFICIELS
     numero_rna VARCHAR(20),
     date_obtention_rna DATE,
     publication_joafe BOOLEAN DEFAULT FALSE,
     date_publication_joafe DATE,
+    extrait_joafe_document_id INT,
     
-    -- IMMATRICULATION COMPLÉMENTAIRE
+    -- IMMATRICULATION COMPLÉMENTAIRE (si nécessaire)
     besoin_siren_siret BOOLEAN DEFAULT FALSE,
     numero_siren VARCHAR(20),
     numero_siret VARCHAR(20),
-    motif_immatriculation ENUM('salaries', 'subventions', 'activite_lucrative'),
+    motif_immatriculation ENUM('salaries', 'subventions_publiques', 'activite_lucrative', 'autre'),
+    date_immatriculation_insee DATE,
     
-    -- LANCEMENT
+    -- COMPTES BANCAIRES
     compte_bancaire_ouvert BOOLEAN DEFAULT FALSE,
     banque_choisie VARCHAR(100),
-    registres_mis_en_place BOOLEAN DEFAULT FALSE,
+    motifs_choix_banque TEXT,
+    compte_numero_masque VARCHAR(20), -- IBAN masqué pour affichage
+    date_ouverture_compte DATE,
     
-    FOREIGN KEY (fk_projet_associatif) REFERENCES llx_elaska_projet_associatif(rowid)
+    -- ASSURANCES
+    assurance_rc_souscrite BOOLEAN DEFAULT FALSE,
+    assureur VARCHAR(100),
+    numero_police VARCHAR(50),
+    date_effet_assurance DATE,
+    
+    -- REGISTRES OBLIGATOIRES
+    registres_mis_en_place BOOLEAN DEFAULT FALSE,
+    registre_deliberations BOOLEAN DEFAULT FALSE,
+    registre_membres BOOLEAN DEFAULT FALSE,
+    
+    -- OBLIGATIONS POST-CRÉATION
+    declaration_sous_prefecture BOOLEAN DEFAULT FALSE, -- Si nécessaire
+    affiliation_federation BOOLEAN DEFAULT FALSE, -- Si applicable
+    agrement_demande BOOLEAN DEFAULT FALSE, -- Si nécessaire
+    
+    -- SUIVI GLOBAL
+    taux_completion DECIMAL(5,2) DEFAULT 0, -- Pourcentage d'avancement
+    prochaine_etape TEXT,
+    obstacles_rencontres TEXT,
+    
+    FOREIGN KEY (fk_projet_associatif) REFERENCES llx_elaska_projet_associatif(rowid),
+    INDEX idx_rna (numero_rna),
+    INDEX idx_completion (taux_completion)
 );
-📋 Portail Association - "Suivi de ma Création"
 
-jsx
-const SuiviCreationAssociation = ({ projetId }) => {
-  const { etapes, documents } = useCreationData(projetId);
-  
-  return (
-    <div className="creation-association">
-      <header>
-        <h1>Création de mon Association</h1>
-        <ProgressBar etapes={etapes} />
-      </header>
-      
-      <div className="etapes-creation">
-        <EtapeCard 
-          title="Définition du Projet"
-          status={etapes.definition_projet}
-          description="Objet social, buts, valeurs"
-          editable={true}
-        />
-        
-        <EtapeCard 
-          title="Rédaction des Statuts"
-          status={etapes.statuts}
-          documents={documents.statuts}
-          template_disponible={true}
-        />
-        
-        <EtapeCard 
-          title="AG Constitutive"
-          status={etapes.ag_constitutive}
-          date_prevue={etapes.date_ag}
-          documents={documents.pv_ag}
-        />
-        
-        <EtapeCard 
-          title="Déclaration Préfecture"
-          status={etapes.declaration}
-          prefecture="Préfecture des Hautes-Pyrénées (Tarbes)"
-          pieces_requises={documents.pieces_declaration}
-        />
-        
-        <EtapeCard 
-          title="Lancement"
-          status={etapes.lancement}
-          actions={['Ouverture compte bancaire', 'Mise en place registres']}
-        />
-      </div>
-      
-      <ConseillerContact />
-    </div>
-  );
-};
-🏛️ 2. GOUVERNANCE & VIE ASSOCIATIVE
-2.1 Gestion des Instances
-👥 Module Instances Associatives
+-- Table pour le suivi des pièces justificatives
+CREATE TABLE llx_elaska_pieces_justificatives_creation (
+    rowid INT PRIMARY KEY AUTO_INCREMENT,
+    fk_documents_fondateurs INT NOT NULL,
+    
+    -- IDENTIFICATION PIÈCE
+    nom_piece VARCHAR(255) NOT NULL,
+    type_piece ENUM(
+        'cerfa_creation', 'statuts_signes', 'pv_ag_constitutive',
+        'liste_dirigeants', 'justificatif_siege', 'piece_identite_dirigeant',
+        'autre'
+    ) NOT NULL,
+    obligatoire BOOLEAN DEFAULT TRUE,
+    
+    -- STATUT
+    piece_fournie BOOLEAN DEFAULT FALSE,
+    document_id INT, -- Lien vers GED
+    date_fourniture DATE,
+    validite_piece ENUM('conforme', 'a_corriger', 'non_conforme'),
+    commentaires_validite TEXT,
+    
+    -- SUIVI
+    demandee_le DATE,
+    relances_envoyees INT DEFAULT 0,
+    derniere_relance DATE,
+    
+    FOREIGN KEY (fk_documents_fondateurs) REFERENCES llx_elaska_documents_fondateurs(rowid)
+);
+```
 
-SQL
+**🖥️ Interface Backoffice - Suivi Création**
+
+```php
+<?php
+class ElaskaCreationTracker
+{
+    public function getDashboardCreation($association_id)
+    {
+        return [
+            'etapes' => [
+                'projet' => [
+                    'label' => 'Définition du projet',
+                    'status' => $this->getProjectStatus($association_id),
+                    'progress' => $this->calculateProjectProgress($association_id),
+                    'actions' => $this->getProjectActions($association_id)
+                ],
+                'statuts' => [
+                    'label' => 'Rédaction des statuts',
+                    'status' => $this->getStatutsStatus($association_id),
+                    'documents' => $this->getStatutsDocuments($association_id),
+                    'template_available' => true
+                ],
+                'ag_constitutive' => [
+                    'label' => 'AG Constitutive',
+                    'status' => $this->getAGStatus($association_id),
+                    'date_prevue' => $this->getDateAGPrevue($association_id),
+                    'checklist' => $this->getAGChecklist($association_id)
+                ],
+                'declaration' => [
+                    'label' => 'Déclaration Préfecture',
+                    'status' => $this->getDeclarationStatus($association_id),
+                    'prefecture' => 'Préfecture des Hautes-Pyrénées (Tarbes)',
+                    'pieces_requises' => $this->getPiecesRequises($association_id)
+                ],
+                'finalisation' => [
+                    'label' => 'Finalisation & Lancement',
+                    'status' => $this->getFinalisationStatus($association_id),
+                    'actions' => [
+                        'Ouverture compte bancaire',
+                        'Souscription assurance RC',
+                        'Mise en place registres'
+                    ]
+                ]
+            ],
+            'alertes' => $this->getAlertes($association_id),
+            'prochaines_echeances' => $this->getProchaines
+Echeances($association_id)
+        ];
+    }
+    
+    public function generateStatutsTemplate($projet_id)
+    {
+        $projet = $this->loadProjet($projet_id);
+        
+        $template = [
+            'article_1' => [
+                'title' => 'Dénomination et siège',
+                'content' => "Il est fondé entre les adhérents aux présents statuts une association régie par la loi du 1er juillet 1901 et le décret du 16 août 1901, ayant pour titre : \"{$projet->denomination_envisagee}\".\n\nLe siège social est fixé à : [ADRESSE SIÈGE].\n\nIl pourra être transféré par simple décision du Conseil d'Administration."
+            ],
+            'article_2' => [
+                'title' => 'Objet',
+                'content' => $projet->objet_social
+            ],
+            'article_3' => [
+                'title' => 'Durée',
+                'content' => "La durée de l'association est illimitée."
+            ],
+            // ... Autres articles selon le secteur et les spécificités
+        ];
+        
+        // Adaptation selon le secteur d'activité
+        $template = $this->adaptTemplateToSector($template, $projet->secteur_activite);
+        
+        // Adaptation selon le territoire
+        $template = $this->adaptTemplateToTerritory($template, $projet->territoire_action);
+        
+        return $template;
+    }
+    
+    private function adaptTemplateToSector($template, $secteur)
+    {
+        switch ($secteur) {
+            case 'culturel':
+                $template['article_special'] = [
+                    'title' => 'Activités culturelles',
+                    'content' => "L'association peut organiser des manifestations culturelles, percevoir des droits d'entrée et demander des subventions publiques."
+                ];
+                break;
+                
+            case 'sportif':
+                $template['article_special'] = [
+                    'title' => 'Affiliation fédérale',
+                    'content' => "L'association pourra s'affilier à la fédération sportive compétente et se conformer à ses règlements."
+                ];
+                break;
+                
+            case 'social':
+                $template['article_special'] = [
+                    'title' => 'Action sociale',
+                    'content' => "L'association peut solliciter tous agréments nécessaires à la réalisation de son objet social."
+                ];
+                break;
+        }
+        
+        return $template;
+    }
+}
+```
+
+---
+
+## **2. GOUVERNANCE & VIE ASSOCIATIVE**
+
+### **2.1 Gestion des Instances**
+
+**👥 Module Instances Associatives Avancé**
+
+```sql
+-- Table de configuration des instances
 CREATE TABLE llx_elaska_instances_associatives (
     rowid INT PRIMARY KEY AUTO_INCREMENT,
     fk_soc INT NOT NULL, -- Association cliente
     
-    -- CONFIGURATION INSTANCES
-    ag_frequence ENUM('annuelle', 'semestrielle', 'selon_statuts'),
-    ca_existe BOOLEAN DEFAULT FALSE,
-    ca_frequence ENUM('mensuelle', 'bimestrielle', 'trimestrielle', 'selon_besoins'),
-    bureau_existe BOOLEAN DEFAULT FALSE,
+    -- CONFIGURATION ASSEMBLÉE GÉNÉRALE
+    ag_frequence ENUM('annuelle', 'semestrielle', 'selon_statuts') DEFAULT 'annuelle',
+    ag_mois_habituel ENUM('janvier', 'février', 'mars', 'avril', 'mai', 'juin', 
+                         'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'),
+    ag_lieu_habituel TEXT,
+    ag_convocation_delai_jours INT DEFAULT 15,
+    ag_quorum_requis DECIMAL(5,2), -- Pourcentage membres présents/représentés
     
-    -- MEMBRES DU BUREAU
+    -- CONFIGURATION CONSEIL D'ADMINISTRATION
+    ca_existe BOOLEAN DEFAULT FALSE,
+    ca_nombre_membres INT,
+    ca_frequence ENUM('mensuelle', 'bimestrielle', 'trimestrielle', 'selon_besoins'),
+    ca_convocation_delai_jours INT DEFAULT 8,
+    ca_quorum_requis DECIMAL(5,2),
+    
+    -- CONFIGURATION BUREAU
+    bureau_existe BOOLEAN DEFAULT TRUE,
+    bureau_nombre_membres INT,
+    bureau_frequence ENUM('hebdomadaire', 'mensuelle', 'bimestrielle', 'selon_besoins'),
+    
+    -- COMPOSITION ACTUELLE DU BUREAU
     president_nom VARCHAR(100),
     president_email VARCHAR(100),
     president_telephone VARCHAR(20),
+    president_mandat_debut DATE,
+    president_mandat_fin DATE,
+    
+    vice_president_nom VARCHAR(100),
+    vice_president_email VARCHAR(100),
     
     tresorier_nom VARCHAR(100),
     tresorier_email VARCHAR(100),
+    tresorier_mandat_debut DATE,
+    tresorier_mandat_fin DATE,
+    
+    tresorier_adjoint_nom VARCHAR(100),
     
     secretaire_nom VARCHAR(100),
     secretaire_email VARCHAR(100),
+    secretaire_mandat_debut DATE,
+    secretaire_mandat_fin DATE,
     
-    autres_membres_bureau JSON,
+    secretaire_adjoint_nom VARCHAR(100),
     
-    -- CALENDRIER
+    autres_membres_bureau JSON, -- Postes spécifiques selon l'association
+    
+    -- CALENDRIER ET PLANIFICATION
     date_derniere_ag DATE,
     date_prochaine_ag DATE,
+    ag_extraordinaire_prevue BOOLEAN DEFAULT FALSE,
+    
     date_derniere_ca DATE,
     date_prochaine_ca DATE,
     
-    -- OUTILS COLLABORATIFS
-    outil_agenda_partage VARCHAR(100),
-    outil_stockage_docs VARCHAR(100),
-    outil_communication VARCHAR(100),
+    date_derniere_bureau DATE,
+    date_prochaine_bureau DATE,
     
-    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid)
+    -- OUTILS COLLABORATIFS
+    outil_agenda_partage VARCHAR(100), -- Google Calendar, Outlook, etc.
+    agenda_public_url VARCHAR(500),
+    outil_stockage_docs VARCHAR(100), -- Google Drive, OneDrive, etc.
+    outil_communication VARCHAR(100), -- Slack, WhatsApp, etc.
+    outil_visioconference VARCHAR(100), -- Zoom, Teams, etc.
+    
+    -- CONFORMITÉ
+    derniere_election_bureau DATE,
+    prochaine_election_due DATE,
+    statuts_a_jour BOOLEAN DEFAULT TRUE,
+    reglement_interieur_a_jour BOOLEAN DEFAULT TRUE,
+    
+    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid),
+    INDEX idx_prochaine_ag (date_prochaine_ag),
+    INDEX idx_elections (prochaine_election_due)
 );
 
+-- Table détaillée des réunions
 CREATE TABLE llx_elaska_reunion_instance (
     rowid INT PRIMARY KEY AUTO_INCREMENT,
-    fk_instances INT,
+    fk_instances INT NOT NULL,
     
-    -- TYPE ET PLANIFICATION
-    type_reunion ENUM('ag_ordinaire', 'ag_extraordinaire', 'ca', 'bureau'),
-    date_reunion DATETIME,
+    -- TYPE ET IDENTIFICATION
+    type_reunion ENUM('ag_ordinaire', 'ag_extraordinaire', 'ca', 'bureau', 'commission') NOT NULL,
+    titre_reunion VARCHAR(255),
+    numero_reunion INT, -- Numérotation annuelle par type
+    
+    -- PLANIFICATION
+    date_reunion DATETIME NOT NULL,
+    duree_prevue_minutes INT DEFAULT 120,
+    duree_reelle_minutes INT,
     lieu_reunion VARCHAR(255),
-    mode_reunion ENUM('presentiel', 'visio', 'mixte'),
+    adresse_complete TEXT,
+    mode_reunion ENUM('presentiel', 'visio', 'mixte') DEFAULT 'presentiel',
+    lien_visio VARCHAR(500),
     
     -- CONVOCATION
     convocation_envoyee BOOLEAN DEFAULT FALSE,
     date_envoi_convocation DATE,
     delai_convocation_jours INT,
+    mode_convocation ENUM('email', 'courrier', 'mixte') DEFAULT 'email',
+    rappel_envoye BOOLEAN DEFAULT FALSE,
+    date_rappel DATE,
     
     -- ORDRE DU JOUR
-    ordre_du_jour TEXT,
+    ordre_du_jour TEXT NOT NULL,
+    points_discussion JSON, -- Points détaillés avec temps estimé
     documents_supports JSON, -- Liens vers GED
+    documents_preparation_envoyes BOOLEAN DEFAULT FALSE,
+    
+    -- PARTICIPATION
+    nb_membres_convoques INT,
+    presents JSON, -- Liste des participants avec statut
+    excuses JSON, -- Membres excusés avec raison
+    procurations JSON, -- Procurations données
+    invites_externes JSON, -- Invités non-membres
+    
+    -- QUORUM ET VALIDITÉ
+    quorum_requis INT,
+    quorum_atteint BOOLEAN,
+    reunion_valide BOOLEAN,
+    motif_invalidite TEXT,
     
     -- DÉROULEMENT
-    presents JSON, -- Liste des participants
-    excuses JSON,
-    quorum_atteint BOOLEAN,
+    heure_ouverture TIME,
+    heure_cloture TIME,
+    president_seance VARCHAR(100),
+    secretaire_seance VARCHAR(100),
     
-    -- DÉCISIONS
-    resolutions_votees JSON,
-    elections_tenues JSON,
+    -- VOTES ET DÉCISIONS
+    resolutions_votees JSON, -- Résolutions avec résultats de vote
+    elections_tenues JSON, -- Élections avec résultats
+    motions_adoptees JSON,
+    decisions_prises JSON,
+    
+    -- ACTIONS DÉCIDÉES
+    actions_decidees JSON, -- Actions avec responsables et échéances
+    commissions_creees JSON,
+    commissions_supprimees JSON,
+    
+    -- PROCÈS-VERBAL
+    pv_redige BOOLEAN DEFAULT FALSE,
+    pv_document_id INT, -- Lien vers GED
+    pv_approuve BOOLEAN DEFAULT FALSE,
+    date_approbation_pv DATE,
     
     -- SUIVI
-    pv_redige BOOLEAN DEFAULT FALSE,
-    pv_document_id INT,
-    actions_decidees JSON,
-    responsables_actions JSON,
+    diffusion_pv_effectuee BOOLEAN DEFAULT FALSE,
+    actions_suivies BOOLEAN DEFAULT FALSE,
+    prochaine_reunion_programmee BOOLEAN DEFAULT FALSE,
     
-    FOREIGN KEY (fk_instances) REFERENCES llx_elaska_instances_associatives(rowid)
+    FOREIGN KEY (fk_instances) REFERENCES llx_elaska_instances_associatives(rowid),
+    INDEX idx_type_date (type_reunion, date_reunion),
+    INDEX idx_quorum (quorum_atteint)
 );
-2.2 Gestion des Membres
-👨‍👩‍👧‍👦 Module Membres & Bénévoles
 
-SQL
+-- Table pour les votes détaillés
+CREATE TABLE llx_elaska_vote_detail (
+    rowid INT PRIMARY KEY AUTO_INCREMENT,
+    fk_reunion INT NOT NULL,
+    
+    -- RÉSOLUTION
+    numero_resolution VARCHAR(20),
+    libelle_resolution TEXT NOT NULL,
+    texte_complet TEXT,
+    
+    -- VOTE
+    nb_votants INT NOT NULL,
+    votes_pour INT NOT NULL,
+    votes_contre INT NOT NULL,
+    abstentions INT NOT NULL,
+    votes_nuls INT DEFAULT 0,
+    
+    -- RÉSULTAT
+    resultat ENUM('adopte', 'rejete', 'reporte') NOT NULL,
+    majorite_requise ENUM('simple', 'absolue', 'qualifiee') DEFAULT 'simple',
+    majorite_atteinte BOOLEAN,
+    
+    -- DÉTAIL PAR VOTANT (si nécessaire)
+    detail_votes JSON, -- Qui a voté quoi (si vote nominal)
+    
+    FOREIGN KEY (fk_reunion) REFERENCES llx_elaska_reunion_instance(rowid)
+);
+```
+
+### **2.2 Gestion des Membres Approfondie**
+
+```sql
+-- Table membres avec gestion complète
 CREATE TABLE llx_elaska_membres_association (
     rowid INT PRIMARY KEY AUTO_INCREMENT,
     fk_soc INT NOT NULL, -- Association
     
     -- IDENTITÉ MEMBRE
-    civilite ENUM('M', 'Mme', 'Autre'),
-    nom VARCHAR(100),
-    prenom VARCHAR(100),
+    civilite ENUM('M', 'Mme', 'Autre') NOT NULL,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    nom_usage VARCHAR(100), -- Nom marital
+    date_naissance DATE,
+    lieu_naissance VARCHAR(100),
+    nationalite VARCHAR(50) DEFAULT 'Française',
+    
+    -- CONTACT
     email VARCHAR(100),
+    email_secondaire VARCHAR(100),
     telephone VARCHAR(20),
+    telephone_portable VARCHAR(20),
     adresse TEXT,
+    code_postal VARCHAR(10),
+    ville VARCHAR(100),
+    pays VARCHAR(50) DEFAULT 'France',
     
     -- ADHÉSION
-    type_membre ENUM('actif', 'bienfaiteur', 'honneur', 'fondateur'),
-    date_premiere_adhesion DATE,
+    numero_membre VARCHAR(20) UNIQUE, -- Numéro d'adhérent
+    type_membre ENUM('actif', 'bienfaiteur', 'honneur', 'fondateur', 'famille') NOT NULL,
+    statut_membre ENUM('actif', 'suspendu', 'exclu', 'demissionnaire', 'radie') DEFAULT 'actif',
+    
+    date_premiere_adhesion DATE NOT NULL,
     date_derniere_adhesion DATE,
+    date_fin_adhesion DATE,
+    duree_engagement_mois INT, -- Engagement minimum si applicable
+    
+    -- COTISATIONS
     cotisation_a_jour BOOLEAN DEFAULT FALSE,
-    montant_cotisation DECIMAL(6,2),
+    montant_cotisation_annuelle DECIMAL(6,2),
+    tarif_applique ENUM('normal', 'reduit', 'etudiant', 'chomeur', 'famille', 'gratuit'),
+    mode_paiement_prefere ENUM('virement', 'cheque', 'especes', 'prelevement'),
+    prelevement_autorise BOOLEAN DEFAULT FALSE,
     
-    -- BÉNÉVOLAT
+    -- HISTORIQUE COTISATIONS
+    historique_cotisations JSON, -- Années payées avec montants et dates
+    relances_cotisation_envoyees INT DEFAULT 0,
+    derniere_relance_cotisation DATE,
+    
+    -- BÉNÉVOLAT ET ENGAGEMENT
     benevolat_actif BOOLEAN DEFAULT FALSE,
-    competences JSON, -- Compétences proposées
-    disponibilites JSON, -- Créneaux horaires
-    formations_suivies JSON,
+    competences JSON, -- Compétences proposées par le membre
+    disponibilites JSON, -- Créneaux horaires disponibles
+    formations_suivies JSON, -- Formations associatives suivies
+    certifications JSON, -- Certifications obtenues (secourisme, etc.)
     
-    -- ENGAGEMENTS
-    responsabilites JSON, -- Postes occupés
-    participations_instances JSON, -- AG, CA participées
+    -- ENGAGEMENT DANS L'ASSOCIATION
+    responsabilites_actuelles JSON, -- Postes/fonctions occupés actuellement
+    responsabilites_passees JSON, -- Historique des responsabilités
+    participations_instances JSON, -- AG, CA, Bureau participés
+    commissions_membre JSON, -- Commissions auxquelles il participe
+    projets_implique JSON, -- Projets dans lesquels il est impliqué
     
-    -- COMMUNICATION
+    -- CENTRES D'INTÉRÊT ET MOTIVATION
+    motivations_adhesion TEXT,
+    attentes_association TEXT,
+    centres_interet JSON,
+    autres_associations JSON, -- Autres engagements associatifs
+    
+    -- COMMUNICATION ET PRÉFÉRENCES
     accepte_newsletter BOOLEAN DEFAULT TRUE,
     accepte_relances BOOLEAN DEFAULT TRUE,
-    preferences_contact ENUM('email', 'telephone', 'courrier'),
+    accepte_sms BOOLEAN DEFAULT FALSE,
+    accepte_appels BOOLEAN DEFAULT TRUE,
+    preferences_contact ENUM('email', 'telephone', 'courrier', 'sms') DEFAULT 'email',
+    langue_communication ENUM('français', 'anglais', 'espagnol', 'autre') DEFAULT 'français',
     
-    -- RGPD
-    consentement_donnees DATE,
+    -- VIE PRIVÉE ET FAMILLE
+    situation_familiale ENUM('celibataire', 'marie', 'pacse', 'divorce', 'veuf'),
+    nb_enfants INT DEFAULT 0,
+    profession VARCHAR(100),
+    employeur VARCHAR(100),
+    
+    -- URGENCE
+    contact_urgence_nom VARCHAR(100),
+    contact_urgence_telephone VARCHAR(20),
+    contact_urgence_lien VARCHAR(50), -- Parent, conjoint, etc.
+    
+    -- DONNÉES MÉDICALES (si pertinent pour l'activité)
+    allergie_connues TEXT,
+    medicaments TEXT,
+    certificat_medical_valide BOOLEAN DEFAULT FALSE,
+    date_certificat_medical DATE,
+    
+    -- RGPD ET CONSENTEMENTS
+    consentement_donnees DATE NOT NULL,
+    consentement_communication DATE,
+    consentement_photos BOOLEAN DEFAULT FALSE,
     droit_opposition BOOLEAN DEFAULT FALSE,
+    derniere_maj_rgpd DATE,
     
+    -- SUIVI ADMINISTRATIF
+    fiche_completee BOOLEAN DEFAULT FALSE,
+    derniere_mise_a_jour DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    notes_internes TEXT, -- Notes réservées aux administrateurs
+    
+    -- ARCHIVAGE
+    archive BOOLEAN DEFAULT FALSE,
+    date_archivage DATE,
+    motif_archivage TEXT,
+    
+    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid),
     INDEX idx_association (fk_soc),
+    INDEX idx_numero_membre (numero_membre),
     INDEX idx_cotisation (cotisation_a_jour),
-    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid)
+    INDEX idx_statut (statut_membre),
+    INDEX idx_benevole (benevolat_actif)
 );
-👥 Portail Association - "Mes Membres"
 
-jsx
+-- Table pour les activités bénévoles
+CREATE TABLE llx_elaska_activite_benevole (
+    rowid INT PRIMARY KEY AUTO_INCREMENT,
+    fk_membre INT NOT NULL,
+    
+    -- ACTIVITÉ
+    titre_activite VARCHAR(255) NOT NULL,
+    description_activite TEXT,
+    type_activite ENUM('ponctuelle', 'reguliere', 'projet', 'evenement'),
+    
+    -- PÉRIODE
+    date_debut DATE NOT NULL,
+    date_fin DATE,
+    nb_heures_prevues DECIMAL(5,2),
+    nb_heures_realisees DECIMAL(5,2),
+    
+    -- ORGANISATION
+    responsable_activite VARCHAR(100),
+    lieu_activite VARCHAR(255),
+    materiel_necessaire TEXT,
+    formation_requise BOOLEAN DEFAULT FALSE,
+    
+    -- ÉVALUATION
+    satisfaction_benevole ENUM('1', '2', '3', '4', '5'),
+    commentaire_benevole TEXT,
+    evaluation_responsable TEXT,
+    
+    -- RECONNAISSANCE
+    certificat_benevole_emis BOOLEAN DEFAULT FALSE,
+    date_emission_certificat DATE,
+    
+    FOREIGN KEY (fk_membre) REFERENCES llx_elaska_membres_association(rowid),
+    INDEX idx_type_activite (type_activite),
+    INDEX idx_periode (date_debut, date_fin)
+);
+```
+
+**🖥️ Interface Portail Association - "Mes Membres"**
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import { Card, Table, Button, Modal, Form, Tabs, Badge, Progress } from 'antd';
+import { UserAddOutlined, MailOutlined, FileExcelOutlined, CalendarOutlined } from '@ant-design/icons';
+
+const { TabPane } = Tabs;
+
 const GestionMembres = () => {
-  const { membres, statistiques } = useMembresData();
-  
-  return (
-    <div className="gestion-membres">
-      <header>
-        <h1>Gestion des Membres</h1>
-        <StatsMembres stats={statistiques} />
-      </header>
-      
-      <div className="actions-rapides">
-        <button className="btn-nouveau-membre">+ Nouveau Membre</button>
-        <button className="btn-relance-cotisations">Relancer Cotisations</button>
-        <button className="btn-export">Exporter Liste</button>
-      </div>
-      
-      <div className="filtres-membres">
-        <FiltreStatut />
-        <FiltreCotisation />
-        <FiltreBenevoles />
-      </div>
-      
-      <MembresList 
-        membres={membres}
-        actions={['modifier', 'relancer', 'supprimer']}
-      />
-      
-      <BenevolatManager />
-    </div>
-  );
-};
-💰 3. RECHERCHE DE FINANCEMENTS
-3.1 Veille Financements
-🔍 Module Veille Financements Associatifs
+    const [membres, setMembres] = useState([]);
+    const [statistiques, setStatistiques] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedMember, setSelectedMember] = useState(null);
+    const [filtres, setFiltres] = useState({
+        statut: 'tous',
+        cotisation: 'tous',
+        benevole: 'tous'
+    });
 
-SQL
+    useEffect(() => {
+        loadMembresData();
+    }, [filtres]);
+
+    const loadMembresData = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch('/api/v1/associations/membres', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filtres })
+            });
+            const data = await response.json();
+            setMembres(data.membres);
+            setStatistiques(data.statistiques);
+        } catch (error) {
+            console.error('Erreur chargement membres:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const StatsMembres = ({ stats }) => (
+        <div className="stats-membres-grid">
+            <Card className="stat-card">
+                <div className="stat-number">{stats.total_membres}</div>
+                <div className="stat-label">Membres Total</div>
+            </Card>
+            <Card className="stat-card">
+                <div className="stat-number">{stats.membres_actifs}</div>
+                <div className="stat-label">Membres Actifs</div>
+            </Card>
+            <Card className="stat-card">
+                <div className="stat-number">{stats.cotisations_a_jour}%</div>
+                <div className="stat-label">Cotisations à Jour</div>
+                <Progress 
+                    percent={stats.cotisations_a_jour} 
+                    size="small" 
+                    status={stats.cotisations_a_jour > 80 ? 'success' : 'exception'}
+                />
+            </Card>
+            <Card className="stat-card">
+                <div className="stat-number">{stats.benevoles_actifs}</div>
+                <div className="stat-label">Bénévoles Actifs</div>
+            </Card>
+        </div>
+    );
+
+    const FiltresMembres = () => (
+        <div className="filtres-container">
+            <Form layout="inline">
+                <Form.Item label="Statut">
+                    <Select 
+                        value={filtres.statut}
+                        onChange={(value) => setFiltres({...filtres, statut: value})}
+                        style={{ width: 120 }}
+                    >
+                        <Option value="tous">Tous</Option>
+                        <Option value="actif">Actifs</Option>
+                        <Option value="suspendu">Suspendus</Option>
+                        <Option value="exclu">Exclus</Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item label="Cotisation">
+                    <Select 
+                        value={filtres.cotisation}
+                        onChange={(value) => setFiltres({...filtres, cotisation: value})}
+                        style={{ width: 120 }}
+                    >
+                        <Option value="tous">Tous</Option>
+                        <Option value="a_jour">À jour</Option>
+                        <Option value="en_retard">En retard</Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item label="Bénévolat">
+                    <Select 
+                        value={filtres.benevole}
+                        onChange={(value) => setFiltres({...filtres, benevole: value})}
+                        style={{ width: 120 }}
+                    >
+                        <Option value="tous">Tous</Option>
+                        <Option value="actif">Bénévoles</Option>
+                        <Option value="inactif">Non bénévoles</Option>
+                    </Select>
+                </Form.Item>
+            </Form>
+        </div>
+    );
+
+    const MembresList = () => {
+        const columns = [
+            {
+                title: 'Membre',
+                key: 'identite',
+                render: (_, record) => (
+                    <div>
+                        <strong>{record.prenom} {record.nom}</strong>
+                        <br />
+                        <small>{record.email}</small>
+                    </div>
+                )
+            },
+            {
+                title: 'N° Adhérent',
+                dataIndex: 'numero_membre',
+                key: 'numero_membre'
+            },
+            {
+                title: 'Type',
+                dataIndex: 'type_membre',
+                key: 'type_membre',
+                render: (type) => (
+                    <Badge 
+                        color={
+                            type === 'fondateur' ? 'gold' :
+                            type === 'bienfaiteur' ? 'purple' :
+                            type === 'honneur' ? 'red' : 'blue'
+                        }
+                        text={type.charAt(0).toUpperCase() + type.slice(1)}
+                    />
+                )
+            },
+            {
+                title: 'Statut',
+                dataIndex: 'statut_membre',
+                key: 'statut_membre',
+                render: (statut) => (
+                    <Badge 
+                        status={statut === 'actif' ? 'success' : 'error'}
+                        text={statut.charAt(0).toUpperCase() + statut.slice(1)}
+                    />
+                )
+            },
+            {
+                title: 'Cotisation',
+                key: 'cotisation',
+                render: (_, record) => (
+                    <div>
+                        <Badge 
+                            status={record.cotisation_a_jour ? 'success' : 'error'}
+                            text={record.cotisation_a_jour ? 'À jour' : 'En retard'}
+                        />
+                        <br />
+                        <small>{record.montant_cotisation_annuelle}€</small>
+                    </div>
+                )
+            },
+            {
+                title: 'Bénévolat',
+                dataIndex: 'benevolat_actif',
+                key: 'benevolat_actif',
+                render: (actif) => (
+                    <Badge 
+                        status={actif ? 'processing' : 'default'}
+                        text={actif ? 'Actif' : 'Inactif'}
+                    />
+                )
+            },
+            {
+                title: 'Actions',
+                key: 'actions',
+                render: (_, record) => (
+                    <div className="actions-buttons">
+                        <Button 
+                            size="small" 
+                            onClick={() => voirDetailMembre(record)}
+                        >
+                            Voir
+                        </Button>
+                        <Button 
+                            size="small" 
+                            type="primary"
+                            onClick={() => modifierMembre(record)}
+                        >
+                            Modifier
+                        </Button>
+                        {!record.cotisation_a_jour && (
+                            <Button 
+                                size="small" 
+                                icon={<MailOutlined />}
+                                onClick={() => relancerCotisation(record)}
+                            >
+                                Relancer
+                            </Button>
+                        )}
+                    </div>
+                )
+            }
+        ];
+
+        return (
+            <Table 
+                columns={columns}
+                dataSource={membres}
+                loading={loading}
+                rowKey="rowid"
+                pagination={{
+                    pageSize: 20,
+                    showSizeChanger: true,
+                    showQuickJumper: true,
+                    showTotal: (total, range) => 
+                        `${range[0]}-${range[1]} sur ${total} membres`
+                }}
+            />
+        );
+    };
+
+    const ActionsRapides = () => (
+        <div className="actions-rapides">
+            <Button 
+                type="primary" 
+                icon={<UserAddOutlined />}
+                onClick={() => setModalVisible(true)}
+            >
+                Nouveau Membre
+            </Button>
+            <Button 
+                icon={<MailOutlined />}
+                onClick={relancerToutesCotisations}
+            >
+                Relancer Cotisations
+            </Button>
+            <Button 
+                icon={<FileExcelOutlined />}
+                onClick={exporterMembres}
+            >
+                Exporter Liste
+            </Button>
+            <Button 
+                icon={<CalendarOutlined />}
+                onClick={() => setModalVisible(true)}
+            >
+                Planifier AG
+            </Button>
+        </div>
+    );
+
+    const BenevolatManager = () => (
+        <Card title="Gestion du Bénévolat" className="benevole-card">
+            <Tabs defaultActiveKey="1">
+                <TabPane tab="Activités en Cours" key="1">
+                    <ActivitesBenevolesEnCours />
+                </TabPane>
+                <TabPane tab="Compétences Disponibles" key="2">
+                    <CompetencesDisponibles />
+                </TabPane>
+                <TabPane tab="Formations" key="3">
+                    <FormationsBenevoles />
+                </TabPane>
+                <TabPane tab="Reconnaissance" key="4">
+                    <ReconnaissanceBenevoles />
+                </TabPane>
+            </Tabs>
+        </Card>
+    );
+
+    // Actions
+    const voirDetailMembre = (membre) => {
+        setSelectedMember(membre);
+        // Ouvrir modal détail
+    };
+
+    const modifierMembre = (membre) => {
+        setSelectedMember(membre);
+        setModalVisible(true);
+    };
+
+    const relancerCotisation = async (membre) => {
+        // Logique de relance individuelle
+        await fetch(`/api/v1/associations/membres/${membre.rowid}/relancer`, {
+            method: 'POST'
+        });
+        loadMembresData();
+    };
+
+    const relancerToutesCotisations = async () => {
+        // Logique de relance groupée
+        await fetch('/api/v1/associations/membres/relancer-cotisations', {
+            method: 'POST'
+        });
+        loadMembresData();
+    };
+
+    const exporterMembres = () => {
+        // Logique d'export Excel
+        window.open('/api/v1/associations/membres/export');
+    };
+
+    return (
+        <div className="gestion-membres-container">
+            <div className="page-header">
+                <h1>Gestion des Membres</h1>
+                <StatsMembres stats={statistiques} />
+            </div>
+
+            <ActionsRapides />
+            
+            <Card title="Liste des Membres" className="membres-card">
+                <FiltresMembres />
+                <MembresList />
+            </Card>
+
+            <BenevolatManager />
+
+            {/* Modals pour nouveau membre, modifications, etc. */}
+            <Modal
+                title={selectedMember ? "Modifier Membre" : "Nouveau Membre"}
+                visible={modalVisible}
+                onCancel={() => setModalVisible(false)}
+                width={800}
+                footer={null}
+            >
+                <FormulaireMembre 
+                    membre={selectedMember}
+                    onSave={() => {
+                        setModalVisible(false);
+                        loadMembresData();
+                    }}
+                />
+            </Modal>
+        </div>
+    );
+};
+
+export default GestionMembres;
+```
+
+---
+
+## **3. RECHERCHE DE FINANCEMENTS**
+
+### **3.1 Veille Financements Spécialisée Occitanie/Tarbes**
+
+```sql
+-- Table veille financements avec données locales enrichies
 CREATE TABLE llx_elaska_veille_financements (
     rowid INT PRIMARY KEY AUTO_INCREMENT,
     
-    -- IDENTIFICATION FINANCEMENT
-    nom_dispositif VARCHAR(255),
-    organisme_financeur VARCHAR(100),
+    -- IDENTIFICATION COMPLÈTE
+    nom_dispositif VARCHAR(255) NOT NULL,
+    nom_court VARCHAR(100), -- Acronyme ou nom usuel
+    organisme_financeur VARCHAR(100) NOT NULL,
     type_financeur ENUM(
         'etat', 'region_occitanie', 'departement_65', 'commune_tarbes',
-        'europe', 'fondation_privee', 'entreprise', 'autre'
-    ),
+        'europe', 'fondation_privee', 'entreprise_locale', 'autre'
+    ) NOT NULL,
     
-    -- ÉLIGIBILITÉ
-    secteurs_eligibles JSON, -- Culturel, sportif, social, etc.
-    types_projets JSON, -- Fonctionnement, investissement, action
-    territoires_eligibles JSON, -- Tarbes, Hautes-Pyrénées, Occitanie
-    taille_association_min INT, -- Effectif minimum
+    -- SPÉCIFICITÉS LOCALES DÉTAILLÉES
+    specificite_hautes_pyrenees TEXT,
+    specificite_tarbes TEXT,
+    contact_local_nom VARCHAR(100),
+    contact_local_email VARCHAR(100),
+    contact_local_telephone VARCHAR(20),
+    adresse_depot TEXT,
+    
+    -- ÉLIGIBILITÉ PRÉCISE
+    secteurs_eligibles JSON NOT NULL, -- Avec sous-secteurs détaillés
+    types_projets JSON NOT NULL, -- Fonctionnement, investissement, action ponctuelle
+    territoires_eligibles JSON NOT NULL,
+    
+    -- CRITÈRES D'ÉLIGIBILITÉ ASSOCIATION
+    taille_asso_min_membres INT,
+    taille_asso_max_membres INT,
+    ca_min_eligibilite DECIMAL(10,2),
     ca_max_eligibilite DECIMAL(10,2),
+    anciennete_min_mois INT, -- Ancienneté minimum de l'association
     
-    -- CALENDRIER
-    type_appel ENUM('permanent', 'session', 'annuel'),
+    -- CRITÈRES SPÉCIFIQUES
+    agrement_requis BOOLEAN DEFAULT FALSE,
+    agrement_type VARCHAR(100), -- Type d'agrément si requis
+    zone_qpv_prioritaire BOOLEAN DEFAULT FALSE, -- Quartier Prioritaire Ville
+    zone_rurale_prioritaire BOOLEAN DEFAULT FALSE,
+    
+    -- CALENDRIER DÉTAILLÉ
+    type_appel ENUM('permanent', 'session', 'annuel', 'exceptionnel') NOT NULL,
+    nb_sessions_par_an INT,
     date_ouverture DATE,
     date_limite_depot DATE,
-    frequence_sessions VARCHAR(50),
+    date_decision DATE,
+    date_versement DATE,
+    delai_instruction_jours INT,
     
-    -- MONTANTS
+    -- SESSIONS PROGRAMMÉES
+    prochaines_sessions JSON, -- Dates des prochaines sessions
+    dates_cloture JSON, -- Historique des dates de clôture
+    
+    -- MONTANTS ET FINANCEMENT
     montant_min DECIMAL(8,2),
     montant_max DECIMAL(8,2),
+    montant_moyen_accorde DECIMAL(8,2), -- Statistique
     taux_financement_max DECIMAL(5,2), -- Pourcentage du projet
+    cofinancement_obligatoire BOOLEAN DEFAULT FALSE,
+    part_autofinancement_min DECIMAL(5,2),
     
-    -- SPÉCIFICITÉS LOCALES
-    specificite_occitanie TEXT,
-    contact_local VARCHAR(255),
+    -- STATISTIQUES DE RÉUSSITE
+    nb_dossiers_deposes_annee INT,
+    nb_dossiers_accordes_annee INT,
+    taux_reussite DECIMAL(5,2), -- Pourcentage de réussite
+    montant_total_distribue DECIMAL(12,2),
     
-    -- SUIVI
-    statut_dispositif ENUM('actif', 'suspendu', 'clos'),
-    derniere_maj DATE,
+    -- PROCÉDURE DE CANDIDATURE
+    procedure_depot ENUM('en_ligne', 'courrier', 'guichet', 'email') NOT NULL,
+    url_candidature VARCHAR(500),
+    pieces_justificatives_requises JSON,
+    formulaire_specifique_requis BOOLEAN DEFAULT TRUE,
+    entretien_requis BOOLEAN DEFAULT FALSE,
+    
+    -- CRITÈRES D'ÉVALUATION
+    criteres_evaluation JSON, -- Critères et pondération
+    composition_jury TEXT,
+    publicite_decisions BOOLEAN DEFAULT TRUE,
+    
+    -- SUIVI POST-ATTRIBUTION
+    rapport_activite_requis BOOLEAN DEFAULT TRUE,
+    frequence_rapports ENUM('trimestriel', 'semestriel', 'annuel'),
+    bilan_financier_requis BOOLEAN DEFAULT TRUE,
+    visite_terrain_possible BOOLEAN DEFAULT FALSE,
+    
+    -- RENOUVELLEMENT
+    renouvellement_possible BOOLEAN DEFAULT TRUE,
+    nb_annees_renouvellement_max INT,
+    delai_entre_demandes_mois INT,
+    
+    -- GESTION ADMINISTRATIVE
+    statut_dispositif ENUM('actif', 'suspendu', 'clos', 'archive') DEFAULT 'actif',
+    derniere_maj DATE NOT NULL,
+    source_information VARCHAR(100), -- D'où vient l'info
+    fiabilite_info ENUM('confirmee', 'a_verifier', 'rumeur') DEFAULT 'a_verifier',
+    
+    -- VEILLE ET ALERTES
+    alerte_ouverture BOOLEAN DEFAULT TRUE,
+    alerte_cloture BOOLEAN DEFAULT TRUE,
+    associations_ciblees JSON, -- Associations clientes potentiellement intéressées
     
     INDEX idx_type_financeur (type_financeur),
     INDEX idx_secteur (secteurs_eligibles(255)),
-    INDEX idx_territoire (territoires_eligibles(255))
+    INDEX idx_territoire (territoires_eligibles(255)),
+    INDEX idx_dates (date_ouverture, date_limite_depot),
+    INDEX idx_montants (montant_min, montant_max),
+    INDEX idx_statut (statut_dispositif)
 );
-3.2 Dossiers de Financement
-📊 Module Dossiers Subventions
 
-SQL
+-- Table pour les organismes financeurs locaux
+CREATE TABLE llx_elaska_organismes_financeurs_locaux (
+    rowid INT PRIMARY KEY AUTO_INCREMENT,
+    
+    -- IDENTIFICATION
+    nom_organisme VARCHAR(255) NOT NULL,
+    sigle VARCHAR(50),
+    type_organisme ENUM(
+        'collectivite', 'etablissement_public', 'fondation',
+        'entreprise', 'association', 'autre'
+    ) NOT NULL,
+    
+    -- CONTACT
+    adresse TEXT,
+    code_postal VARCHAR(10),
+    ville VARCHAR(100),
+    telephone VARCHAR(20),
+    email VARCHAR(100),
+    site_web VARCHAR(255),
+    
+    -- SPÉCIALISATION
+    secteurs_intervention JSON,
+    zone_intervention ENUM('tarbes', 'hautes_pyrenees', 'occitanie', 'national'),
+    politique_soutien TEXT, -- Orientation générale
+    
+    -- CONTACT PRIVILÉGIÉ
+    contact_nom VARCHAR(100),
+    contact_fonction VARCHAR(100),
+    contact_email VARCHAR(100),
+    contact_telephone VARCHAR(20),
+    
+    -- DISPOSITIFS
+    dispositifs_actifs JSON, -- Liste des dispositifs proposés
+    budget_annuel_estime DECIMAL(10,2),
+    
+    -- HISTORIQUE PARTENARIAT
+    partenaire_elaska BOOLEAN DEFAULT FALSE,
+    premiere_collaboration DATE,
+    derniere_collaboration DATE,
+    nb_dossiers_accompagnes INT DEFAULT 0,
+    taux_reussite_elaska DECIMAL(5,2),
+    
+    INDEX idx_type (type_organisme),
+    INDEX idx_zone (zone_intervention)
+);
+
+-- Données initiales Occitanie/Tarbes
+INSERT INTO llx_elaska_organismes_financeurs_locaux VALUES
+(1, 'Région Occitanie', 'Région', 'collectivite', '22 boulevard du Maréchal Juin', '31400', 'Toulouse', '05 61 33 50 50', 'contact@laregion.fr', 'https://www.laregion.fr', 
+ '["culturel", "sportif", "social", "environnemental"]', 'occitanie', 'Soutien aux associations d\'intérêt régional', 
+ 'Service Vie Associative', 'Responsable', 'vie.associative@laregion.fr', '05 61 33 52 00', 
+ '["aide_fonctionnement", "aide_projet", "aide_equipement"]', 5000000, TRUE, '2023-01-01', '2024-12-01', 45, 78.5),
+
+(2, 'Département des Hautes-Pyrénées', 'CD65', 'collectivite', 'Place Charles de Gaulle', '65000', 'Tarbes', '05 62 56 78 65', 'contact@hautespyrenees.fr', 'https://www.hautespyrenees.fr',
+ '["social", "sportif", "culturel"]', 'hautes_pyrenees', 'Proximité et solidarité territoriale',
+ 'Direction Action Sociale', 'Chef de service', 'associatif@hautespyrenees.fr', '05 62 56 78 90',
+ '["subvention_fonctionnement", "aide_transport", "aide_manifestation"]', 800000, TRUE, '2023-01-01', '2024-11-15', 23, 82.1),
+
+(3, 'Ville de Tarbes', 'Tarbes', 'collectivite', 'Place Jean Jaurès', '65000', 'Tarbes', '05 62 44 38 38', 'mairie@ville-tarbes.fr', 'https://www.tarbes.fr',
+ '["culturel", "sportif", "social", "jeunesse"]', 'tarbes', 'Dynamisme associatif local',
+ 'Service Associations', 'Responsable', 'associations@ville-tarbes.fr', '05 62 44 39 20',
+ '["subvention_annuelle", "aide_ponctuelle", "mise_disposition_locaux"]', 150000, TRUE, '2023-01-01', '2024-12-10', 12, 91.7);
+```
+
+### **3.2 Dossiers de Financement Complets**
+
+```sql
+-- Table principale des dossiers de subvention
 CREATE TABLE llx_elaska_dossier_subvention (
     rowid INT PRIMARY KEY AUTO_INCREMENT,
     fk_soc INT NOT NULL, -- Association demandeuse
-    ref_elaska VARCHAR(50),
+    ref_elaska VARCHAR(50) UNIQUE NOT NULL,
     
     -- FINANCEMENT VISÉ
     fk_dispositif_financement INT,
-    organisme_financeur VARCHAR(100),
-    nom_dispositif VARCHAR(255),
+    organisme_financeur VARCHAR(100) NOT NULL,
+    nom_dispositif VARCHAR(255) NOT NULL,
+   ```sql
+-- Session candidature VARCHAR(100), -- Ex: "Session 1 2024"
+    url_dispositif VARCHAR(500),
     
-    -- PROJET FINANCÉ
-    intitule_projet TEXT,
-    description_projet TEXT,
-    objectifs_projet JSON,
-    public_beneficiaire TEXT,
-    territoire_realisation VARCHAR(100),
+    -- PROJET FINANCÉ - DESCRIPTION DÉTAILLÉE
+    intitule_projet TEXT NOT NULL,
+    description_courte TEXT, -- Résumé en quelques lignes
+    description_projet TEXT NOT NULL, -- Description complète
+    contexte_projet TEXT, -- Pourquoi ce projet maintenant
+    objectifs_generaux JSON NOT NULL, -- Objectifs principaux
+    objectifs_operationnels JSON, -- Objectifs mesurables
     
-    -- CALENDRIER PROJET
-    date_debut_projet DATE,
-    date_fin_projet DATE,
-    duree_mois INT,
+    -- PUBLIC ET TERRITOIRE
+    public_beneficiaire TEXT NOT NULL,
+    nb_beneficiaires_directs INT,
+    nb_beneficiaires_indirects INT,
+    caracteristiques_public JSON, -- Âge, situation sociale, etc.
+    territoire_realisation VARCHAR(100) NOT NULL,
+    lieux_realisation JSON, -- Adresses précises
     
-    -- BUDGET PROJET
-    cout_total_projet DECIMAL(10,2),
-    montant_demande DECIMAL(10,2),
+    -- PARTENAIRES ET RÉSEAU
+    partenaires_projet JSON, -- Partenaires associés
+    partenaires_financiers JSON, -- Co-financeurs
+    soutiens_institutionnels JSON, -- Soutiens obtenus
+    
+    -- CALENDRIER PROJET DÉTAILLÉ
+    date_debut_projet DATE NOT NULL,
+    date_fin_projet DATE NOT NULL,
+    duree_mois INT NOT NULL,
+    phases_projet JSON, -- Découpage en phases
+    jalons_importants JSON, -- Échéances clés
+    
+    -- BUDGET PROJET COMPLET
+    cout_total_projet DECIMAL(10,2) NOT NULL,
+    montant_demande DECIMAL(10,2) NOT NULL,
     part_autofinancement DECIMAL(10,2),
-    autres_financements JSON, -- Autres co-financeurs
+    pourcentage_demande DECIMAL(5,2), -- % du coût total
     
-    -- BUDGET DÉTAILLÉ
+    -- RÉPARTITION BUDGET DÉTAILLÉE
     budget_personnel DECIMAL(8,2),
+    budget_charges_sociales DECIMAL(8,2),
     budget_fonctionnement DECIMAL(8,2),
     budget_investissement DECIMAL(8,2),
     budget_communication DECIMAL(8,2),
+    budget_formation DECIMAL(8,2),
+    budget_deplacement DECIMAL(8,2),
+    budget_prestation_externe DECIMAL(8,2),
+    budget_autre DECIMAL(8,2),
     
-    -- INDICATEURS
-    nb_beneficiaires_prevus INT,
-    indicateurs_impact JSON,
+    -- AUTRES FINANCEMENTS
+    autres_financements JSON, -- Détail autres sources
+    financements_obtenus DECIMAL(8,2), -- Déjà acquis
+    financements_sollicites DECIMAL(8,2), -- En cours
+    financements_a_solliciter DECIMAL(8,2), -- À démarcher
     
-    -- SUIVI ADMINISTRATIF
-    cahier_charges_analyse BOOLEAN DEFAULT FALSE,
-    argumentaire_redige BOOLEAN DEFAULT FALSE,
-    budget_valide BOOLEAN DEFAULT FALSE,
-    pieces_administratives_ok BOOLEAN DEFAULT FALSE,
+    -- IMPACT ET ÉVALUATION
+    indicateurs_quantitatifs JSON, -- Mesures chiffrées
+    indicateurs_qualitatifs JSON, -- Mesures qualitatives
+    methode_evaluation TEXT,
+    outils_evaluation JSON,
     
-    -- DÉPÔT ET SUIVI
+    -- INNOVATION ET PLUS-VALUE
+    caractere_innovant TEXT,
+    plus_value_association TEXT,
+    transferabilite_projet TEXT,
+    
+    -- ÉTAT D'AVANCEMENT DOSSIER
+    etape_redaction ENUM(
+        'reflexion', 'redaction', 'relecture', 'finalise', 'depose'
+    ) DEFAULT 'reflexion',
+    pourcentage_avancement DECIMAL(5,2) DEFAULT 0,
+    
+    -- PARTIES DU DOSSIER
+    description_association_ok BOOLEAN DEFAULT FALSE,
+    description_projet_ok BOOLEAN DEFAULT FALSE,
+    budget_detaille_ok BOOLEAN DEFAULT FALSE,
+    plan_financement_ok BOOLEAN DEFAULT FALSE,
+    calendrier_ok BOOLEAN DEFAULT FALSE,
+    evaluation_ok BOOLEAN DEFAULT FALSE,
+    
+    -- PIÈCES ADMINISTRATIVES
+    statuts_association_fournis BOOLEAN DEFAULT FALSE,
+    dernier_rapport_activite BOOLEAN DEFAULT FALSE,
+    derniers_comptes_approuves BOOLEAN DEFAULT FALSE,
+    budget_previsionnel_association BOOLEAN DEFAULT FALSE,
+    rib_association BOOLEAN DEFAULT FALSE,
+    
+    -- DÉPÔT ET SUIVI ADMINISTRATIF
     date_depot DATE,
-    mode_depot ENUM('en_ligne', 'courrier', 'main_propre'),
+    mode_depot ENUM('en_ligne', 'courrier', 'main_propre', 'email'),
     accuse_reception BOOLEAN DEFAULT FALSE,
+    numero_dossier_organisme VARCHAR(100),
     
-    -- DÉCISION
+    -- INSTRUCTION ET DÉCISION
     date_commission DATE,
-    decision ENUM('en_attente', 'accorde', 'accorde_partiel', 'refuse', 'reporte'),
+    decision ENUM(
+        'en_attente', 'en_instruction', 'accorde', 'accorde_partiel', 
+        'refuse', 'reporte', 'complement_demande'
+    ) DEFAULT 'en_attente',
     montant_accorde DECIMAL(10,2),
+    pourcentage_accorde DECIMAL(5,2),
     conditions_attribution TEXT,
+    motif_refus TEXT,
     
-    -- VERSEMENTS
-    modalites_versement JSON,
+    -- VERSEMENTS ET SUIVI FINANCIER
+    modalites_versement JSON, -- Modalités de paiement
     acompte_verse DECIMAL(8,2),
     date_premier_versement DATE,
-    solde_a_percevoir DECIMAL(8,2),
+    versements_intermediaires JSON, -- Historique versements
+    solde_verse DECIMAL(8,2),
+    date_solde DATE,
+    total_verse DECIMAL(8,2),
     
-    -- BILAN D'ACTION
-    bilan_qualitatif_rendu BOOLEAN DEFAULT FALSE,
+    -- OBLIGATIONS POST-ATTRIBUTION
+    rapport_intermediaire_requis BOOLEAN DEFAULT FALSE,
+    date_rapport_intermediaire DATE,
+    rapport_intermediaire_rendu BOOLEAN DEFAULT FALSE,
+    
+    bilan_activite_requis BOOLEAN DEFAULT TRUE,
+    date_limite_bilan DATE,
+    bilan_activite_rendu BOOLEAN DEFAULT FALSE,
+    
+    bilan_financier_requis BOOLEAN DEFAULT TRUE,
     bilan_financier_rendu BOOLEAN DEFAULT FALSE,
-    date_rendu_bilan DATE,
+    
+    -- COMMUNICATION ET VALORISATION
+    communication_obligatoire TEXT,
+    logo_financeur_utilise BOOLEAN DEFAULT FALSE,
+    mentions_obligatoires TEXT,
+    
+    -- RENOUVELLEMENT
+    renouvellement_possible BOOLEAN DEFAULT FALSE,
+    renouvellement_demande BOOLEAN DEFAULT FALSE,
+    
+    -- SATISFACTION ET ÉVALUATION
+    satisfaction_procedure ENUM('1', '2', '3', '4', '5'),
+    satisfaction_accompagnement ENUM('1', '2', '3', '4', '5'),
+    commentaires_procedure TEXT,
+    ameliorations_suggerees TEXT,
+    
+    -- SUIVI CONSEILLER
+    fk_user_accompagnant INT,
+    temps_passe_preparation DECIMAL(5,2), -- Heures
+    difficultes_rencontrees TEXT,
+    points_amelioration TEXT,
+    
+    -- ARCHIVAGE
+    dossier_clos BOOLEAN DEFAULT FALSE,
+    date_cloture DATE,
+    archive BOOLEAN DEFAULT FALSE,
     
     FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid),
-    INDEX idx_statut (decision),
-    INDEX idx_organisme (organisme_financeur)
+    FOREIGN KEY (fk_dispositif_financement) REFERENCES llx_elaska_veille_financements(rowid),
+    FOREIGN KEY (fk_user_accompagnant) REFERENCES llx_user(rowid),
+    INDEX idx_organisme (organisme_financeur),
+    INDEX idx_decision (decision),
+    INDEX idx_dates (date_depot, date_commission),
+    INDEX idx_montants (montant_demande, montant_accorde),
+    INDEX idx_etape (etape_redaction)
 );
-💼 Portail Association - "Mes Demandes de Financement"
 
-jsx
+-- Table pour le suivi des interactions avec les financeurs
+CREATE TABLE llx_elaska_interaction_financeur (
+    rowid INT PRIMARY KEY AUTO_INCREMENT,
+    fk_dossier_subvention INT NOT NULL,
+    
+    -- INTERACTION
+    date_interaction DATETIME NOT NULL,
+    type_interaction ENUM(
+        'appel_telephonique', 'email', 'rdv', 'courrier', 
+        'visite_terrain', 'commission', 'autre'
+    ) NOT NULL,
+    sens_interaction ENUM('sortant', 'entrant') NOT NULL,
+    
+    -- PARTICIPANTS
+    interlocuteur_financeur VARCHAR(100),
+    fonction_interlocuteur VARCHAR(100),
+    participants_association JSON,
+    
+    -- CONTENU
+    objet_interaction TEXT NOT NULL,
+    resume_echanges TEXT,
+    documents_transmis JSON,
+    documents_recus JSON,
+    
+    -- SUIVI
+    points_action JSON, -- Actions à mener suite à l'interaction
+    prochaine_interaction_prevue DATE,
+    satisfaction_interaction ENUM('1', '2', '3', '4', '5'),
+    
+    FOREIGN KEY (fk_dossier_subvention) REFERENCES llx_elaska_dossier_subvention(rowid),
+    INDEX idx_date (date_interaction),
+    INDEX idx_type (type_interaction)
+);
+
+-- Table pour les documents du dossier
+CREATE TABLE llx_elaska_document_subvention (
+    rowid INT PRIMARY KEY AUTO_INCREMENT,
+    fk_dossier_subvention INT NOT NULL,
+    
+    -- DOCUMENT
+    nom_document VARCHAR(255) NOT NULL,
+    type_document ENUM(
+        'formulaire_candidature', 'budget_detaille', 'plan_financement',
+        'description_projet', 'cv_dirigeants', 'lettres_soutien',
+        'pieces_administratives', 'annexes', 'autre'
+    ) NOT NULL,
+    
+    -- STATUT
+    document_obligatoire BOOLEAN DEFAULT TRUE,
+    document_fourni BOOLEAN DEFAULT FALSE,
+    document_id INT, -- Lien vers GED Dolibarr
+    version_document INT DEFAULT 1,
+    
+    -- GESTION
+    date_creation DATE,
+    date_derniere_maj DATE,
+    validite_document ENUM('valide', 'a_corriger', 'obsolete'),
+    commentaires TEXT,
+    
+    FOREIGN KEY (fk_dossier_subvention) REFERENCES llx_elaska_dossier_subvention(rowid),
+    INDEX idx_type (type_document),
+    INDEX idx_statut (document_fourni)
+);
+```
+
+**💼 Interface Portail Association - "Mes Demandes de Financement"**
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import { Card, Steps, Timeline, Progress, Button, Table, Tag, Modal, Form, Tabs } from 'antd';
+import { 
+    FileTextOutlined, 
+    EuroCircleOutlined, 
+    CalendarOutlined,
+    CheckCircleOutlined,
+    ClockCircleOutlined,
+    ExclamationCircleOutlined 
+} from '@ant-design/icons';
+
+const { Step } = Steps;
+const { TabPane } = Tabs;
+
 const MesFinancements = () => {
-  const { dossiers, opportunites, stats } = useFinancementsData();
-  
-  return (
-    <div className="financements-dashboard">
-      <header>
-        <h1>Mes Financements</h1>
-        <StatsFinancements 
-          total_demande={stats.total_demande}
-          total_obtenu={stats.total_obtenu}
-          taux_reussite={stats.taux_reussite}
-        />
-      </header>
-      
-      <div className="sections-financement">
-        <section className="dossiers-en-cours">
-          <h2>Dossiers en Cours</h2>
-          <DossiersList 
-            dossiers={dossiers.en_cours}
-            showProgress={true}
-          />
-        </section>
+    const [dossiers, setDossiers] = useState([]);
+    const [opportunites, setOpportunites] = useState([]);
+    const [stats, setStats] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [selectedDossier, setSelectedDossier] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    useEffect(() => {
+        loadFinancementsData();
+    }, []);
+
+    const loadFinancementsData = async () => {
+        try {
+            const response = await fetch('/api/v1/associations/financements');
+            const data = await response.json();
+            setDossiers(data.dossiers);
+            setOpportunites(data.opportunites);
+            setStats(data.statistiques);
+        } catch (error) {
+            console.error('Erreur chargement financements:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const StatsFinancements = ({ stats }) => (
+        <div className="stats-financements">
+            <Card className="stat-card total-demande">
+                <div className="stat-content">
+                    <EuroCircleOutlined className="stat-icon" />
+                    <div>
+                        <div className="stat-number">{stats.total_demande?.toLocaleString()}€</div>
+                        <div className="stat-label">Total Demandé</div>
+                    </div>
+                </div>
+            </Card>
+            
+            <Card className="stat-card total-obtenu">
+                <div className="stat-content">
+                    <CheckCircleOutlined className="stat-icon success" />
+                    <div>
+                        <div className="stat-number">{stats.total_obtenu?.toLocaleString()}€</div>
+                        <div className="stat-label">Total Obtenu</div>
+                    </div>
+                </div>
+                <Progress 
+                    percent={Math.round((stats.total_obtenu / stats.total_demande) * 100)} 
+                    size="small"
+                    status="success"
+                />
+            </Card>
+            
+            <Card className="stat-card taux-reussite">
+                <div className="stat-content">
+                    <div className="stat-number">{stats.taux_reussite}%</div>
+                    <div className="stat-label">Taux de Réussite</div>
+                </div>
+                <div className="stat-details">
+                    {stats.nb_accordes} accordés sur {stats.nb_deposes} déposés
+                </div>
+            </Card>
+            
+            <Card className="stat-card en-cours">
+                <div className="stat-content">
+                    <ClockCircleOutlined className="stat-icon warning" />
+                    <div>
+                        <div className="stat-number">{stats.dossiers_en_cours}</div>
+                        <div className="stat-label">Dossiers en Cours</div>
+                    </div>
+                </div>
+            </Card>
+        </div>
+    );
+
+    const DossierCard = ({ dossier, onClick }) => {
+        const getStatusColor = (decision) => {
+            const colors = {
+                'en_attente': 'blue',
+                'en_instruction': 'orange',
+                'accorde': 'green',
+                'accorde_partiel': 'cyan',
+                'refuse': 'red',
+                'reporte': 'purple'
+            };
+            return colors[decision] || 'default';
+        };
+
+        const getStatusText = (decision) => {
+            const texts = {
+                'en_attente': 'En Attente',
+                'en_instruction': 'En Instruction',
+                'accorde': 'Accordé',
+                'accorde_partiel': 'Partiellement Accordé',
+                'refuse': 'Refusé',
+                'reporte': 'Reporté'
+            };
+            return texts[decision] || decision;
+        };
+
+        return (
+            <Card 
+                className="dossier-card"
+                hoverable
+                onClick={() => onClick(dossier)}
+                actions={[
+                    <Button type="link">Voir Détail</Button>,
+                    <Button type="link">Documents</Button>,
+                    <Button type="link">Historique</Button>
+                ]}
+            >
+                <div className="dossier-header">
+                    <h3>{dossier.intitule_projet}</h3>
+                    <Tag color={getStatusColor(dossier.decision)}>
+                        {getStatusText(dossier.decision)}
+                    </Tag>
+                </div>
+                
+                <div className="dossier-info">
+                    <div className="info-item">
+                        <span className="label">Financeur:</span>
+                        <span className="value">{dossier.organisme_financeur}</span>
+                    </div>
+                    <div className="info-item">
+                        <span className="label">Montant demandé:</span>
+                        <span className="value">{dossier.montant_demande?.toLocaleString()}€</span>
+                    </div>
+                    {dossier.montant_accorde > 0 && (
+                        <div className="info-item">
+                            <span className="label">Montant accordé:</span>
+                            <span className="value success">{dossier.montant_accorde?.toLocaleString()}€</span>
+                        </div>
+                    )}
+                    <div className="info-item">
+                        <span className="label">Période:</span>
+                        <span className="value">
+                            {new Date(dossier.date_debut_projet).toLocaleDateString()} - 
+                            {new Date(dossier.date_fin_projet).toLocaleDateString()}
+                        </span>
+                    </div>
+                </div>
+                
+                {dossier.etape_redaction !== 'depose' && (
+                    <div className="progress-section">
+                        <div className="progress-label">Avancement du dossier</div>
+                        <Progress 
+                            percent={dossier.pourcentage_avancement} 
+                            size="small"
+                            status={dossier.pourcentage_avancement === 100 ? 'success' : 'active'}
+                        />
+                    </div>
+                )}
+            </Card>
+        );
+    };
+
+    const DossiersEnCours = () => (
+        <div className="dossiers-en-cours">
+            <div className="section-header">
+                <h2>Dossiers en Cours ({dossiers.filter(d => ['en_attente', 'en_instruction'].includes(d.decision)).length})</h2>
+                <Button type="primary" onClick={() => setModalVisible(true)}>
+                    Nouveau Dossier
+                </Button>
+            </div>
+            
+            <div className="dossiers-grid">
+                {dossiers
+                    .filter(d => ['en_attente', 'en_instruction', 'complement_demande'].includes(d.decision))
+                    .map(dossier => (
+                        <DossierCard 
+                            key={dossier.rowid}
+                            dossier={dossier}
+                            onClick={setSelectedDossier}
+                        />
+                    ))
+                }
+            </div>
+        </div>
+    );
+
+    const OpportunitesCard = ({ opportunites }) => {
+        const [filtres, setFiltres] = useState({
+            secteur: 'tous',
+            territoire: 'tous',
+            montant: 'tous'
+        });
+
+        const opportunitesFiltrees = opportunites.filter(opp => {
+            if (filtres.secteur !== 'tous' && !opp.secteurs_eligibles.includes(filtres.secteur)) return false;
+            if (filtres.territoire !== 'tous' && !opp.territoires_eligibles.includes(filtres.territoire)) return false;
+            return true;
+        });
+
+        return (
+            <Card title="Nouvelles Opportunités" className="opportunites-card">
+                <div className="filtres-opportunites">
+                    <Form layout="inline">
+                        <Form.Item label="Secteur">
+                            <Select 
+                                value={filtres.secteur}
+                                onChange={(value) => setFiltres({...filtres, secteur: value})}
+                                style={{ width: 120 }}
+                            >
+                                <Option value="tous">Tous</Option>
+                                <Option value="culturel">Culturel</Option>
+                                <Option value="sportif">Sportif</Option>
+                                <Option value="social">Social</Option>
+                                <Option value="environnemental">Environnemental</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item label="Territoire">
+                            <Select 
+                                value={filtres.territoire}
+                                onChange={(value) => setFiltres({...filtres, territoire: value})}
+                                style={{ width: 120 }}
+                            >
+                                <Option value="tous">Tous</Option>
+                                <Option value="tarbes">Tarbes</Option>
+                                <Option value="hautes_pyrenees">Hautes-Pyrénées</Option>
+                                <Option value="occitanie">Occitanie</Option>
+                                <Option value="national">National</Option>
+                            </Select>
+                        </Form.Item>
+                    </Form>
+                </div>
+
+                <div className="opportunites-list">
+                    {opportunitesFiltrees.map(opp => (
+                        <Card key={opp.rowid} className="opportunite-item" size="small">
+                            <div className="opportunite-header">
+                                <h4>{opp.nom_dispositif}</h4>
+                                <Tag color="blue">{opp.organisme_financeur}</Tag>
+                            </div>
+                            
+                            <div className="opportunite-details">
+                                <div className="detail-row">
+                                    <span className="label">Montant:</span>
+                                    <span>{opp.montant_min?.toLocaleString()}€ - {opp.montant_max?.toLocaleString()}€</span>
+                                </div>
+                                
+                                {opp.date_limite_depot && (
+                                    <div className="detail-row">
+                                        <span className="label">Date limite:</span>
+                                        <span className="date-limite">
+                                            {new Date(opp.date_limite_depot).toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                )}
+                                
+                                <div className="detail-row">
+                                    <span className="label">Territoire:</span>
+                                    <span>{opp.territoires_eligibles.join(', ')}</span>
+                                </div>
+                            </div>
+                            
+                            <div className="opportunite-actions">
+                                <Button size="small" type="primary">
+                                    Candidater
+                                </Button>
+                                <Button size="small">
+                                    Plus d'infos
+                                </Button>
+                            </div>
+                        </Card>
+                    ))}
+                </div>
+            </Card>
+        );
+    };
+
+    const FinancementsObtenus = ({ dossiers }) => {
+        const dossiersObtenus = dossiers.filter(d => ['accorde', 'accorde_partiel'].includes(d.decision));
         
-        <section className="opportunites">
-          <h2>Nouvelles Opportunités</h2>
-          <OpportunitesCard 
-            opportunites={opportunites}
-            filtres={['secteur', 'territoire', 'montant']}
-          />
-        </section>
-        
-        <section className="obtenus">
-          <h2>Financements Obtenus</h2>
-          <FinancementsObtenus 
-            dossiers={dossiers.obtenus}
-            showVersements={true}
-          />
-        </section>
-      </div>
-      
-      <CalendrierEcheances />
-    </div>
-  );
+        const columns = [
+            {
+                title: 'Projet',
+                dataIndex: 'intitule_projet',
+                key: 'projet'
+            },
+            {
+                title: 'Financeur',
+                dataIndex: 'organisme_financeur',
+                key: 'financeur'
+            },
+            {
+                title: 'Montant Accordé',
+                key: 'montant',
+                render: (_, record) => (
+                    <span className="montant-accorde">
+                        {record.montant_accorde?.toLocaleString()}€
+                    </span>
+                )
+            },
+            {
+                title: 'Versements',
+                key: 'versements',
+                render: (_, record) => (
+                    <div className="versements-info">
+                        <Progress 
+                            percent={Math.round((record.total_verse / record.montant_accorde) * 100)}
+                            size="small"
+                            format={(percent) => `${percent}%`}
+                        />
+                        <div className="versement-detail">
+                            {record.total_verse?.toLocaleString()}€ / {record.montant_accorde?.toLocaleString()}€
+                        </div>
+                    </div>
+                )
+            },
+            {
+                title: 'Obligations',
+                key: 'obligations',
+                render: (_, record) => (
+                    <div className="obligations">
+                        {record.bilan_activite_requis && (
+                            <Tag color={record.bilan_activite_rendu ? 'green' : 'orange'}>
+                                Bilan activité
+                            </Tag>
+                        )}
+                        {record.bilan_financier_requis && (
+                            <Tag color={record.bilan_financier_rendu ? 'green' : 'orange'}>
+                                Bilan financier
+                            </Tag>
+                        )}
+                    </div>
+                )
+            }
+        ];
+
+        return (
+            <Card title="Financements Obtenus" className="financements-obtenus">
+                <Table 
+                    columns={columns}
+                    dataSource={dossiersObtenus}
+                    pagination={false}
+                    size="small"
+                />
+            </Card>
+        );
+    };
+
+    const CalendrierEcheances = () => {
+        const [echeances, setEcheances] = useState([]);
+
+        useEffect(() => {
+            // Calculer les échéances importantes
+            const echeancesCalculees = [];
+            
+            dossiers.forEach(dossier => {
+                // Échéances de dépôt
+                if (dossier.decision === 'en_attente' && dossier.date_limite_depot) {
+                    echeancesCalculees.push({
+                        date: dossier.date_limite_depot,
+                        type: 'depot',
+                        title: `Dépôt: ${dossier.intitule_projet}`,
+                        description: `Dépôt dossier ${dossier.organisme_financeur}`,
+                        urgence: 'haute'
+                    });
+                }
+                
+                // Échéances de bilan
+                if (dossier.decision === 'accorde' && dossier.date_limite_bilan && !dossier.bilan_activite_rendu) {
+                    echeancesCalculees.push({
+                        date: dossier.date_limite_bilan,
+                        type: 'bilan',
+                        title: `Bilan: ${dossier.intitule_projet}`,
+                        description: `Remise bilan d'activité`,
+                        urgence: 'moyenne'
+                    });
+                }
+            });
+            
+            // Trier par date
+            echeancesCalculees.sort((a, b) => new Date(a.date) - new Date(b.date));
+            setEcheances(echeancesCalculees);
+        }, [dossiers]);
+
+        return (
+            <Card title="Prochaines Échéances" className="calendrier-echeances">
+                <Timeline>
+                    {echeances.slice(0, 5).map((echeance, index) => (
+                        <Timeline.Item
+                            key={index}
+                            color={echeance.urgence === 'haute' ? 'red' : echeance.urgence === 'moyenne' ? 'orange' : 'blue'}
+                            dot={echeance.type === 'depot' ? <FileTextOutlined /> : <CalendarOutlined />}
+                        >
+                            <div className="echeance-item">
+                                <div className="echeance-date">
+                                    {new Date(echeance.date).toLocaleDateString()}
+                                </div>
+                                <div className="echeance-title">{echeance.title}</div>
+                                <div className="echeance-description">{echeance.description}</div>
+                            </div>
+                        </Timeline.Item>
+                    ))}
+                </Timeline>
+                
+                {echeances.length > 5 && (
+                    <Button type="link">Voir toutes les échéances ({echeances.length})</Button>
+                )}
+            </Card>
+        );
+    };
+
+    return (
+        <div className="financements-dashboard">
+            <div className="dashboard-header">
+                <h1>Mes Financements</h1>
+                <StatsFinancements stats={stats} />
+            </div>
+            
+            <Tabs defaultActiveKey="en-cours" className="financements-tabs">
+                <TabPane tab="Dossiers en Cours" key="en-cours">
+                    <DossiersEnCours />
+                </TabPane>
+                
+                <TabPane tab="Opportunités" key="opportunites">
+                    <OpportunitesCard opportunites={opportunites} />
+                </TabPane>
+                
+                <TabPane tab="Financements Obtenus" key="obtenus">
+                    <FinancementsObtenus dossiers={dossiers} />
+                </TabPane>
+                
+                <TabPane tab="Échéances" key="echeances">
+                    <CalendrierEcheances />
+                </TabPane>
+            </Tabs>
+
+            {/* Modal détail dossier */}
+            <Modal
+                title="Détail du Dossier"
+                visible={selectedDossier !== null}
+                onCancel={() => setSelectedDossier(null)}
+                width={1000}
+                footer={null}
+            >
+                {selectedDossier && (
+                    <DetailDossierSubvention dossier={selectedDossier} />
+                )}
+            </Modal>
+        </div>
+    );
 };
-3.3 Diversification des Ressources
-🎯 Module Développement Ressources
 
-SQL
-CREATE TABLE llx_elaska_developpement_ressources (
-    rowid INT PRIMARY KEY AUTO_INCREMENT,
-    fk_soc INT NOT NULL,
-    
-    -- STRATÉGIE GLOBALE
-    objectif_annuel_ressources DECIMAL(10,2),
-    repartition_cible JSON, -- % subventions, dons, activités, etc.
-    
-    -- DONS ET MÉCÉNAT
-    habilitation_recu_fiscal BOOLEAN DEFAULT FALSE,
-    campagne_dons_active BOOLEAN DEFAULT FALSE,
-    objectif_dons_annuel DECIMAL(8,2),
-    nb_donateurs_reguliers INT,
-    don_moyen DECIMAL(6,2),
-    
-    -- FINANCEMENT PARTICIPATIF
-    projets_crowdfunding JSON,
-    plateforme_privilegiee VARCHAR(100),
-    
-    -- MÉCÉNAT ENTREPRISES
-    entreprises_mecenes JSON,
-    entreprises_ciblees JSON,
-    partenariats_en_cours JSON,
-    
-    -- ÉVÉNEMENTS COLLECTE
-    evenements_planifies JSON,
-    revenus_evenements_annuel DECIMAL(8,2),
-    
-    -- ACTIVITÉS LUCRATIVES
-    activites_lucratives_autorisees BOOLEAN DEFAULT FALSE,
-    ca_activites_lucratives DECIMAL(8,2),
-    seuil_franchise_respecte BOOLEAN DEFAULT TRUE,
-    
-    -- SUIVI GLOBAL
-    total_ressources_annuel DECIMAL(10,2),
-    autonomie_financiere DECIMAL(5,2), -- %
-    
-    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid)
-);
+export default MesFinancements;
+```
 
-CREATE TABLE llx_elaska_donateur (
-    rowid INT PRIMARY KEY AUTO_INCREMENT,
-    fk_soc INT NOT NULL, -- Association
-    
-    -- IDENTITÉ
-    type_donateur ENUM('particulier', 'entreprise'),
-    nom VARCHAR(100),
-    prenom VARCHAR(100),
-    email VARCHAR(100),
-    adresse TEXT,
-    
-    -- HISTORIQUE DONS
-    premier_don DATE,
-    dernier_don DATE,
-    nb_dons_total INT,
-    montant_total_donne DECIMAL(8,2),
-    don_moyen DECIMAL(6,2),
-    
-    -- CARACTÉRISTIQUES
-    donateur_regulier BOOLEAN DEFAULT FALSE,
-    montant_mensuel DECIMAL(6,2),
-    mode_prelevement ENUM('cb', 'virement', 'cheque', 'especes'),
-    
-    -- COMMUNICATION
-    souhaite_newsletter BOOLEAN DEFAULT TRUE,
-    souhaite_invitations BOOLEAN DEFAULT TRUE,
-    
-    -- REÇUS FISCAUX
-    recu_fiscal_demande BOOLEAN DEFAULT TRUE,
-    adresse_recu TEXT,
-    
-    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid)
-);
-📊 4. GESTION ADMINISTRATIVE & COMPTABLE
-4.1 Pré-comptabilité Associative
-💰 Module Comptabilité Association
+---
 
-SQL
+## **4. GESTION ADMINISTRATIVE & COMPTABLE**
+
+### **4.1 Pré-comptabilité Associative Avancée**
+
+```sql
+-- Table comptabilité association avec détails obligatoire
 CREATE TABLE llx_elaska_comptabilite_association (
     rowid INT PRIMARY KEY AUTO_INCREMENT,
     fk_soc INT NOT NULL,
-    exercice_annee INT,
+    exercice_annee INT NOT NULL,
     
-    -- TYPE COMPTABILITÉ
+    -- CONFIGURATION COMPTABLE
     comptabilite_engagement BOOLEAN DEFAULT FALSE, -- Sinon trésorerie
+    seuils_depasses JSON, -- Quels seuils ont été dépassés
     expert_comptable VARCHAR(100),
     logiciel_comptable VARCHAR(100),
+    tenue_comptabilite ENUM('interne', 'expert_comptable', 'mixte') DEFAULT 'interne',
     
-    -- RECETTES PAR NATURE
-    cotisations_membres DECIMAL(8,2),
-    subventions_publiques DECIMAL(10,2),
-    dons_particuliers DECIMAL(8,2),
-    mecenat_entreprises DECIMAL(8,2),
-    revenus_activites DECIMAL(8,2),
-    produits_financiers DECIMAL(6,2),
-    autres_recettes DECIMAL(8,2),
-    total_recettes DECIMAL(10,2),
+    -- SEUILS RÉGLEMENTAIRES (mise à jour annuelle)
+    seuil_subventions_publiques DECIMAL(8,2) DEFAULT 23000, -- Seuil 2024
+    seuil_bilan_simplifie DECIMAL(10,2) DEFAULT 175000,
+    seuil_commissaire_comptes DECIMAL(10,2) DEFAULT 153000,
     
-    -- DÉPENSES PAR NATURE
-    charges_personnel DECIMAL(8,2),
-    achats_fournitures DECIMAL(6,2),
-    loyers_charges DECIMAL(6,2),
-    assurances DECIMAL(4,2),
-    communication DECIMAL(4,2),
-    deplacement_missions DECIMAL(6,2),
-    prestations_exterieures DECIMAL(6,2),
-    impots_taxes DECIMAL(4,2),
-    autres_charges DECIMAL(8,2),
-    total_charges DECIMAL(10,2),
+    -- RECETTES DÉTAILLÉES PAR NATURE
+    cotisations_membres DECIMAL(8,2) DEFAULT 0,
     
-    -- RÉSULTAT
-    resultat_exercice DECIMAL(8,2),
+    -- Subventions publiques détaillées
+    subventions_etat DECIMAL(8,2) DEFAULT 0,
+    subventions_region DECIMAL(8,2) DEFAULT 0,
+    subventions_departement DECIMAL(8,2) DEFAULT 0,
+    subventions_commune DECIMAL(8,2) DEFAULT 0,
+    subventions_europe DECIMAL(8,2) DEFAULT 0,
+    total_subventions_publiques DECIMAL(10,2) GENERATED ALWAYS AS (
+        subventions_etat + subventions_region + subventions_departement + 
+        subventions_commune + subventions_europe
+    ) STORED,
+    
+    -- Ressources privées
+    dons_particuliers DECIMAL(8,2) DEFAULT 0,
+    mecenat_entreprises DECIMAL(8,2) DEFAULT 0,
+    legs_donations DECIMAL(8,2) DEFAULT 0,
+    
+    -- Ressources d'activité
+    revenus_manifestations DECIMAL(8,2) DEFAULT 0,
+    ventes_marchandises DECIMAL(8,2) DEFAULT 0,
+    prestations_services DECIMAL(8,2) DEFAULT 0,
+    
+    -- Ressources financières
+    produits_financiers DECIMAL(6,2) DEFAULT 0,
+    produits_placement DECIMAL(6,2) DEFAULT 0,
+    
+    autres_recettes DECIMAL(8,2) DEFAULT 0,
+    total_recettes DECIMAL(10,2) GENERATED ALWAYS AS (
+        cotisations_membres + total_subventions_publiques + dons_particuliers + 
+        mecenat_entreprises + legs_donations + revenus_manifestations + 
+        ventes_marchandises + prestations_services + produits_financiers + 
+        produits_placement + autres_recettes
+    ) STORED,
+    
+    -- DÉPENSES DÉTAILLÉES PAR NATURE
+    -- Charges de personnel
+    salaires_bruts DECIMAL(8,2) DEFAULT 0,
+    charges_sociales_patronales DECIMAL(8,2) DEFAULT 0,
+    autres_charges_personnel DECIMAL(6,2) DEFAULT 0,
+    total_charges_personnel DECIMAL(8,2) GENERATED ALWAYS AS (
+        salaires_bruts + charges_sociales_patronales + autres_charges_personnel
+    ) STORED,
+    
+    -- Achats et charges externes
+    achats_fournitures DECIMAL(6,2) DEFAULT 0,
+    locations DECIMAL(6,2) DEFAULT 0,
+    entretien_reparations DECIMAL(6,2) DEFAULT 0,
+    assurances DECIMAL(4,2) DEFAULT 0,
+    communication_publicite DECIMAL(4,2) DEFAULT 0,
+    deplacement_missions DECIMAL(6,2) DEFAULT 0,
+    services_exterieurs DECIMAL(6,2) DEFAULT 0,
+    honoraires DECIMAL(6,2) DEFAULT 0,
+    
+    -- Charges diverses
+    impots_taxes DECIMAL(4,2) DEFAULT 0,
+    charges_financieres DECIMAL(4,2) DEFAULT 0,
+    charges_exceptionnelles DECIMAL(6,2) DEFAULT 0,
+    dotations_amortissements DECIMAL(6,2) DEFAULT 0,
+    autres_charges DECIMAL(8,2) DEFAULT 0,
+    
+    total_charges DECIMAL(10,2) GENERATED ALWAYS AS (
+        total_charges_personnel + achats_fournitures + locations + 
+        entretien_reparations + assurances + communication_publicite + 
+        deplacement_missions + services_exterieurs + honoraires + 
+        impots_taxes + charges_financieres + charges_exceptionnelles + 
+        dotations_amortissements + autres_charges
+    ) STORED,
+    
+    -- RÉSULTAT ET FONDS ASSOCIATIFS
+    resultat_exercice DECIMAL(8,2) GENERATED ALWAYS AS (
+        total_recettes - total_charges
+    ) STORED,
+    fonds_associatifs_debut DECIMAL(10,2),
     reserves_cumulees DECIMAL(10,2),
+    fonds_associatifs_fin DECIMAL(10,2) GENERATED ALWAYS AS (
+        fonds_associatifs_debut + resultat_exercice
+    ) STORED,
     
-    -- OBLIGATIONS
+    -- BILAN SIMPLIFIÉ (si applicable)
+    actif_immobilise DECIMAL(10,2),
+    actif_circulant DECIMAL(10,2),
+    tresorerie_actif DECIMAL(8,2),
+    total_actif DECIMAL(10,2),
+    
+    fonds_associatifs_bilan DECIMAL(10,2),
+    provisions_risques DECIMAL(8,2),
+    dettes DECIMAL(8,2),
+    total_passif DECIMAL(10,2),
+    
+    -- RATIOS FINANCIERS
+    ratio_independance DECIMAL(5,2), -- Fonds propres / Total passif
+    ratio_liquidite DECIMAL(5,2), -- Actif circulant / Dettes CT
+    ratio_charges_personnel DECIMAL(5,2), -- Charges personnel / Total charges
+    
+    -- OBLIGATIONS ET CONTRÔLES
     depot_comptes_prefecture BOOLEAN DEFAULT FALSE,
+    date_depot_comptes DATE,
     rapport_activite_redige BOOLEAN DEFAULT FALSE,
     ag_approbation_tenue BOOLEAN DEFAULT FALSE,
+    date_ag_approbation DATE,
     
-    -- CONTRÔLES
+    -- Commissaire aux comptes
     commissaire_comptes_obligatoire BOOLEAN DEFAULT FALSE,
-    controle_urssaf_ok BOOLEAN DEFAULT TRUE,
+    commissaire_comptes_designe BOOLEAN DEFAULT FALSE,
+    nom_commissaire_comptes VARCHAR(100),
+    rapport_commissaire_rendu BOOLEAN DEFAULT FALSE,
     
-    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid)
+    -- Contrôles externes
+    controle_urssaf_date DATE,
+    controle_urssaf_conforme BOOLEAN DEFAULT TRUE,
+    controle_inspection_travail_date DATE,
+    controle_dgfip_date DATE,
+    
+    -- CERTIFICATION ET LABELLISATION
+    certification_ideas BOOLEAN DEFAULT FALSE, -- Certification IDEAS
+    label_don_confiance BOOLEAN DEFAULT FALSE,
+    autre_certification VARCHAR(100),
+    
+    -- SUIVI ET ALERTES
+    alerte_seuils_actives BOOLEAN DEFAULT TRUE,
+    prochaine_echeance_comptable DATE,
+    commentaires_exercice TEXT,
+    
+    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid),
+    UNIQUE KEY unique_exercice (fk_soc, exercice_annee),
+    INDEX idx_exercice (exercice_annee),
+    INDEX idx_seuils (total_subventions_publiques)
 );
-4.2 Obligations Légales
-⚖️ Module Obligations Associatives
 
-SQL
+-- Table pour le suivi des pièces comptables
+CREATE TABLE llx_elaska_piece_comptable (
+    rowid INT PRIMARY KEY AUTO_INCREMENT,
+    fk_comptabilite INT NOT NULL,
+    
+    -- PIÈCE
+    numero_piece VARCHAR(50) NOT NULL,
+    date_piece DATE NOT NULL,
+    type_piece ENUM(
+        'facture_achat', 'facture_vente', 'recu_don', 'virement', 
+        'cheque', 'especes', 'carte_bancaire', 'autre'
+    ) NOT NULL,
+    
+    -- TIERS
+    tiers_nom VARCHAR(255),
+    tiers_type ENUM('fournisseur', 'client', 'donateur', 'financeur', 'autre'),
+    
+    -- MONTANTS
+    montant_ht DECIMAL(8,2),
+    montant_tva DECIMAL(6,2),
+    montant_ttc DECIMAL(8,2) NOT NULL,
+    
+    -- CLASSIFICATION
+    compte_comptable VARCHAR(20),
+    libelle_compte VARCHAR(255),
+    nature_recette_depense VARCHAR(100),
+    
+    -- DOCUMENTS
+    document_id INT, -- Lien vers GED
+    justificatif_fourni BOOLEAN DEFAULT TRUE,
+    
+    -- VALIDATION
+    piece_validee BOOLEAN DEFAULT FALSE,
+    validee_par INT, -- Utilisateur ayant validé
+    date_validation DATE,
+    
+    FOREIGN KEY (fk_comptabilite) REFERENCES llx_elaska_comptabilite_association(rowid),
+    INDEX idx_date (date_piece),
+    INDEX idx_type (type_piece),
+    INDEX idx_validation (piece_validee)
+);
+```
+
+### **4.2 Obligations Légales Complètes**
+
+```sql
+-- Table obligations légales avec suivi automatisé
 CREATE TABLE llx_elaska_obligations_legales (
     rowid INT PRIMARY KEY AUTO_INCREMENT,
     fk_soc INT NOT NULL,
+    exercice_annee INT NOT NULL,
     
     -- DÉCLARATIONS OBLIGATOIRES
-    declarations_modificatives JSON, -- Historique
+    declaration_prefecture_modificative JSON, -- Historique des déclarations
     derniere_declaration_dirigeants DATE,
+    prochaine_declaration_due DATE,
+    
+    -- Déclarations spécifiques
+    declaration_activite_lucratives BOOLEAN DEFAULT FALSE,
+    declaration_dons_manuels BOOLEAN DEFAULT FALSE,
+    declaration_emplois_francs BOOLEAN DEFAULT FALSE,
     
     -- RAPPORTS ANNUELS
     rapport_activite_fait BOOLEAN DEFAULT FALSE,
+    rapport_activite_date DATE,
     rapport_financier_fait BOOLEAN DEFAULT FALSE,
+    rapport_financier_date DATE,
     comptes_approuves_ag BOOLEAN DEFAULT FALSE,
-    depot_comptes_fait BOOLEAN DEFAULT FALSE,
+    date_ag_approbation DATE,
     
-    -- RGPD
+    -- DÉPÔT EN PRÉFECTURE
+    depot_comptes_obligatoire BOOLEAN DEFAULT FALSE,
+    depot_comptes_fait BOOLEAN DEFAULT FALSE,
+    date_depot_comptes DATE,
+    depot_dematérialise BOOLEAN DEFAULT TRUE,
+    
+    -- PUBLICATION JOAFE
+    publication_joafe_obligatoire BOOLEAN DEFAULT FALSE,
+    publication_joafe_faite BOOLEAN DEFAULT FALSE,
+    date_publication_joafe DATE,
+    
+    -- RGPD ET PROTECTION DONNÉES
     rgpd_conforme BOOLEAN DEFAULT FALSE,
     registre_traitements_tenu BOOLEAN DEFAULT FALSE,
-    politique_confidentialite_mise_a_jour BOOLEAN DEFAULT FALSE,
+    registre_traitements_date_maj DATE,
+    politique_confidentialite_publiee BOOLEAN DEFAULT FALSE,
+    dpo_designe BOOLEAN DEFAULT FALSE,
+    nom_dpo VARCHAR(100),
     
-    -- ASSURANCES OBLIGATOIRES
+    -- ASSURANCES OBLIGATOIRES ET RECOMMANDÉES
     assurance_responsabilite_civile BOOLEAN DEFAULT TRUE,
+    assurance_rc_numero_police VARCHAR(50),
+    assurance_rc_echeance DATE,
+    assurance_rc_montant_garantie DECIMAL(10,2),
+    
     assurance_locaux BOOLEAN DEFAULT FALSE,
+    assurance_locaux_echeance DATE,
+    
     assurance_dirigeants BOOLEAN DEFAULT FALSE,
+    assurance_dirigeants_echeance DATE,
+    
+    assurance_activite_specifique BOOLEAN DEFAULT FALSE,
+    assurance_activite_type VARCHAR(100), -- Ex: responsabilité professionnelle
     
     -- SPÉCIFICITÉS SECTORIELLES
-    autorisation_prefecture BOOLEAN, -- Si nécessaire
-    licence_sportive BOOLEAN, -- Si fédération
-    agrement_education_populaire BOOLEAN,
+    autorisation_prefecture BOOLEAN DEFAULT FALSE,
+    autorisation_numero VARCHAR(50),
+    autorisation_echeance DATE,
     
-    -- EMPLOYEUR (si applicable)
-    declaration_urssaf BOOLEAN,
-    medecine_travail BOOLEAN,
-    document_unique_risques BOOLEAN,
+    licence_sportive BOOLEAN DEFAULT FALSE,
+    federation_affiliation VARCHAR(100),
+    licence_numero VARCHAR(50),
     
-    -- ALERTES
-    prochaines_echeances JSON,
-    alertes_non_conformite JSON,
+    agrement_education_populaire BOOLEAN DEFAULT FALSE,
+    agrement_numero VARCHAR(50),
+    agrement_echeance DATE,
     
-    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid)
+    agrement_jeunesse_sport BOOLEAN DEFAULT FALSE,
+    agrement_service_civique BOOLEAN DEFAULT FALSE,
+    
+    -- OBLIGATIONS EMPLOYEUR (si salariés)
+    nb_salaries_declares INT DEFAULT 0,
+    declaration_urssaf_a_jour BOOLEAN DEFAULT TRUE,
+    medecine_travail_a_jour BOOLEAN DEFAULT TRUE,
+    document_unique_risques_fait BOOLEAN DEFAULT FALSE,
+    document_unique_date_maj DATE,
+    
+    registre_personnel_tenu BOOLEAN DEFAULT FALSE,
+    elections_dp_a_jour BOOLEAN DEFAULT TRUE, -- Délégués du personnel
+    
+    formation_securite_faite BOOLEAN DEFAULT FALSE,
+    visite_medicale_embauche_faite BOOLEAN DEFAULT TRUE,
+    
+    -- OBLIGATIONS FISCALES SPÉCIFIQUES
+    declaration_fiscale_1330_faite BOOLEAN DEFAULT FALSE, -- Associations
+    exoneration_impots_commerciaux BOOLEAN DEFAULT TRUE,
+    
+    -- CONTRÔLES ET VÉRIFICATIONS
+    controle_urssaf_date DATE,
+    controle_urssaf_conforme BOOLEAN DEFAULT TRUE,
+    controle_inspection_travail_date DATE,
+    controle_it_conforme BOOLEAN DEFAULT TRUE,
+    
+    -- ALERTES ET ÉCHÉANCES
+    prochaines_echeances JSON, -- Calcul automatique des prochaines échéances
+    alertes_non_conformite JSON, -- Liste des non-conformités
+    score_conformite DECIMAL(5,2), -- Score global de conformité
+    
+    -- ACCOMPAGNEMENT
+    formation_dirigeants_suivie BOOLEAN DEFAULT FALSE,
+    formation_dirigeants_date DATE,
+    conseil_juridique_utilise BOOLEAN DEFAULT FALSE,
+    
+    -- SUIVI HISTORIQUE
+    derniere_verification DATE,
+    prochaine_verification DATE,
+    
+    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid),
+    UNIQUE KEY unique_exercice_obligations (fk_soc, exercice_annee),
+    INDEX idx_conformite (score_conformite),
+    INDEX idx_echeances (prochaine_verification)
 );
-📈 5. STRATÉGIE & COMMUNICATION
-5.1 Projet Associatif Pluriannuel
-🎯 Module Stratégie Association
 
-SQL
-CREATE TABLE llx_elaska_strategie_association (
+-- Table pour le calendrier des obligations
+CREATE TABLE llx_elaska_calendrier_obligations (
     rowid INT PRIMARY KEY AUTO_INCREMENT,
     fk_soc INT NOT NULL,
     
-    -- HORIZON STRATÉGIQUE
-    periode_debut DATE,
-    periode_fin DATE,
-    duree_annees INT,
+    -- OBLIGATION
+    type_obligation ENUM(
+        'ag_annuelle', 'depot_comptes', 'declaration_dirigeants',
+        'renouvellement_assurance', 'renouvellement_agrement',
+        'declaration_urssaf', 'visite_medicale', 'formation_obligatoire',
+        'controle_periodique', 'autre'
+    ) NOT NULL,
+    libelle_obligation VARCHAR(255) NOT NULL,
+    description_obligation TEXT,
     
-    -- VISION ET MISSION
-    vision_long_terme TEXT,
-    mission_principale TEXT,
-    valeurs_cles JSON,
+    -- PÉRIODICITÉ
+    periodicite ENUM('annuelle', 'semestrielle', 'trimestrielle', 'mensuelle', 'ponctuelle') NOT NULL,
+    mois_echeance INT, -- Mois de l'échéance pour les obligations annuelles
+    jour_echeance INT, -- Jour du mois pour les obligations mensuelles
     
-    -- OBJECTIFS STRATÉGIQUES
-    objectifs_quantitatifs JSON, -- Nb bénéficiaires, budget, etc.
-    objectifs_qualitatifs JSON, -- Impact, qualité, etc.
-    objectifs_organisationnels JSON, -- Équipe, gouvernance
+    -- DATES
+    derniere_execution DATE,
+    prochaine_echeance DATE NOT NULL,
+    delai_alerte_jours INT DEFAULT 30, -- Délai d'alerte avant échéance
     
-    -- AXES DE DÉVELOPPEMENT
-    axes_prioritaires JSON,
-    actions_phares JSON,
-    partenariats_strategiques JSON,
+    -- STATUT
+    statut_execution ENUM('en_attente', 'en_cours', 'execute', 'retard') DEFAULT 'en_attente',
+    execution_validee BOOLEAN DEFAULT FALSE,
     
-    -- RESSOURCES NÉCESSAIRES
-    budget_pluriannuel DECIMAL(12,2),
-    besoins_humains JSON,
-    besoins_competences JSON,
+    -- RESPONSABILITÉ
+    responsable_execution VARCHAR(100), -- Qui doit s'en occuper
+    rappel_active BOOLEAN DEFAULT TRUE,
     
-    -- INDICATEURS DE RÉUSSITE
-    indicateurs_impact JSON,
-    modalites_evaluation JSON,
+    -- DOCUMENTS
+    documents_requis JSON, -- Liste des documents nécessaires
+    documents_fournis JSON, -- Documents effectivement fournis
     
-    -- SUIVI
-    revisions_prevues JSON, -- Dates de point d'étape
-    derniere_evaluation DATE,
-    taux_realisation DECIMAL(5,2),
+    -- COÛT
+    cout_estime DECIMAL(6,2),
+    cout_reel DECIMAL(6,2),
     
-    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid)
+    -- NOTES
+    notes_execution TEXT,
+    difficultes_rencontrees TEXT,
+    
+    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid),
+    INDEX idx_echeance (prochaine_echeance),
+    INDEX idx_type (type_obligation),
+    INDEX idx_statut (statut_execution)
 );
-5.2 Communication & Visibilité
-📢 Module Communication Association
+```
 
-SQL
-CREATE TABLE llx_elaska_communication_asso (
-    rowid INT PRIMARY KEY AUTO_INCREMENT,
-    fk_soc INT NOT NULL,
-    
-    -- STRATÉGIE COMMUNICATION
-    objectifs_communication JSON,
-    cibles_prioritaires JSON,
-    messages_cles JSON,
-    
-    -- SUPPORTS DE COMMUNICATION
-    site_web_url VARCHAR(255),
-    site_web_last_update DATE,
-    newsletter_active BOOLEAN DEFAULT FALSE,
-    newsletter_abonnes INT,
-    
-    -- RÉSEAUX SOCIAUX
-    facebook_page VARCHAR(255),
-    facebook_followers INT,
-    instagram_account VARCHAR(255),
-    instagram_followers INT,
-    linkedin_page VARCHAR(255),
-    twitter_account VARCHAR(255),
-    
-    -- SUPPORTS PRINT
-    plaquette_presentation BOOLEAN DEFAULT FALSE,
-    flyers_activites BOOLEAN DEFAULT FALSE,
-    affiches_evenements BOOLEAN DEFAULT FALSE,
-    
-    -- RELATIONS PRESSE
-    contacts_medias_locaux JSON,
-    communiques_presse_annee INT,
-    passages_medias JSON,
-    
-    -- ÉVÉNEMENTS
-    evenements_communication JSON,
-    portes_ouvertes_annuelles BOOLEAN DEFAULT FALSE,
-    participation_forums BOOLEAN DEFAULT FALSE,
-    
-    -- MESURE D'IMPACT
-    visiteurs_site_mois INT,
-    taux_ouverture_newsletter DECIMAL(5,2),
-    mentions_presse_annee INT,
-    
-    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid)
-);
-🤝 6. PARTENARIATS & RÉSEAUX
-🌐 Module Partenariats Associatifs
+**🖥️ Interface Backoffice - Suivi Obligations**
 
-SQL
-CREATE TABLE llx_elaska_partenariat_asso (
-    rowid INT PRIMARY KEY AUTO_INCREMENT,
-    fk_soc INT NOT NULL, -- Association cliente
+```php
+<?php
+class ElaskaObligationsManager
+{
+    private $db;
     
-    -- PARTENAIRE
-    fk_soc_partenaire INT, -- Si dans base de données
-    nom_partenaire VARCHAR(255),
-    type_partenaire ENUM(
-        'association', 'collectivite', 'entreprise', 
-        'etablissement_scolaire', 'institution', 'autre'
-    ),
+    public function __construct($db)
+    {
+        $this->db = $db;
+    }
     
-    -- NATURE DU PARTENARIAT
-    type_collaboration ENUM(
-        'projet_commun', 'mutualisation_moyens', 'echange_competences',
-        'co_financement', 'parrainage', 'residence', 'autre'
-    ),
-    description_partenariat TEXT,
+    /**
+     * Calcule le score de conformité d'une association
+     */
+    public function calculateConformityScore($association_id, $exercice = null)
+    {
+        if (!$exercice) {
+            $exercice = date('Y');
+        }
+        
+        $obligations = $this->getObligationsForAssociation($association_id, $exercice);
+        $total_obligations = count($obligations);
+        $obligations_conformes = 0;
+        
+        foreach ($obligations as $obligation) {
+            if ($this->isObligationConforme($obligation)) {
+                $obligations_conformes++;
+            }
+        }
+        
+        $score = $total_obligations > 0 ? ($obligations_conformes / $total_obligations) * 100 : 100;
+        
+        // Mise à jour en base
+        $this->updateConformityScore($association_id, $exercice, $score);
+        
+        return round($score, 2);
+    }
     
-    -- FORMALISATION
-    convention_signee BOOLEAN DEFAULT FALSE,
-    date_debut DATE,
-    date_fin DATE,
-    duree_mois INT,
-    
-    -- ENGAGEMENTS
-    engagements_association TEXT,
-    engagements_partenaire TEXT,
-    ressources_mutualisees JSON,
-    
-    -- SUIVI
-    bilan_partenariat TEXT,
-    satisfaction ENUM('1', '2', '3', '4', '5'),
-    renouvellement_souhaite BOOLEAN,
-    
-    -- TERRITOIRE
-    ancrage_local BOOLEAN DEFAULT TRUE,
-    impact_territorial TEXT,
-    
-    FOREIGN KEY (fk_soc) REFERENCES llx_societe(rowid)
-);
-🔧 WORKFLOWS & AUTOMATISATIONS ASSOCIATIONS
-1. Workflows Spécialisés Associatifs
-PHP
-class ElaskaWorkflowAssociation {
-    public function defineAssociationWorkflows() {
-        return [
-            'nouvelle_association_cliente' => [
-                'trigger' => 'creation_tiers_association',
-                'actions' => [
-                    'evaluer_maturite_projet',
-                    'identifier_besoins_prioritaires',
-                    'proposer_accompagnement_adapte',
-                    'planifier_formation_gouvernance'
-                ]
-            ],
+    /**
+     * Génère les alertes pour les échéances proches
+     */
+    public function generateUpcomingAlerts($association_id, $days_ahead = 30)
+    {
+        $sql = "SELECT * FROM " . MAIN_DB_PREFIX . "elaska_calendrier_obligations 
+                WHERE fk_soc = " . (int)$association_id . "
+                AND prochaine_echeance BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL " . (int)$days_ahead . " DAY)
+                AND statut_execution IN ('en_attente', 'en_cours')
+                ORDER BY prochaine_echeance ASC";
+        
+        $result = $this->db->query($sql);
+        $alerts = [];
+        
+        while ($obj = $this->db->fetch_object($result)) {
+            $days_until = (strtotime($obj->prochaine_echeance) - time()) / (60 * 60 * 24);
             
-            'echeance_ag_annuelle' => [
-                'trigger' => 'ag_dans_60_jours',
-                'actions' => [
-                    'rappeler_preparation_rapports',
-                    'verifier_convocations_statuts',
-                    'preparer_documents_ag',
-                    'proposer_formation_animation'
-                ]
-            ],
+            $urgency = 'low';
+            if ($days_until <= 7) $urgency = 'high';
+            elseif ($days_until <= 15) $urgency = 'medium';
             
-            'nouveau_dispositif_financement' => [
-                'trigger' => 'creation_dispositif_eligible',
-                'actions' => [
-                    'analyser_eligibilite_associations',
-                    'notifier_associations_cibles',
-                    'proposer_accompagnement_dossier'
-                ]
+            $alerts[] = [
+                'id' => $obj->rowid,
+                'type' => $obj->type_obligation,
+                'libelle' => $obj->libelle_obligation,
+                'echeance' => $obj->prochaine_echeance,
+                'days_until' => round($days_until),
+                'urgency' => $urgency,
+                'responsable' => $obj->responsable_execution
+            ];
+        }
+        
+        return $alerts;
+    }
+    
+    /**
+     * Planifie automatiquement les obligations selon le profil de l'association
+     */
+    public function setupObligationsCalendar($association_id)
+    {
+        $association = new Societe($this->db);
+        $association->fetch($association_id);
+        
+        // Obligations communes à toutes les associations
+        $common_obligations = [
+            [
+                'type' => 'ag_annuelle',
+                'libelle' => 'Assemblée Générale Annuelle',
+                'periodicite' => 'annuelle',
+                'mois_echeance' => 6, // Juin par défaut
+                'delai_alerte' => 60
             ],
-            
-            'fin_subvention' => [
-                'trigger' => 'echeance_subvention_dans_30_jours',
-                'actions' => [
-                    'rappeler_bilan_obligatoire',
-                    'preparer_renouvellement',
-                    'identifier_alternatives_financement'
-                ]
+            [
+                'type' => 'depot_comptes',
+                'libelle' => 'Dépôt des comptes en préfecture',
+                'periodicite' => 'annuelle',
+                'mois_echeance' => 12,
+                'delai_alerte' => 30
+            ],
+            [
+                'type' => 'declaration_dirigeants',
+                'libelle' => 'Déclaration de changement de dirigeants',
+                'periodicite' => 'ponctuelle',
+                'delai_alerte' => 0
+            ],
+            [
+                'type' => 'renouvellement_assurance',
+                'libelle' => 'Renouvellement assurance RC',
+                'periodicite' => 'annuelle',
+                'delai_alerte' => 30
             ]
         ];
+        
+        // Obligations spécifiques selon le secteur
+        $secteur = $this->getAssociationSector($association_id);
+        $specific_obligations = $this->getSectorSpecificObligations($secteur);
+        
+        // Obligations employeur si salariés
+        if ($this->hasSalaries($association_id)) {
+            $employer_obligations = $this->getEmployerObligations();
+            $common_obligations = array_merge($common_obligations, $employer_obligations);
+        }
+        
+        // Insertion en base
+        foreach (array_merge($common_obligations, $specific_obligations) as $obligation) {
+            $this->createObligationCalendar($association_id, $obligation);
+        }
+    }
+    
+    /**
+     * Génère un rapport de conformité détaillé
+     */
+    public function generateConformityReport($association_id, $exercice = null)
+    {
+        $report = [
+            'score_global' => $this->calculateConformityScore($association_id, $exercice),
+            'obligations_conformes' => [],
+            'obligations_non_conformes' => [],
+            'alertes_urgentes' => [],
+            'recommandations' => []
+        ];
+        
+        $obligations = $this->getDetailedObligations($association_id, $exercice);
+        
+        foreach ($obligations as $obligation) {
+            if ($this->isObligationConforme($obligation)) {
+                $report['obligations_conformes'][] = $obligation;
+            } else {
+                $report['obligations_non_conformes'][] = $obligation;
+                
+                // Génération de recommandations
+                $recommendation = $this->generateRecommendation($obligation);
+                if ($recommendation) {
+                    $report['recommandations'][] = $recommendation;
+                }
+            }
+        }
+        
+        $report['alertes_urgentes'] = $this->generateUpcomingAlerts($association_id, 15);
+        
+        return $report;
+    }
+    
+    /**
+     * Automatise les rappels selon les préférences de l'association
+     */
+    public function processAutomaticReminders()
+    {
+        $sql = "SELECT co.*, s.nom as association_name, s.email 
+                FROM " . MAIN_DB_PREFIX . "elaska_calendrier_obligations co
+                JOIN " . MAIN_DB_PREFIX . "societe s ON co.fk_soc = s.rowid
+                WHERE co.prochaine_echeance BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL co.delai_alerte_jours DAY)
+                AND co.rappel_active = 1
+                AND co.statut_execution = 'en_attente'";
+        
+        $result = $this->db->query($sql);
+        
+        while ($obj = $this->db->fetch_object($result)) {
+            $this->sendObligationReminder($obj);
+        }
+    }
+    
+    private function sendObligationReminder($obligation)
+    {
+        // Logique d'envoi de rappel (email, notification, etc.)
+        $email_template = $this->getEmailTemplate('obligation_reminder');
+        $email_content = $this->populateEmailTemplate($email_template, $obligation);
+        
+        // Envoi de l'email
+        $this->sendEmail($obligation->email, $email_content);
+        
+        // Log du rappel envoyé
+        $this->logReminderSent($obligation->rowid);
     }
 }
-2. Templates Emails Associatifs
+```
+3.6bis Module Accompagnement Spécifique des Créateurs d'Entreprises (Version Complète)
+3.6bis.1 Architecture Fonctionnelle pour Créateurs
+Structure des données enrichie :
+
+PHP
+class ElaskaCreateur extends ElaskaClient {
+    // Phase pré-création
+    public $phase_projet;           // idea/validation/business_plan/financement/creation/lancement
+    public $idee_initiale;          // Description du concept
+    public $proposition_valeur;     // Proposition de valeur unique
+    public $etude_marche_statut;    // non_faite/en_cours/terminee/validee
+    public $business_plan_statut;   // brouillon/redaction/finalise/valide_expert
+    
+    // Choix structurels
+    public $forme_juridique_visee;  // EI/micro/EURL/SASU/SARL/SAS
+    public $regime_fiscal_prevu;    // IR/IS/micro_social/reel
+    public $secteur_activite_naf;   // Code NAF détaillé
+    
+    // Aides et financements
+    public $aides_eligibles;        // JSON: ACRE/ARCE/prêts_honneur/subventions
+    public $dossiers_aides;         // Array des dossiers d'aides déposés
+    
+    // Formalités création
+    public $dossier_immatriculation_statut; // preparation/depot/en_cours/finalisee
+    public $numero_siret;           // Après immatriculation
+    public $date_debut_activite;
+    
+    // Organisation administrative
+    public $outil_facturation_choisi;
+    public $expert_comptable_choisi; // Lien vers Tiers partenaire
+    public $assureur_choisi;        // Lien vers Tiers partenaire
+}
+3.6bis.2 Timeline Spécialisée Création (Basée sur votre description)
+Phase 1 : Pré-Création - Structuration du Projet
+
+jsx
+const PhasePreCreation = ({ createurId }) => {
+  const etapes = [
+    {
+      id: 'clarification_idee',
+      libelle: 'De l\'idée au projet',
+      description: 'Clarification, validation idée, étude marché préliminaire',
+      documents_requis: ['fiche_concept', 'etude_marche_preliminaire'],
+      duree_estimee: '2-4 semaines',
+      outils_aide: ['template_business_model_canvas', 'guide_etude_marche']
+    },
+    {
+      id: 'business_plan',
+      libelle: 'Business Plan',
+      description: 'Structuration, co-rédaction, collecte infos prévisionnels',
+      documents_requis: ['business_plan_complet', 'previsionnels_financiers'],
+      duree_estimee: '4-6 semaines',
+      note_importante: 'Validation finale par expert-comptable obligatoire'
+    },
+    {
+      id: 'choix_statut',
+      libelle: 'Choix Statut Juridique',
+      description: 'Information options (EI/micro/EURL/SASU/SARL/SAS)',
+      documents_requis: ['comparatif_statuts', 'simulation_charges'],
+      duree_estimee: '1-2 semaines',
+      avertissement: 'Information uniquement - consultation juriste recommandée'
+    },
+    {
+      id: 'recherche_aides',
+      libelle: 'Aides à la Création',
+      description: 'ACRE, ARCE, prêts honneur, subventions Occitanie',
+      documents_requis: ['dossiers_aides', 'justificatifs_eligibilite'],
+      duree_estimee: '2-3 semaines',
+      partenaires_locaux: ['Initiative_Pyrenees', 'CCI_Tarbes', 'Region_Occitanie']
+    }
+  ];
+  
+  return <TimelinePhase etapes={etapes} phase="pre_creation" />;
+};
+Phase 2 : Création et Formalités
+
+jsx
+const PhaseCreation = ({ createurId }) => {
+  const etapes = [
+    {
+      id: 'dossier_immatriculation',
+      libelle: 'Constitution Dossier Immatriculation',
+      description: 'Formulaires P0/M0, pièces justificatives',
+      documents_requis: ['formulaire_P0_M0', 'pieces_justificatives'],
+      duree_estimee: '1-2 semaines',
+      plateforme: 'Guichet Unique INPI'
+    },
+    {
+      id: 'redaction_statuts',
+      libelle: 'Rédaction Statuts',
+      description: 'Statuts simplifiés ou validation juriste si complexe',
+      documents_requis: ['statuts_societe'],
+      duree_estimee: '1 semaine',
+      condition: 'Société uniquement',
+      avertissement: 'Juriste obligatoire pour cas complexes'
+    },
+    {
+      id: 'formalites_guichet_unique',
+      libelle: 'Démarches Guichet Unique',
+      description: 'Accompagnement plateforme INPI, organismes compétents',
+      documents_requis: ['dossier_complet_numerise'],
+      duree_estimee: '1 semaine',
+      delai_traitement: '2-15 jours selon statut'
+    },
+    {
+      id: 'formalites_bancaires_assurance',
+      libelle: 'Compte Pro & Assurances',
+      description: 'Ouverture compte pro, assurances obligatoires',
+      documents_requis: ['convention_compte_pro', 'contrats_assurance'],
+      duree_estimee: '1-2 semaines',
+      partenaires: ['banques_partenaires', 'courtiers_assurance']
+    }
+  ];
+  
+  return <TimelinePhase etapes={etapes} phase="creation_formalites" />;
+};
+Phase 3 : Lancement et Premiers Pas
+
+jsx
+const PhaseLancement = ({ createurId }) => {
+  const etapes = [
+    {
+      id: 'organisation_administrative',
+      libelle: 'Organisation Administrative',
+      description: 'Classement, outil facturation, échéancier fiscal/social',
+      documents_requis: ['procedure_classement', 'parametrage_facturation'],
+      duree_estimee: '1 semaine',
+      outils_recommandes: ['logiciel_facturation', 'planning_obligations']
+    },
+    {
+      id: 'premieres_obligations',
+      libelle: 'Premières Obligations',
+      description: 'Déclarations CA (micro), TVA, cotisations sociales',
+      documents_requis: ['calendrier_declarations', 'procedures_declarer'],
+      duree_estimee: 'Récurrent',
+      formation: 'Formation pratique aux déclarations'
+    },
+    {
+      id: 'mise_en_relation_experts',
+      libelle: 'Réseau Partenaires',
+      description: 'Experts-comptables, avocats, assureurs Tarbes/Occitanie',
+      documents_requis: ['annuaire_partenaires', 'recommandations'],
+      duree_estimee: '1 semaine',
+      objectif: 'Constitution équipe conseil'
+    }
+  ];
+  
+  return <TimelinePhase etapes={etapes} phase="lancement" />;
+};
+3.6bis.3 Module Aides Spécifiques Occitanie/Tarbes
+Base de données aides locales :
+
 SQL
-INSERT INTO llx_elaska_email_template_association VALUES
-('convocation_ag', 'Convocation AG [DATE] - [ASSOCIATION]', 'HTML avec ordre du jour...'),
-('rappel_cotisation', 'Rappel cotisation [ANNEE] - [ASSOCIATION]', 'HTML personnalisé...'),
-('opportunite_financement', 'Nouvelle opportunité : [DISPOSITIF]', 'Présentation dispositif...'),
-('bilan_annuel', 'Votre bilan annuel - [ASSOCIATION]', 'Synthèse activités et finances...');
-3. KPIs Spécifiques Associations
-SQL
-CREATE VIEW v_elaska_kpi_associations AS
-SELECT 
-    COUNT(*) as nb_associations_clientes,
-    AVG(CASE WHEN statut_creation = 'creee' THEN 1 ELSE 0 END) as taux_creation_reussie,
-    SUM(subventions_obtenues.montant_total) as subventions_totales_obtenues,
-    AVG(satisfaction_accompagnement.note) as satisfaction_moyenne,
-    COUNT(CASE WHEN instances.ag_a_jour = 1 THEN 1 END) as associations_conformes_ag
-FROM llx_societe s
-JOIN llx_elaska_projet_associatif p ON s.rowid = p.fk_soc
-LEFT JOIN subventions_obtenues ON s.rowid = subventions_obtenues.fk_soc
-LEFT JOIN satisfaction_accompagnement ON s.rowid = satisfaction_accompagnement.fk_soc
-LEFT JOIN instances ON s.rowid = instances.fk_soc
-WHERE s.type_client = 'association';
+-- Table aides spécifiques région
+CREATE TABLE llx_elaska_aide_locale (
+    rowid INT PRIMARY KEY AUTO_INCREMENT,
+    code_aide VARCHAR(50) UNIQUE,
+    nom_aide VARCHAR(255),
+    organisme_financeur VARCHAR(255),
+    type_aide ENUM('subvention','pret_honneur','exoneration','accompagnement'),
+    zone_geographique ENUM('nationale','occitanie','hautes_pyrenees','tarbes','communaute_agglo'),
+    secteurs_eligibles JSON, -- Codes NAF éligibles
+    conditions_eligibilite TEXT,
+    montant_min DECIMAL(10,2),
+    montant_max DECIMAL(10,2),
+    url_information VARCHAR(500),
+    contact_referent VARCHAR(255),
+    periode_depot_debut DATE,
+    periode_depot_fin DATE,
+    actif BOOLEAN DEFAULT TRUE
+);
+
+-- Données initiales Occitanie/Tarbes
+INSERT INTO llx_elaska_aide_locale VALUES
+(1, 'ACRE', 'Aide à la Création/Reprise Entreprise', 'URSSAF', 'exoneration', 'nationale', '[]', 'Demandeur emploi, bénéficiaire minima sociaux...', 0, 0, 'https://www.urssaf.fr/acre', '', NULL, NULL, 1),
+(2, 'INITIATIVE_PYRENEES', 'Prêt d\'honneur Initiative Pyrénées', 'Initiative Pyrénées', 'pret_honneur', 'hautes_pyrenees', '[]', 'Création/reprise entreprise Hautes-Pyrénées', 1000, 50000, 'https://initiative-pyrenees.fr', 'contact@initiative-pyrenees.fr', NULL, NULL, 1),
+(3, 'AIDE_CREATION_OCCITANIE', 'Aide Création Entreprise Région Occitanie', 'Région Occitanie', 'subvention', 'occitanie', '[]', 'Premier emploi créé, innovation', 2000, 8000, 'https://www.laregion.fr/aide-creation', '', NULL, NULL, 1),
+(4, 'CCI_TARBES_ACCOMPAGNEMENT', 'Accompagnement CCI Tarbes', 'CCI Tarbes et Hautes-Pyrénées', 'accompagnement', 'hautes_pyrenees', '[]', 'Entreprises Hautes-Pyrénées', 0, 0, 'https://www.tarbes.cci.fr', 'creation@tarbes.cci.fr', NULL, NULL, 1);
+3.6bis.4 Portail Créateur Enrichi
+Dashboard spécialisé :
+
+jsx
+const DashboardCreateur = () => {
+  const { parcours, aides, echeances } = useCreateurData();
+  
+  return (
+    <div className="dashboard-createur">
+      <WidgetProgression 
+        phaseActuelle={parcours.phase_actuelle}
+        progression={parcours.pourcentage_avancement}
+        prochaine_etape={parcours.prochaine_etape}
+      />
+      
+      <WidgetAides 
+        aides_eligibles={aides.eligibles}
+        dossiers_en_cours={aides.en_cours}
+        aides_obtenues={aides.obtenues}
+      />
+      
+      <WidgetEcheances 
+        obligations_fiscales={echeances.fiscales}
+        obligations_sociales={echeances.sociales}
+        rdv_conseillers={echeances.rdv}
+      />
+      
+      <WidgetDocuments 
+        documents_a_fournir={parcours.documents_manquants}
+        templates_disponibles={parcours.templates}
+      />
+    </div>
+  );
+};
+3.6bis.5 Intégration avec Partenaires Locaux
+Annuaire dynamique Tarbes/Occitanie :
+
+PHP
+// Gestion partenaires spécialisés création
+class ElaskaPartenaireCreation extends CommonObject {
+    public $nom_partenaire;
+    public $type_partenaire; // expert_comptable/avocat/assureur/accompagnement
+    public $specialites;     // JSON: secteurs, types de création
+    public $zone_intervention; // tarbes/hautes_pyrenees/occitanie
+    public $tarifs_moyens;   // Informations tarifaires si disponibles
+    public $evaluations_clients; // Notes et commentaires clients
+    public $contact_direct;  // Email/téléphone contact privilégié
+}
+Exemples partenaires Tarbes :
+
+Initiative Pyrénées (prêts d'honneur)
+CCI Tarbes et Hautes-Pyrénées (accompagnement)
+CMA des Hautes-Pyrénées (artisans)
+Crescendo Tarbes (pépinière d'entreprises)
+Experts-comptables spécialisés création
+Avocats droit des affaires région Occitanie
+3.6bis.6 Workflows Automatisés Création
+Règles métier spécialisées :
+
+PHP
+$creation_workflows = [
+    // Passage phase business plan -> validation expert obligatoire
+    [
+        'trigger' => 'business_plan_finalise',
+        'actions' => [
+            'create_task' => 'Planifier RDV validation expert-comptable',
+            'send_notification' => 'Business plan prêt - validation expert requise',
+            'block_next_phase' => true // Bloque jusqu'à validation
+        ]
+    ],
+    
+    // Eligibilité aide détectée -> proposition automatique
+    [
+        'trigger' => 'profil_createur_updated',
+        'conditions' => ['demandeur_emploi' => true, 'zone' => 'hautes_pyrenees'],
+        'actions' => [
+            'suggest_aide' => ['ACRE', 'INITIATIVE_PYRENEES'],
+            'create_task' => 'Préparer dossiers aides éligibles'
+        ]
+    ],
+    
+    // Immatriculation finalisée -> setup administratif
+    [
+        'trigger' => 'siret_obtenu',
+        'actions' => [
+            'activate_phase' => 'lancement',
+            'create_tasks' => [
+                'Ouvrir compte bancaire professionnel',
+                'Souscrire assurances obligatoires',
+                'Paramétrer outil facturation'
+            ],
+            'schedule_formation' => 'Gestion administrative premiers pas'
+        ]
+    ]
+];
