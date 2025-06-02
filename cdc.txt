@@ -1,5 +1,5 @@
 # Cahier des Charges Fonctionnel - Module eSaiko (Version Finale et Ultra-Détaillée)
-Date de finalisation : 2 juin 2025 Référence : CdC-eLaska-VF-UltraDetaillé-20250602 
+Date de finalisation : 2 juin 2025 Référence : CdC-eSaiko-VF-UltraDetaillé-20250602 
 
 ## Table des Matières
 * INTRODUCTION 
@@ -14,8 +14,8 @@ Date de finalisation : 2 juin 2025 Référence : CdC-eLaska-VF-UltraDetaillé-20
     * 2.2. Responsive design et Icônes (Exigences détaillées) 
     * 2.3. Sécurité (Mesures et stratégies détaillées) 
 * 3 Structure et fonctionnalité des modules (Chaque module et sous-module détaillé) 
-    * 3.1. Menu principal eLaska (Backoffice) 
-    * 3.2. Tableaux de bord eLaska (Backoffice) 
+    * 3.1. Menu principal eSaiko (Backoffice) 
+    * 3.2. Tableaux de bord eSaiko (Backoffice) 
     * 3.3. Module Cœur : Gestion des Tiers (Backoffice) 
     * 3.4. Module Gestion Centralisée des Dossiers Généraux (Backoffice) 
     * 3.5. Module Portail Web Client & Communication (SPA React) 
@@ -525,7 +525,7 @@ Cette section est tournée vers l'avenir de l'association et la valorisation de 
 # 1 Vue d'ensemble du module 
 
 ## 1.1. Objectif du module 
-Le module eLaska est conçu pour être une solution de gestion intégrale et d'optimisation des services d'accompagnement proposés par le cabinet. Il s'adresse à une clientèle variée, comprenant les particuliers, les associations, les créateurs d'entreprises, ainsi que les entreprises établies (TPE/PME, artisans, professions libérales). L'ambition principale est de centraliser l'ensemble des informations clients et dossiers au sein d'une plateforme unique, de simplifier et rationaliser les démarches administratives et de gestion tant pour les conseillers que pour les clients, d'améliorer significativement la communication et la collaboration, et d'offrir un suivi personnalisé, proactif et à forte valeur ajoutée. Pour atteindre ces objectifs, le module permettra un suivi méticuleux des dossiers clients grâce à des timelines de projet hautement dynamiques et entièrement personnalisables. Ces timelines visualiseront les étapes progressives de chaque mission, avec la possibilité de les modifier au cas par cas (par instance de dossier). Les étapes en attente ou non commencées seront clairement identifiables (par exemple, grisées ou avec une icône spécifique), tandis que des badges de statut modernes, colorés et visuels indiqueront de manière explicite l'état d'avancement de chaque étape (ex: "À faire", "En cours", "Validé", "Bloqué"). La gestion des tâches sera intégrée, permettant d'assigner, de suivre et de prioriser les actions. Le stockage documentaire sera sécurisé et polyvalent, avec une gestion native de pièces jointes plurielles (multiples fichiers de formats variés avec métadonnées associées) pour chaque entité (dossier, tâche, client, etc.), une option d'intégration avec Google Drive pour plus de flexibilité, et un Coffre-Fort Numérique Avancé spécifiquement pour les particuliers, garantissant une confidentialité et une sécurité accrues pour leurs documents les plus sensibles. La gestion des communications sera optimisée grâce à des templates d'emails HTML personnalisables (permettant d'insérer dynamiquement des informations clients ou dossiers), des sujets d'email dynamiques pour une meilleure organisation, et un suivi centralisé des échanges avec les clients ainsi qu'avec les intervenants externes (banques, administrations, etc.). Une vision client à 360° sera offerte aux conseillers via la fiche tiers enrichie, et aux clients eux-mêmes via un portail web client développé en Single Page Application (SPA), garantissant une expérience utilisateur fluide, réactive et moderne. Les bénéfices attendus incluent une optimisation significative du temps de traitement des dossiers, une amélioration tangible de la qualité du suivi client, une traçabilité complète des échanges et des actions, et une meilleure efficacité opérationnelle. Le module intégrera des fonctionnalités avancées telles que le recouvrement (pour le cabinet et en délégation pour les clients TPE/PME), la numérotation automatique et personnalisable des objets métier (dossiers, contrats, factures, etc.) avec utilisation de variables dynamiques (ex: année, type de client, initiales conseiller), et une personnalisation totale de l'interface et des fonctionnalités (icônes Font Awesome ou similaires, tags et catégories personnalisables, champs additionnels, vues de listes configurables, menus et tableaux de bord adaptables par rôle utilisateur). Des outils spécialisés seront inclus pour le conseil en gestion de patrimoine, la gestion des contrats d'assurances et d'abonnements (particuliers et professionnels), le montage et le suivi de dossiers de crédit, ainsi que la gestion des sinistres. La prise de rendez-vous en ligne sera facilitée, avec synchronisation bidirectionnelle avec Google Agenda et stockage de la référence de l'événement Google Calendar. Un accompagnement spécifique sera proposé pour chaque typologie de client : basé sur les objectifs de vie pour les particuliers, une aide structurée et un suivi du parcours pour les créateurs d'entreprises, un soutien adapté aux spécificités de gouvernance et de financement pour les associations, et des services d'externalisation administrative et de conseil pour les professionnels. Le module intégrera un système de notifications modernes et multicanales (push web, email, notifications sur tableau de bord) avec des indicateurs de suivi de progression pour tenir informés les utilisateurs des avancées et des actions requises. Enfin, un suivi détaillé des consommations (frais, fournitures spécifiques au dossier) et des heures de travail (avec une granularité fine par dossier, prestation, tâche et même par étape de timeline) sera possible, permettant une analyse de rentabilité et une facturation précise. Des outils de veille sur les dispositifs d'aide locaux/régionaux (spécifiquement pour la zone Occitanie/Tarbes) et un annuaire de partenaires viendront compléter l'offre de services. L'ensemble de ces fonctionnalités sera présenté au travers d'un design et d'une interface utilisateur (UI) très modernes, épurés et intuitifs, s'inspirant des meilleures pratiques et des exemples visuels fournis, afin d'assurer une adoption aisée et une utilisation agréable au quotidien. 
+Le module eSaiko est conçu pour être une solution de gestion intégrale et d'optimisation des services d'accompagnement proposés par le cabinet. Il s'adresse à une clientèle variée, comprenant les particuliers, les associations, les créateurs d'entreprises, ainsi que les entreprises établies (TPE/PME, artisans, professions libérales). L'ambition principale est de centraliser l'ensemble des informations clients et dossiers au sein d'une plateforme unique, de simplifier et rationaliser les démarches administratives et de gestion tant pour les conseillers que pour les clients, d'améliorer significativement la communication et la collaboration, et d'offrir un suivi personnalisé, proactif et à forte valeur ajoutée. Pour atteindre ces objectifs, le module permettra un suivi méticuleux des dossiers clients grâce à des timelines de projet hautement dynamiques et entièrement personnalisables. Ces timelines visualiseront les étapes progressives de chaque mission, avec la possibilité de les modifier au cas par cas (par instance de dossier). Les étapes en attente ou non commencées seront clairement identifiables (par exemple, grisées ou avec une icône spécifique), tandis que des badges de statut modernes, colorés et visuels indiqueront de manière explicite l'état d'avancement de chaque étape (ex: "À faire", "En cours", "Validé", "Bloqué"). La gestion des tâches sera intégrée, permettant d'assigner, de suivre et de prioriser les actions. Le stockage documentaire sera sécurisé et polyvalent, avec une gestion native de pièces jointes plurielles (multiples fichiers de formats variés avec métadonnées associées) pour chaque entité (dossier, tâche, client, etc.), une option d'intégration avec Google Drive pour plus de flexibilité, et un Coffre-Fort Numérique Avancé spécifiquement pour les particuliers, garantissant une confidentialité et une sécurité accrues pour leurs documents les plus sensibles. La gestion des communications sera optimisée grâce à des templates d'emails HTML personnalisables (permettant d'insérer dynamiquement des informations clients ou dossiers), des sujets d'email dynamiques pour une meilleure organisation, et un suivi centralisé des échanges avec les clients ainsi qu'avec les intervenants externes (banques, administrations, etc.). Une vision client à 360° sera offerte aux conseillers via la fiche tiers enrichie, et aux clients eux-mêmes via un portail web client développé en Single Page Application (SPA), garantissant une expérience utilisateur fluide, réactive et moderne. Les bénéfices attendus incluent une optimisation significative du temps de traitement des dossiers, une amélioration tangible de la qualité du suivi client, une traçabilité complète des échanges et des actions, et une meilleure efficacité opérationnelle. Le module intégrera des fonctionnalités avancées telles que le recouvrement (pour le cabinet et en délégation pour les clients TPE/PME), la numérotation automatique et personnalisable des objets métier (dossiers, contrats, factures, etc.) avec utilisation de variables dynamiques (ex: année, type de client, initiales conseiller), et une personnalisation totale de l'interface et des fonctionnalités (icônes Font Awesome ou similaires, tags et catégories personnalisables, champs additionnels, vues de listes configurables, menus et tableaux de bord adaptables par rôle utilisateur). Des outils spécialisés seront inclus pour le conseil en gestion de patrimoine, la gestion des contrats d'assurances et d'abonnements (particuliers et professionnels), le montage et le suivi de dossiers de crédit, ainsi que la gestion des sinistres. La prise de rendez-vous en ligne sera facilitée, avec synchronisation bidirectionnelle avec Google Agenda et stockage de la référence de l'événement Google Calendar. Un accompagnement spécifique sera proposé pour chaque typologie de client : basé sur les objectifs de vie pour les particuliers, une aide structurée et un suivi du parcours pour les créateurs d'entreprises, un soutien adapté aux spécificités de gouvernance et de financement pour les associations, et des services d'externalisation administrative et de conseil pour les professionnels. Le module intégrera un système de notifications modernes et multicanales (push web, email, notifications sur tableau de bord) avec des indicateurs de suivi de progression pour tenir informés les utilisateurs des avancées et des actions requises. Enfin, un suivi détaillé des consommations (frais, fournitures spécifiques au dossier) et des heures de travail (avec une granularité fine par dossier, prestation, tâche et même par étape de timeline) sera possible, permettant une analyse de rentabilité et une facturation précise. Des outils de veille sur les dispositifs d'aide locaux/régionaux (spécifiquement pour la zone Occitanie/Tarbes) et un annuaire de partenaires viendront compléter l'offre de services. L'ensemble de ces fonctionnalités sera présenté au travers d'un design et d'une interface utilisateur (UI) très modernes, épurés et intuitifs, s'inspirant des meilleures pratiques et des exemples visuels fournis, afin d'assurer une adoption aisée et une utilisation agréable au quotidien. 
 
 ## 1.2. Modules principaux (Description détaillée) 
 * **Cœur : Gestion des Tiers :** Ce module fondamental est la pierre angulaire du système. Il permet une gestion complète et détaillée de tous les contacts et entités interagissant avec le cabinet. 
@@ -538,11 +538,11 @@ Le module eLaska est conçu pour être une solution de gestion intégrale et d'o
         * Organismes : Administrations, institutions publiques ou privées (ex: CAF, Pôle Emploi, URSSAF, organismes de formation). 
         * Partenaires : Entreprises ou professionnels avec lesquels le cabinet a des accords de partenariat structurés. 
         * Apporteurs d'Affaires : Individus ou entités qui recommandent les services du cabinet. 
-    * Fiche Tiers Enrichie : Chaque tiers dispose d'une fiche détaillée, synchronisée avec le module Tiers natif de Dolibarr, mais enrichie par eLaska pour offrir une vue à 360° (voir section 3.3). 
+    * Fiche Tiers Enrichie : Chaque tiers dispose d'une fiche détaillée, synchronisée avec le module Tiers natif de Dolibarr, mais enrichie par eSaiko pour offrir une vue à 360° (voir section 3.3). 
     * Gestion des Contacts et Adresses Multiples. 
     * Historique des Interactions Transversales. 
 * **Gestion Centralisée des Dossiers Généraux :** Ce module est le moteur du suivi opérationnel. Il permet de créer, gérer et suivre tous les types de dossiers d'accompagnement. 
-    * Références eLaska Personnalisables : Système de numérotation unique et configurable pour chaque dossier. 
+    * Références eSaiko Personnalisables : Système de numérotation unique et configurable pour chaque dossier. 
     * Modèles de Timelines par Type de Dossier : L'administrateur pourra configurer des modèles de timelines prédéfinis pour chaque grand type de service ou de dossier (ex: modèle "Accompagnement Particulier - Déclaration de revenus", "Suivi Association - Demande de subvention", "Création d'Entreprise - Parcours complet", "Prestation TPE/PME - Audit administratif", "Recouvrement - Phase amiable", "Dossier de Crédit Immobilier"). 
     * Ces modèles incluront des étapes types, des durées estimées, et des documents requis. 
     * Logique des Timelines Dynamiques : Gestion de l'affichage des étapes, de leur progression, des dépendances. 
@@ -595,52 +595,52 @@ Le module eLaska est conçu pour être une solution de gestion intégrale et d'o
 * **Recouvrements (transversal) :** Gestion des processus de recouvrement des factures impayées (ce que notre client doit à des tiers et ce que des tiers lui doivent) délégué pour le compte des clients TPE/PME, avec suivi des actions, des communications et des encaissements. 
 * **Pilotage Interne & Rapports Avancés :** Outils de reporting pour la direction du cabinet, incluant des analyses sur la performance des services, la charge de travail, la rentabilité par type de mission ou client. 
 * **Gestion des Partenariats & Apporteurs d'Affaires :** Suivi des relations avec les partenaires et les apporteurs d'affaires, gestion des commissions éventuelles. Avec Annuaire Dynamique des Partenaires Locaux/Régionaux (focus Tarbes/Occitanie). 
-* **Paramètres et Personnalisation Approfondie du module eLaska :** Interface d'administration pour configurer le module, incluant la gestion des workflows automatisés (ex: création automatique de tâches à une certaine étape d'une timeline) et la gestion des consentements RGPD (types de consentement, traçabilité). 
+* **Paramètres et Personnalisation Approfondie du module eSaiko :** Interface d'administration pour configurer le module, incluant la gestion des workflows automatisés (ex: création automatique de tâches à une certaine étape d'une timeline) et la gestion des consentements RGPD (types de consentement, traçabilité). 
 
 ## 1.3. Intégration avec les modules natifs Dolibarr (Interactions détaillées) 
-L'objectif est une fusion totale et une synergie avec les données existantes et les fonctionnalités de Dolibarr. Le module eLaska s'intégrera de manière transparente et complète avec les modules natifs suivants, en les enrichissant : 
+L'objectif est une fusion totale et une synergie avec les données existantes et les fonctionnalités de Dolibarr. Le module eSaiko s'intégrera de manière transparente et complète avec les modules natifs suivants, en les enrichissant : 
 * **Tiers (Clients, Prospects, Partenaires, Fournisseurs) :** 
-    * Utilisation du module "Tiers" de Dolibarr comme base de données centrale pour les entités. eLaska ne dupliquera pas les fiches tiers mais les étendra. 
-    * Synchronisation Bidirectionnelle : Les informations de base (nom, adresse, SIRET, etc.) saisies ou modifiées dans Dolibarr seront reflétées dans eLaska et vice-versa (pour les champs communs). 
-    * Enrichissement des Fiches Tiers : eLaska ajoutera des onglets, des champs spécifiques et des vues dédiées à la fiche tiers Dolibarr pour afficher les informations propres à l'accompagnement eLaska (typologies eLaska, dossiers liés, communications spécifiques, etc.). La fiche Tiers eLaska (accessible depuis la fiche Dolibarr) deviendra le point central pour visualiser l'ensemble de l'accompagnement. 
-    * Gestion des Typologies eLaska : Ajout d'un champ "Type de Tiers eLaska" (Particulier, Association, etc.) pour conditionner l'affichage et les fonctionnalités. 
+    * Utilisation du module "Tiers" de Dolibarr comme base de données centrale pour les entités. eSaiko ne dupliquera pas les fiches tiers mais les étendra. 
+    * Synchronisation Bidirectionnelle : Les informations de base (nom, adresse, SIRET, etc.) saisies ou modifiées dans Dolibarr seront reflétées dans eSaiko et vice-versa (pour les champs communs). 
+    * Enrichissement des Fiches Tiers : eSaiko ajoutera des onglets, des champs spécifiques et des vues dédiées à la fiche tiers Dolibarr pour afficher les informations propres à l'accompagnement eSaiko (typologies eSaiko, dossiers liés, communications spécifiques, etc.). La fiche Tiers eSaiko (accessible depuis la fiche Dolibarr) deviendra le point central pour visualiser l'ensemble de l'accompagnement. 
+    * Gestion des Typologies eSaiko : Ajout d'un champ "Type de Tiers eSaiko" (Particulier, Association, etc.) pour conditionner l'affichage et les fonctionnalités. 
     * Gestion des Mandats : Possibilité de lier des mandats de gestion ou de représentation (stockés comme documents ou via un sous-module Contrats) aux fiches tiers. 
 * **Facturation (Propositions commerciales, Commandes, Factures, Paiements) :** 
-    * Génération depuis Prestations eLaska : Les services et prestations définis et suivis dans eLaska (incluant les temps passés facturables et les consommations/frais refacturables avec granularité fine) pourront générer automatiquement des propositions commerciales, des commandes clients, puis des factures dans le module Facturation de Dolibarr. 
-    * Lien Temps Passé/Facturation : Les heures saisies dans eLaska sur des dossiers/tâches facturables pourront être regroupées et transférées pour créer des lignes de facture. 
-    * Suivi des Statuts de Facturation : Visualisation depuis eLaska du statut des factures Dolibarr liées à des prestations eLaska (brouillon, validée, payée, impayée). 
+    * Génération depuis Prestations eSaiko : Les services et prestations définis et suivis dans eSaiko (incluant les temps passés facturables et les consommations/frais refacturables avec granularité fine) pourront générer automatiquement des propositions commerciales, des commandes clients, puis des factures dans le module Facturation de Dolibarr. 
+    * Lien Temps Passé/Facturation : Les heures saisies dans eSaiko sur des dossiers/tâches facturables pourront être regroupées et transférées pour créer des lignes de facture. 
+    * Suivi des Statuts de Facturation : Visualisation depuis eSaiko du statut des factures Dolibarr liées à des prestations eSaiko (brouillon, validée, payée, impayée). 
     * Gestion des Paiements : Utilisation du module Factures et Banque de Dolibarr pour le suivi des règlements. 
 * **Projets et Tâches / Feuilles de temps :** 
-    * Création Automatique ou Manuelle : Les dossiers eLaska pourront, si pertinent, créer automatiquement un projet Dolibarr lié. De même, les tâches eLaska pourront être synchronisées avec les tâches du module Projet de Dolibarr. 
-    * Assignation et Suivi de Statut : Synchronisation des affectations de responsables et des statuts entre eLaska et Dolibarr pour les tâches/projets liés. 
-    * Checklists : Les checklists des tâches eLaska pourront être visibles ou gérées via l'interface Projet de Dolibarr. 
-    * Lien avec "Feuilles de temps" (Timesheet) : Les heures saisies dans eLaska (par dossier, prestation, tâche, étape de timeline) seront enregistrées ou synchronisées avec le module "Feuilles de temps" de Dolibarr, permettant une consolidation des temps passés au niveau du cabinet. 
+    * Création Automatique ou Manuelle : Les dossiers eSaiko pourront, si pertinent, créer automatiquement un projet Dolibarr lié. De même, les tâches eSaiko pourront être synchronisées avec les tâches du module Projet de Dolibarr. 
+    * Assignation et Suivi de Statut : Synchronisation des affectations de responsables et des statuts entre eSaiko et Dolibarr pour les tâches/projets liés. 
+    * Checklists : Les checklists des tâches eSaiko pourront être visibles ou gérées via l'interface Projet de Dolibarr. 
+    * Lien avec "Feuilles de temps" (Timesheet) : Les heures saisies dans eSaiko (par dossier, prestation, tâche, étape de timeline) seront enregistrées ou synchronisées avec le module "Feuilles de temps" de Dolibarr, permettant une consolidation des temps passés au niveau du cabinet. 
 * **Gestion Documentaire (GED) :** 
-    * Utilisation du module GED de Dolibarr comme système de stockage de base. eLaska s'appuiera sur l'infrastructure de la GED Dolibarr pour le stockage physique des fichiers. 
-    * Enrichissement par eLaska : eLaska apportera une surcouche pour une gestion de pièces jointes plurielles plus intuitive, permettant d'attacher facilement de multiples fichiers (de divers formats, avec prévisualisation si possible) directement aux dossiers eLaska, missions, contrats, tâches, étapes de timeline, ou toute autre entité pertinente du module. 
-    * Métadonnées Étendues : Ajout de métadonnées spécifiques eLaska aux documents (ex: type de pièce justificative, date de validité, statut de vérification). 
+    * Utilisation du module GED de Dolibarr comme système de stockage de base. eSaiko s'appuiera sur l'infrastructure de la GED Dolibarr pour le stockage physique des fichiers. 
+    * Enrichissement par eSaiko : eSaiko apportera une surcouche pour une gestion de pièces jointes plurielles plus intuitive, permettant d'attacher facilement de multiples fichiers (de divers formats, avec prévisualisation si possible) directement aux dossiers eSaiko, missions, contrats, tâches, étapes de timeline, ou toute autre entité pertinente du module. 
+    * Métadonnées Étendues : Ajout de métadonnées spécifiques eSaiko aux documents (ex: type de pièce justificative, date de validité, statut de vérification). 
     * Distinction et Sécurisation pour le Coffre-Fort Numérique Avancé : Les documents destinés au Coffre-Fort Numérique des particuliers bénéficieront d'un niveau de sécurité et de confidentialité accru, potentiellement via un répertoire distinct ou des droits d'accès spécifiques au sein de la GED. 
 * **Messagerie et Communication (Notes/Tickets/Email) :** 
-    * Utilisation de "Notes" (privées/publiques) ou "Tickets" : Le fil de discussion par dossier eLaska pourra s'appuyer sur le système de Notes de Dolibarr (pour les commentaires internes ou partagés avec le client sur le portail) ou sur le module Tickets pour un suivi plus formel de certaines demandes. 
-    * Notifications Internes : Les notifications eLaska pourront utiliser le système de notification natif de Dolibarr pour les utilisateurs internes, en complément des notifications push/email. 
-    * Intégration IMAP pour Emails : Liaison des boîtes email des conseillers pour archiver les emails envoyés/reçus directement dans les dossiers clients eLaska concernés, assurant une traçabilité complète des échanges. 
+    * Utilisation de "Notes" (privées/publiques) ou "Tickets" : Le fil de discussion par dossier eSaiko pourra s'appuyer sur le système de Notes de Dolibarr (pour les commentaires internes ou partagés avec le client sur le portail) ou sur le module Tickets pour un suivi plus formel de certaines demandes. 
+    * Notifications Internes : Les notifications eSaiko pourront utiliser le système de notification natif de Dolibarr pour les utilisateurs internes, en complément des notifications push/email. 
+    * Intégration IMAP pour Emails : Liaison des boîtes email des conseillers pour archiver les emails envoyés/reçus directement dans les dossiers clients eSaiko concernés, assurant une traçabilité complète des échanges. 
 * **Agenda et Échéances :** 
-    * Ajout des Échéances eLaska : Les dates clés des dossiers, tâches, étapes de timelines, et autres échéances importantes gérées dans eLaska (ex: fin de contrat d'assurance, date limite de déclaration fiscale) seront automatiquement ajoutées ou synchronisées avec l'"Agenda" Dolibarr des conseillers concernés. 
-    * Rappels et Alertes : Utilisation du système de rappels de l'agenda Dolibarr en complément des notifications eLaska. 
-    * Synchronisation RDV Portail Client : La planification de rendez-vous effectuée par les clients via le portail eLaska (et synchronisée avec Google Agenda) sera également reflétée dans l'agenda Dolibarr interne des conseillers pour une vision consolidée de leur emploi du temps. L'ID de l'événement Google Calendar sera stocké pour référence. 
+    * Ajout des Échéances eSaiko : Les dates clés des dossiers, tâches, étapes de timelines, et autres échéances importantes gérées dans eSaiko (ex: fin de contrat d'assurance, date limite de déclaration fiscale) seront automatiquement ajoutées ou synchronisées avec l'"Agenda" Dolibarr des conseillers concernés. 
+    * Rappels et Alertes : Utilisation du système de rappels de l'agenda Dolibarr en complément des notifications eSaiko. 
+    * Synchronisation RDV Portail Client : La planification de rendez-vous effectuée par les clients via le portail eSaiko (et synchronisée avec Google Agenda) sera également reflétée dans l'agenda Dolibarr interne des conseillers pour une vision consolidée de leur emploi du temps. L'ID de l'événement Google Calendar sera stocké pour référence. 
 * **Produits/Services :** 
-    * Catalogue des Prestations eLaska : Les services et prestations proposés par le cabinet et gérés dans eLaska (avec leurs descriptions, tarifications, etc.) pourront être définis comme des produits/services dans Dolibarr pour faciliter leur intégration dans les propositions commerciales et les factures. 
+    * Catalogue des Prestations eSaiko : Les services et prestations proposés par le cabinet et gérés dans eSaiko (avec leurs descriptions, tarifications, etc.) pourront être définis comme des produits/services dans Dolibarr pour faciliter leur intégration dans les propositions commerciales et les factures. 
 * **Contrats :** 
-    * Formalisation des Accords de Services : Pour les missions récurrentes ou les abonnements aux services eLaska (hors contrats d'assurance ou de crédit qui sont gérés spécifiquement), le module Contrats de Dolibarr pourra être utilisé pour formaliser les accords contractuels avec les clients. 
+    * Formalisation des Accords de Services : Pour les missions récurrentes ou les abonnements aux services eSaiko (hors contrats d'assurance ou de crédit qui sont gérés spécifiquement), le module Contrats de Dolibarr pourra être utilisé pour formaliser les accords contractuels avec les clients. 
 * **Banque :** 
-    * Suivi des Règlements : Le module Banque de Dolibarr sera utilisé pour le suivi des encaissements des factures émises pour les prestations eLaska. 
+    * Suivi des Règlements : Le module Banque de Dolibarr sera utilisé pour le suivi des encaissements des factures émises pour les prestations eSaiko. 
 * **Notes de frais :** 
-    * Gestion des Frais Refacturables : Si des frais engagés par les conseillers (déplacements, etc.) sont liés à des prestations eLaska et doivent être refacturés aux clients, le module Notes de Frais de Dolibarr pourra être utilisé pour leur saisie et leur traitement avant intégration à la facturation. 
+    * Gestion des Frais Refacturables : Si des frais engagés par les conseillers (déplacements, etc.) sont liés à des prestations eSaiko et doivent être refacturés aux clients, le module Notes de Frais de Dolibarr pourra être utilisé pour leur saisie et leur traitement avant intégration à la facturation. 
 
 ## 1.4. Public Cible (Utilisateurs) (Description détaillée) 
-* **Gestionnaires / Conseillers du Cabinet eLaska (Utilisateurs Internes) :** 
+* **Gestionnaires / Conseillers du Cabinet eSaiko (Utilisateurs Internes) :** 
     * Profil : Employés du cabinet chargés de l'accompagnement des clients, de la gestion des dossiers, et de la réalisation des prestations. Ils peuvent avoir des spécialisations différentes (administratif, financier, social, juridique, etc.) et des niveaux de responsabilité variés. 
-    * Utilisation : Ils utiliseront quotidiennement le back-office Dolibarr enrichi par le module eLaska pour toutes leurs opérations : gestion des fiches clients, création et suivi des dossiers, planification et exécution des tâches, gestion documentaire, communication avec les clients et les tiers, saisie des temps et des consommations, génération de rapports. 
+    * Utilisation : Ils utiliseront quotidiennement le back-office Dolibarr enrichi par le module eSaiko pour toutes leurs opérations : gestion des fiches clients, création et suivi des dossiers, planification et exécution des tâches, gestion documentaire, communication avec les clients et les tiers, saisie des temps et des consommations, génération de rapports. 
     * Attentes : Ils attendent un outil performant, intuitif, qui leur fait gagner du temps, réduit les erreurs, facilite la collaboration interne, et leur donne une vision claire de leur charge de travail et de l'avancement des dossiers. Le design moderne et épuré, ainsi que les tableaux de bord personnalisés par rôle, sont cruciaux pour leur adoption et leur efficacité. La fiche Tiers centralisée offrant une vue à 360° de toutes les interactions et dossiers du client est un élément clé. 
 * **Clients du Cabinet (Utilisateurs Externes via Portail Web SPA) :** 
     * Profils Variés : 
@@ -660,7 +660,7 @@ L'objectif est une fusion totale et une synergie avec les données existantes et
     * Attentes : Ils attendent une interface claire, simple à utiliser, moderne et réactive. L'accès facile à l'information, la transparence sur le suivi de leurs dossiers, et la possibilité d'interagir efficacement avec le cabinet sont primordiaux. La sécurité de leurs données est une préoccupation majeure. 
 
 ## 1.5. Périmètre du Module (Description détaillée) 
-Le module eLaska vise à couvrir de manière exhaustive et intégrée l'ensemble du cycle de vie de l'accompagnement client, depuis la prospection jusqu'au suivi post-prestation. Son périmètre fonctionnel s'étend sur plusieurs axes majeurs : 
+Le module eSaiko vise à couvrir de manière exhaustive et intégrée l'ensemble du cycle de vie de l'accompagnement client, depuis la prospection jusqu'au suivi post-prestation. Son périmètre fonctionnel s'étend sur plusieurs axes majeurs : 
 * Gestion des Tiers (tous types) : Identification, qualification, segmentation, et suivi complet de tous les contacts et entités. 
 * Suivi Détaillé des Dossiers Multi-domaines : Couverture d'une large palette de services, incluant l'accompagnement administratif quotidien et complexe (démarches spécifiques pour particuliers), le suivi social, fiscal, le soutien administratif RH externalisé pour les entreprises, la gestion financière de base, le conseil en gestion de patrimoine, le montage et le suivi des contrats d'assurances, des dossiers de crédit et des sinistres, l'accompagnement à la création d'entreprise de A à Z, la gestion associative (gouvernance, financement, projets), et l'optimisation administrative pour les TPE/PME. Cela inclut également la gestion du recouvrement délégué pour le compte des clients professionnels. 
 * Gestion Documentaire Avancée : Stockage centralisé et sécurisé de tous les documents, avec gestion de pièces jointes plurielles (multiples fichiers de formats variés avec métadonnées, prévisualisation, versioning), option d'intégration Google Drive, et un Coffre-Fort Numérique sécurisé pour les particuliers. 
@@ -681,7 +681,7 @@ Le module eLaska vise à couvrir de manière exhaustive et intégrée l'ensemble
 # 2. Architecture technique 
 
 ## 2.1. Approche UI/UX : Portail Client en SPA et Backoffice Amélioré (Principes et inspirations détaillés) 
-L'expérience utilisateur (UX) et l'interface utilisateur (UI) sont au cœur de la conception du module eLaska. L'objectif est de fournir un outil non seulement fonctionnel mais aussi agréable et intuitif à utiliser, tant pour les conseillers du cabinet que pour les clients finaux. L'ensemble des interfaces (Portail Client et Backoffice eLaska) adoptera un design moderne, épuré, et intuitif, privilégiant la clarté, la facilité de navigation et une UX optimale. L'esthétique s'inspirera des standards actuels en matière de design d'applications web professionnelles, tels qu'illustrés par les exemples visuels fournis par le client : 
+L'expérience utilisateur (UX) et l'interface utilisateur (UI) sont au cœur de la conception du module eSaiko. L'objectif est de fournir un outil non seulement fonctionnel mais aussi agréable et intuitif à utiliser, tant pour les conseillers du cabinet que pour les clients finaux. L'ensemble des interfaces (Portail Client et Backoffice eSaiko) adoptera un design moderne, épuré, et intuitif, privilégiant la clarté, la facilité de navigation et une UX optimale. L'esthétique s'inspirera des standards actuels en matière de design d'applications web professionnelles, tels qu'illustrés par les exemples visuels fournis par le client : 
 * **Clarté et Lisibilité :** 
     * Utilisation généreuse des espaces blancs pour aérer les contenus et éviter la surcharge cognitive. 
     * Choix d'une typographie soignée et hautement lisible (par exemple, des polices sans-serif modernes comme Inter, Open Sans, Roboto) avec des tailles et des graisses variées pour hiérarchiser l'information. 
@@ -695,7 +695,7 @@ L'expérience utilisateur (UX) et l'interface utilisateur (UI) sont au cœur de 
     * Pour le portail client, un menu hamburger sur mobile et une barre de navigation supérieure sur desktop pourraient être utilisés. 
     * Utilisation d'un fil d'Ariane (breadcrumbs) si la profondeur de navigation le justifie, pour permettre à l'utilisateur de se situer facilement. 
 * **Palette de Couleurs :** 
-    * Définition d'une palette de couleurs harmonieuse, professionnelle et cohérente avec l'identité visuelle du cabinet eLaska. 
+    * Définition d'une palette de couleurs harmonieuse, professionnelle et cohérente avec l'identité visuelle du cabinet eSaiko. 
     * Utilisation de couleurs d'accentuation (primaires et secondaires) pour les éléments interactifs importants (boutons d'action principaux, liens, indicateurs de notification urgentes) afin de guider l'utilisateur, sans pour autant surcharger visuellement l'interface. 
 * **Icônes Modernes et Significatives :** 
     * Intégration de bibliothèques d'icônes vectorielles modernes et légères (ex: Font Awesome, Phosphor Icons, Material Icons, ou une sélection SVG personnalisée) pour renforcer la compréhension intuitive des fonctionnalités, des actions et des statuts. 
@@ -707,7 +707,7 @@ L'expérience utilisateur (UX) et l'interface utilisateur (UI) sont au cœur de 
 * **Interactions Fluides et Feedback Utilisateur :** 
     * Mise en place de micro-interactions discrètes pour améliorer le feedback visuel et la réactivité de l'interface (ex: effets de survol (hover effects) subtils sur les boutons et éléments cliquables, indicateurs de chargement non intrusifs, transitions douces entre les vues ou lors de l'affichage de modales). 
 * **Cohérence Visuelle Globale :** 
-    * Maintien d'une identité visuelle forte et cohérente à travers toutes les pages, sections et composants du module eLaska et du portail client (polices, couleurs, espacements, style des boutons, des champs de formulaire, etc.). 
+    * Maintien d'une identité visuelle forte et cohérente à travers toutes les pages, sections et composants du module eSaiko et du portail client (polices, couleurs, espacements, style des boutons, des champs de formulaire, etc.). 
 * **Thèmes Personnalisables (Optionnel) :** 
     * Possibilité d'implémenter des thèmes visuels commutables (ex: un thème clair par défaut et un thème sombre optionnel) pour le portail client et/ou le backoffice, afin d'améliorer le confort visuel des utilisateurs selon leurs préférences ou les conditions d'éclairage, et de contribuer à une meilleure accessibilité. 
 * **Portail Client Web :** 
@@ -715,11 +715,11 @@ L'expérience utilisateur (UX) et l'interface utilisateur (UI) sont au cœur de 
     * Technologie privilégiée : ReactJS, en raison de son écosystème riche, de sa performance et de sa popularité pour la création d'interfaces utilisateur dynamiques. 
     * Utilisation de bibliothèques UI modernes et matures (ex: Material-UI pour un ensemble complet de composants prêts à l'emploi, Ant Design pour une approche orientée entreprise, ou Tailwind CSS pour une approche "utility-first" permettant une grande flexibilité de design en accord avec l'esthétique épurée souhaitée). Le choix final sera fait en concertation avec l'équipe de développement. 
     * Utilisation de bibliothèques de gestion d'état (ex: Redux Toolkit, Zustand, ou React Context pour des besoins plus simples) et de requêtage de données (ex: React Query/SWR, axios) pour une gestion efficace des données et des interactions avec le backend. 
-    * Hébergé sur le même serveur web que Dolibarr (ou un serveur dédié communiquant étroitement), et communiquant avec le backend via des API REST sécurisées fournies par le module eLaska et potentiellement l'API native de Dolibarr. 
-* **Backoffice Dolibarr (Interfaces du Module eLaska) :** 
-    * Amélioration du Design Natif : Le design des pages et composants spécifiques au module eLaska au sein du backoffice Dolibarr sera soigné et modernisé grâce à l'utilisation de CSS personnalisé et de templates HTML/PHP bien structurés, en respectant scrupuleusement les principes UI/UX énoncés ci-dessus pour assurer une cohérence avec le portail client. 
+    * Hébergé sur le même serveur web que Dolibarr (ou un serveur dédié communiquant étroitement), et communiquant avec le backend via des API REST sécurisées fournies par le module eSaiko et potentiellement l'API native de Dolibarr. 
+* **Backoffice Dolibarr (Interfaces du Module eSaiko) :** 
+    * Amélioration du Design Natif : Le design des pages et composants spécifiques au module eSaiko au sein du backoffice Dolibarr sera soigné et modernisé grâce à l'utilisation de CSS personnalisé et de templates HTML/PHP bien structurés, en respectant scrupuleusement les principes UI/UX énoncés ci-dessus pour assurer une cohérence avec le portail client. 
     * "Îlots d'Interactivité" React (ou autre technologie front-end moderne) : Pour des fonctionnalités spécifiques nécessitant une interactivité riche et une expérience utilisateur avancée (ex: tableaux de type Kanban pour les tâches, timelines dynamiques et interactives, dashboards avec graphiques complexes), des composants React (ou Vue.js, Svelte, etc.) pourront être intégrés de manière ciblée au sein des pages du backoffice Dolibarr. Ces "îlots" conserveront la cohérence du design global. 
-    * Tableaux de Bord et Menus Adaptatifs : La structure des menus spécifiques à eLaska et le contenu des tableaux de bord pourront être configurés pour s'adapter en fonction du rôle et des permissions de l'utilisateur interne connecté. 
+    * Tableaux de Bord et Menus Adaptatifs : La structure des menus spécifiques à eSaiko et le contenu des tableaux de bord pourront être configurés pour s'adapter en fonction du rôle et des permissions de l'utilisateur interne connecté. 
 
 ## 2.2. Responsive design et Icônes (Exigences détaillées) 
 * **Portail Client SPA :** 
@@ -727,8 +727,8 @@ L'expérience utilisateur (UX) et l'interface utilisateur (UI) sont au cœur de 
     * Garantie d'une adaptation fluide et optimale à toutes les tailles d'écran et orientations (portrait/paysage), assurant une lisibilité et une utilisabilité parfaites quel que soit le dispositif utilisé par le client. 
     * Les éléments interactifs (boutons, liens, champs de formulaire) devront avoir des zones de clic/tactiles suffisamment grandes pour une utilisation aisée sur les écrans tactiles. 
     * Les images et médias seront optimisés et responsives. 
-* **Backoffice Module eLaska :** 
-    * Les pages spécifiques au module eLaska intégrées dans le backoffice Dolibarr devront également être responsives, grâce à l'utilisation de CSS dédié (ex: un fichier elaska-responsive.css ou l'utilisation de frameworks CSS responsives). 
+* **Backoffice Module eSaiko :** 
+    * Les pages spécifiques au module eSaiko intégrées dans le backoffice Dolibarr devront également être responsives, grâce à l'utilisation de CSS dédié (ex: un fichier eSaiko-responsive.css ou l'utilisation de frameworks CSS responsives). 
     * Les composants React (ou équivalents) intégrés pour des fonctionnalités spécifiques seront conçus pour être nativement responsives. 
     * Bien que le backoffice soit majoritairement utilisé sur des écrans d'ordinateur, une bonne lisibilité et fonctionnalité sur tablette seront assurées. 
 * **Utilisation des Icônes :** 
@@ -751,7 +751,7 @@ L'expérience utilisateur (UX) et l'interface utilisateur (UI) sont au cœur de 
     * Gestion Sécurisée et Robuste des Clés de Chiffrement/Déchiffrement : Les clés de chiffrement devront être gérées de manière extrêmement sécurisée (ex: via un HSM - Hardware Security Module, ou un service de gestion de clés dédié), en considérant les impacts sur la performance et la complexité de la recherche sur données chiffrées. L'accès aux clés sera strictement limité. 
     * Chiffrement des Communications : Utilisation systématique de HTTPS (TLS 1.2 ou supérieur) pour toutes les communications entre le client (navigateur) et le serveur, ainsi qu'entre les différents composants du système si applicable. 
 * **Permissions et Contrôle d'Accès :** 
-    * Système de Permissions Granulaires : Mise en place d'un système de gestion des droits d'accès fin et configurable par l'administrateur du module eLaska. Ce système sera basé sur les rôles natifs de Dolibarr mais pourra être étendu pour définir des permissions spécifiques aux fonctionnalités et données d'eLaska (ex: qui peut voir/modifier quel type de dossier, qui peut accéder aux paramètres du module, etc.). 
+    * Système de Permissions Granulaires : Mise en place d'un système de gestion des droits d'accès fin et configurable par l'administrateur du module eSaiko. Ce système sera basé sur les rôles natifs de Dolibarr mais pourra être étendu pour définir des permissions spécifiques aux fonctionnalités et données d'eSaiko (ex: qui peut voir/modifier quel type de dossier, qui peut accéder aux paramètres du module, etc.). 
     * Principe du Moindre Privilège : Les utilisateurs n'auront accès qu'aux données et fonctionnalités strictement nécessaires à l'accomplissement de leurs tâches. 
 * **Traçabilité et Audit :** 
     * Journal d'Audit Complet et Inaltérable : Enregistrement de toutes les actions critiques effectuées dans le système, notamment : accès aux données sensibles, modifications de données sensibles (en particulier financières ou personnelles), création/modification/suppression de dossiers ou de tiers, changements de permissions, actions d'administration, et gestion des consentements RGPD. Le journal d'audit devra inclure l'identifiant de l'utilisateur, la date/heure de l'action, l'adresse IP source, et une description de l'action. 
@@ -759,7 +759,7 @@ L'expérience utilisateur (UX) et l'interface utilisateur (UI) sont au cœur de 
     * Suivi rigoureux des bonnes pratiques de développement sécurisé de Dolibarr et des recommandations de l'OWASP (Open Web Application Security Project). 
     * Protection contre les injections SQL : Utilisation systématique de requêtes préparées ou d'ORM (Object-Relational Mapper) sécurisés. 
     * Protection contre les failles XSS (Cross-Site Scripting) : Validation et échappement systématique de toutes les données affichées dans l'interface. Utilisation de Content Security Policy (CSP). 
-    * Protection contre les failles CSRF (Cross-Site Request Forgery) : Utilisation de tokens anti-CSRF sur tous les formulaires et actions sensibles du backoffice Dolibarr et des API eLaska. 
+    * Protection contre les failles CSRF (Cross-Site Request Forgery) : Utilisation de tokens anti-CSRF sur tous les formulaires et actions sensibles du backoffice Dolibarr et des API eSaiko. 
     * Validation et Nettoyage Systématique des Entrées Utilisateur : Toutes les données provenant des utilisateurs (formulaires, paramètres d'URL, API) devront être rigoureusement validées côté serveur (type, format, longueur, plage de valeurs) et nettoyées (sanitized) avant d'être traitées ou stockées. 
 * **Confidentialité des Données :** 
     * Niveaux de Confidentialité pour Documents et Notes : Possibilité de marquer certains documents ou notes comme confidentiels, limitant leur accès à certains rôles ou utilisateurs spécifiques, même au sein d'un dossier partagé. 
@@ -768,12 +768,12 @@ L'expérience utilisateur (UX) et l'interface utilisateur (UI) sont au cœur de 
 
 # 3. Structure et fonctionnalité des modules 
 
-## 3.1 Menu principal eLaska (Backoffice) (Précisé et enrichi) 
+## 3.1 Menu principal eSaiko (Backoffice) (Précisé et enrichi) 
 Accessible depuis le menu Dolibarr, structuré et personnalisable (avec possibilité de variations par rôle utilisateur interne) : 
-* Tableau de bord eLaska (avec centre de notifications) 
+* Tableau de bord eSaiko (avec centre de notifications) 
 * [NOUVEAU] Prospection & Opportunités 
 * Tiers (Clients, Créateurs, Partenaires, Organismes, Intervenants Externes, Apporteurs d'Affaires) - Point d'entrée vers la vue 360° client 
-* Prestations/Services eLaska 
+* Prestations/Services eSaiko 
 * Dossiers (avec sous-menus par type : Particulier, Association, Création d'Entreprise, TPE/PME, Recouvrement, Crédit, etc.) 
 * Gestion de Patrimoine & Financier 
     * Bilans Patrimoniaux 
@@ -792,38 +792,38 @@ Accessible depuis le menu Dolibarr, structuré et personnalisable (avec possibil
 * Base de Connaissances & Veille Réglementaire (incluant veille locale et dispositifs Occitanie/Tarbes) 
 * Partenariats & Apporteurs d'Affaires (avec Annuaire Partenaires Locaux) 
 * Enquêtes de Satisfaction 
-* Configuration eLaska (incluant personnalisation des menus/tableaux de bord par rôle, gestion des modèles de timelines, badges, tags) 
-* Icônes personnalisables pour chaque entrée (Font Awesome via config eLaska). 
+* Configuration eSaiko (incluant personnalisation des menus/tableaux de bord par rôle, gestion des modèles de timelines, badges, tags) 
+* Icônes personnalisables pour chaque entrée (Font Awesome via config eSaiko). 
 
-## 3.2 Tableaux de bord eLaska (Backoffice - Vues Gestionnaire et Rôles) (Enrichi) 
+## 3.2 Tableaux de bord eSaiko (Backoffice - Vues Gestionnaire et Rôles) (Enrichi) 
 * Widgets standards et configurables par rôle (A.1) : Tâches (mes tâches, tâches en retard), Dossiers actifs/récents, Échéances critiques, Centre de Notifications intégré (voir 4.5), Communications récentes, Dossiers bloqués, Activité récente du portail client, Indicateurs de performance clés (KPIs) adaptés au rôle (avec graphiques de progression clairs et lisibles, inspirés de create-modern-dashboard-crm-web-app-ui-ux-design-in-figma.png), Nuage de Tags pertinents, Dernières fiches de Veille Réglementaire/Locale, Activité des Apporteurs d'Affaires, Synthèse Satisfaction Client, RDV à venir (synchronisés Google Agenda). 
 * Vue Gestionnaire : Accès à des widgets de pilotage global du cabinet (charge de travail par conseiller, performance des services, etc.). 
 
 ## 3.3 Module Cœur : Gestion des Tiers (Backoffice) (Développé pour une vue 360° Client) 
-* **3.3.1 Liste des Tiers :** Filtres avancés par type de Tiers eLaska (Particulier, Association, Entreprise, Créateur, Intervenant Externe, Organisme Local/Régional, Partenaire, Apporteur d'Affaires) et par tags. Colonnes personnalisables pour afficher des informations clés en un coup d'œil. 
-* **3.3.2 Fiche Tiers eLaska (Vue 360° de l'Accompagnement Client) :** La fiche tiers est le pivot central de l'information client. Elle consolide et donne accès à l'ensemble des interactions, dossiers, et suivis gérés par le cabinet pour ce client. 
-    * En-tête Fiche Tiers : Informations d'identification principales (Nom, Type de Tiers eLaska, Coordonnées principales, Conseiller référent eLaska, Statut global du client). Lien vers la fichier tiers Dolibarr 
+* **3.3.1 Liste des Tiers :** Filtres avancés par type de Tiers eSaiko (Particulier, Association, Entreprise, Créateur, Intervenant Externe, Organisme Local/Régional, Partenaire, Apporteur d'Affaires) et par tags. Colonnes personnalisables pour afficher des informations clés en un coup d'œil. 
+* **3.3.2 Fiche Tiers eSaiko (Vue 360° de l'Accompagnement Client) :** La fiche tiers est le pivot central de l'information client. Elle consolide et donne accès à l'ensemble des interactions, dossiers, et suivis gérés par le cabinet pour ce client. 
+    * En-tête Fiche Tiers : Informations d'identification principales (Nom, Type de Tiers eSaiko, Coordonnées principales, Conseiller référent eSaiko, Statut global du client). Lien vers la fichier tiers Dolibarr 
     * Onglet "Synthèse & Accompagnement Global" (NOUVEAU) : 
         * Tableau de Bord Client Personnalisé : Widgets clés résumant l'activité récente, les dossiers en cours critiques (avec barre de progression), les prochaines échéances importantes pour CE client, les dernières communications non lues. 
         * Indicateurs Clés de l'Accompagnement : Nombre de dossiers actifs, types d'accompagnement en cours, date du dernier contact significatif, niveau de satisfaction (si applicable). 
         * Accès Rapides aux Modules d'Accompagnement Actifs : Liens directs vers les sections spécifiques de l'accompagnement du client (ex: vers ses dossiers de recouvrement délégué, ses contrats d'assurance, son parcours création, ses dossiers de crédit). 
     * Onglets Spécifiques par Type de Tiers (conservés et enrichis) : 
         * Pour "Particulier" : 
-            * Onglet "eLaska - Informations Détaillées" : 
+            * Onglet "eSaiko - Informations Détaillées" : 
             * Section "Patrimoine & Objectifs" : Profil investisseur, Objectifs patrimoniaux (texte/sélection), Horizon, Connaissance produits, Situation nette estimée. Lien vers le module "Mes Objectifs de Vie & Projets" du client. 
             * Section "Situation Financière (Crédit)" : Revenus (détaillés par source), charges récurrentes (loyer, pensions, autres crédits en cours), apport personnel disponible, patrimoine existant (immobilier, financier). 
             * Section "Situation Administrative & Sociale" : Informations clés pour l'accompagnement (composition foyer, régimes sociaux, etc.). 
         * Pour "Association" : 
-            * Onglet "eLaska - Informations Association" : Objet social, date de création, N° RNA/SIREN, instances (membres bureau/CA), nombre d'adhérents, principaux financeurs, structure de gouvernance, informations statutaire. 
+            * Onglet "eSaiko - Informations Association" : Objet social, date de création, N° RNA/SIREN, instances (membres bureau/CA), nombre d'adhérents, principaux financeurs, structure de gouvernance, informations statutaire. 
             * Section "Situation Financière (Crédit)" : Subventions récurrentes, autres sources de revenus, état de la trésorerie, capacité d'autofinancement pour projets. 
         * Pour "Créateur d'Entreprise" (A.2) : 
-            * Onglet "eLaska - Projet de Création" : Description idée/concept, stade d'avancement, étude de marché (synthèse), besoins en accompagnement, aides visées/obtenues (avant formalisation en dossier). 
+            * Onglet "eSaiko - Projet de Création" : Description idée/concept, stade d'avancement, étude de marché (synthèse), besoins en accompagnement, aides visées/obtenues (avant formalisation en dossier). 
             * Section "Prévisionnel Financier (Crédit)" : Plan de financement du projet, apport personnel, besoins en fonds de roulement, chiffre d'affaires prévisionnel. 
         * Pour "Entreprise (TPE/PME)" : 
-            * Onglet "eLaska - Informations Entreprise" : Activité principale, forme juridique, effectif, principaux interlocuteurs, outils de gestion existants, besoins spécifiques en externalisation. 
+            * Onglet "eSaiko - Informations Entreprise" : Activité principale, forme juridique, effectif, principaux interlocuteurs, outils de gestion existants, besoins spécifiques en externalisation. 
             * Section "Données Financières (Crédit)" : Derniers bilans et comptes de résultat (ou accès), plan de trésorerie, capacité d'autofinancement, encours bancaires. 
-    * Onglet "Tous les Dossiers eLaska" (ÉVOLUTION de "Dossiers Associés") : 
-        * Liste exhaustive et filtrable de TOUS les dossiers eLaska liés à ce tiers, quel que soit leur type (Accompagnement Particulier, Suivi Association, Création d'Entreprise, Prestation TPE/PME, Recouvrement pour le compte du client, Gestion de Patrimoine, Sinistres, Dossier de Crédit, etc.). 
+    * Onglet "Tous les Dossiers eSaiko" (ÉVOLUTION de "Dossiers Associés") : 
+        * Liste exhaustive et filtrable de TOUS les dossiers eSaiko liés à ce tiers, quel que soit leur type (Accompagnement Particulier, Suivi Association, Création d'Entreprise, Prestation TPE/PME, Recouvrement pour le compte du client, Gestion de Patrimoine, Sinistres, Dossier de Crédit, etc.). 
         * Pour chaque dossier listé : Référence, Type, Statut (avec badge visuel), Conseiller, Date de création/dernière modification, Barre de progression de la timeline, Lien direct vers la fiche dossier. 
     * Onglet "Communications Unifiées" : Historique complet de toutes les communications (emails, notes d'appels, messages portail, courriers) avec ce client, avec possibilité de filtrer par dossier ou par canal. 
     * Onglet "Documents Clés du Client" : Accès rapide aux documents les plus importants du client, potentiellement tagués comme "favoris" ou "essentiels" depuis les différents dossiers. La gestion documentaire permettra l'ajout et l'organisation de pièces jointes plurielles (multiples fichiers de divers formats) pour chaque entité. 
@@ -834,7 +834,7 @@ Accessible depuis le menu Dolibarr, structuré et personnalisable (avec possibil
     * Onglet "Intervenants Externes Associés" (B.1) : Sur la fiche client, liste des intervenants externes impliqués DANS L'ENSEMBLE de ses dossiers, avec leur rôle et le contexte (ex: banque X pour dossier de crédit Y, notaire Z pour prêt immobilier). 
     * Onglet "Paramètres de Rendez-vous en Ligne" (pour Conseillers) : Lien Google Agenda, types RDV proposables, plages dispo, temps tampon. 
     * Onglet "Consentements RGPD" : Historique et statut des consentements obtenus pour ce tiers. 
-* **3.3.4 Affichage Conditionnel d'Informations d'Accompagnement (Intégré dans la nouvelle structure de la Fiche Tiers) :** La fiche tiers, via notamment l'onglet "Synthèse & Accompagnement Global" et "Tous les Dossiers eLaska", doit afficher de manière centralisée et facilement accessible toutes les informations pertinentes relatives à l'ensemble de son accompagnement par le cabinet. Les exemples ci-dessous illustrent les types d'informations qui doivent être visibles ou rapidement accessibles depuis la fiche du tiers : 
+* **3.3.4 Affichage Conditionnel d'Informations d'Accompagnement (Intégré dans la nouvelle structure de la Fiche Tiers) :** La fiche tiers, via notamment l'onglet "Synthèse & Accompagnement Global" et "Tous les Dossiers eSaiko", doit afficher de manière centralisée et facilement accessible toutes les informations pertinentes relatives à l'ensemble de son accompagnement par le cabinet. Les exemples ci-dessous illustrent les types d'informations qui doivent être visibles ou rapidement accessibles depuis la fiche du tiers : 
     * Pour un Particulier : 
         * Ses dossiers d'accompagnement administratif (quotidien, budgétaire). 
         * Ses dossiers de démarches spécifiques (retraite, MDPH, surendettement, logement, fiscalité, etc.). 
@@ -868,7 +868,7 @@ Accessible depuis le menu Dolibarr, structuré et personnalisable (avec possibil
 ## 3.4 Module Gestion Centralisée des Dossiers Généraux (Backoffice) (Précisé : timelines, suivi temps/coûts) 
 Ce module est la fondation pour tous les types de dossiers, y compris les "Dossiers de Crédit". Il fournit les fonctionnalités transversales suivantes : 
 * **3.4.1 Création et Gestion de Dossiers :** 
-    * Création de dossiers pour différents types de services et d'accompagnements, incluant un type "Dossier de Crédit". Chaque dossier est lié à un Tiers et peut avoir une référence eLaska unique et personnalisable (B.6). 
+    * Création de dossiers pour différents types de services et d'accompagnements, incluant un type "Dossier de Crédit". Chaque dossier est lié à un Tiers et peut avoir une référence eSaiko unique et personnalisable (B.6). 
     * Champs standards et personnalisables (via attributs supplémentaires) pour chaque type de dossier. 
 * **3.4.2 Ajout de Documents et Notes :** 
     * Intégration avec la GED Dolibarr pour téléverser, classer, prévisualiser et versionner tous les documents pertinents (pièces justificatives, offres de prêt, contrats, courriers, etc.) au sein de chaque dossier. La gestion documentaire permettra l'ajout et l'organisation de pièces jointes plurielles (multiples fichiers de divers formats, avec prévisualisation si possible) pour chaque dossier, mission, contrat, ou toute autre entité pertinente. Chaque document pourra être versionné, et des métadonnées (description, tags, date d'ajout) pourront y être associées. Interface de type "drag and drop" pour faciliter l'upload (similaire à interface_illustration_FR.jpg). 
@@ -892,9 +892,9 @@ Envoi de notifications automatiques (internes pour les conseillers, externes pou
 3.4.6 Liste des Dossiers : Filtres par type (Particulier, Association, Création d'Entreprise, TPE/PME, Recouvrement Client, Recouvrement Délégué, Dossier de Crédit, etc.), statut (avec badges), conseiller, tags[cite: 1363].
 
 3.4.7 Fiche Dossier Complète (Vue 360° Interne du Dossier Spécifique) :
-En-tête : Référence eLaska, Tiers principal (lien vers Fiche Tiers 360°), Conseiller référent, Statut global du dossier (avec badge)[cite: 1364].
+En-tête : Référence eSaiko, Tiers principal (lien vers Fiche Tiers 360°), Conseiller référent, Statut global du dossier (avec badge)[cite: 1364].
 Onglet Principal "Suivi / Timeline" : Affichage de la timeline dynamique du dossier avec ses étapes, statuts (badges), commentaires, et barre de progression[cite: 1365].
-Onglet "Tâches Associées" : Liste des tâches eLaska liées au dossier[cite: 1366].
+Onglet "Tâches Associées" : Liste des tâches eSaiko liées au dossier[cite: 1366].
 Onglet "Documents (GED)" : Accès à tous les documents du dossier (avec gestion plurielle des pièces jointes)[cite: 1367].
 Onglet "Communications" : Historique des échanges spécifiques à ce dossier[cite: 1368].
 Onglet "Temps Passé & Consommations" (B.4) : Tableau récapitulatif des heures saisies et des consommations pour ce dossier[cite: 1369]. Export PDF personnalisable[cite: 1370].
@@ -939,35 +939,35 @@ Section "Mes Consentements RGPD" (I.4) : Visualisation et gestion des consenteme
 
 3.5.8 Sections Spécifiques Modulables (Portail Client SPA) (I.1)[cite: 1392]:
 A. Pour Particuliers :
-"Mon Patrimoine" : Consultation des informations gérées par eLaska (bilan, stratégie si applicable)[cite: 1392].
+"Mon Patrimoine" : Consultation des informations gérées par eSaiko (bilan, stratégie si applicable)[cite: 1392].
 "Mes Assurances" : Liste des contrats suivis, garanties principales, échéances[cite: 1393]. Accès aux documents clés (attestations)[cite: 1393].
-"Mes Crédits" : Suivi des dossiers de crédit (immobilier, consommation, rachat) montés avec eLaska, état d'avancement (timeline visible), conditions obtenues (taux, durée, mensualité), tableau d'amortissement (si fourni), documents liés (offre de prêt)[cite: 1394].
+"Mes Crédits" : Suivi des dossiers de crédit (immobilier, consommation, rachat) montés avec eSaiko, état d'avancement (timeline visible), conditions obtenues (taux, durée, mensualité), tableau d'amortissement (si fourni), documents liés (offre de prêt)[cite: 1394].
 "Mes Sinistres" : Suivi des déclarations et de l'avancement des dossiers sinistres[cite: 1395].
-"Mon Budget & Mes Abonnements" : Visualisation des abonnements gérés via eLaska (énergie, télécoms, etc.), coûts, échéances[cite: 1396]. Outils de suivi budgétaire simples si souscrit[cite: 1397].
+"Mon Budget & Mes Abonnements" : Visualisation des abonnements gérés via eSaiko (énergie, télécoms, etc.), coûts, échéances[cite: 1396]. Outils de suivi budgétaire simples si souscrit[cite: 1397].
 "Mes Objectifs de Vie & Projets" : Espace interactif pour définir, suivre et échanger avec le conseiller sur ses objectifs personnels et projets (ex: achat immobilier, préparation retraite, projet de formation)[cite: 1397].
-"Mes Démarches en Cours" : Suivi simplifié du statut des démarches administratives complexes (Retraite, MDPH, Surendettement, Logement social, etc.) gérées avec eLaska[cite: 1398].
+"Mes Démarches en Cours" : Suivi simplifié du statut des démarches administratives complexes (Retraite, MDPH, Surendettement, Logement social, etc.) gérées avec eSaiko[cite: 1398].
 "Mon Coffre-Fort Numérique" : Accès direct[cite: 1399].
 "Mon Inclusion Numérique" : Accès à des tutoriels ou ressources si pertinent[cite: 1399].
 B. Pour Associations :
 "Suivi des Subventions & Financements" (B.2) : Liste des dossiers de demande déposés, statuts (en cours, accepté, refusé, versé), montants, échéances de reporting[cite: 1400].
 "Mes Instances Statutaires" (B.2) : Calendrier des AG/CA/Bureau, accès aux convocations, ordres du jour, PV (si partagés)[cite: 1401].
 "Vie Associative" : Gestion des adhésions (si gérée via portail), accès à des documents partagés (règlement intérieur, chartes)[cite: 1402].
-"Mes Projets" : Suivi des projets clés de l'association accompagnés par eLaska[cite: 1403].
+"Mes Projets" : Suivi des projets clés de l'association accompagnés par eSaiko[cite: 1403].
 "Nos Dossiers de Crédit" : Suivi des demandes de financement par emprunt pour les projets de l'association[cite: 1404].
 C. Pour Entreprises (TPE/PME, Artisans, Libéraux) :
-"Suivi des Obligations Réglementaires Clés" : Échéancier personnalisé des obligations suivies par eLaska[cite: 1405].
-"Mes Contrats Fournisseurs Délégués" : Consultation des contrats gérés par eLaska, suivi des échéances[cite: 1406].
+"Suivi des Obligations Réglementaires Clés" : Échéancier personnalisé des obligations suivies par eSaiko[cite: 1405].
+"Mes Contrats Fournisseurs Délégués" : Consultation des contrats gérés par eSaiko, suivi des échéances[cite: 1406].
 "Mes Dossiers de Recouvrement Délégué" : Vue d'ensemble des créances confiées au cabinet, statut de chaque dossier, montants recouvrés[cite: 1407].
 "Nos Dossiers de Crédit Professionnel" : Suivi des demandes de financement (investissement, trésorerie), conditions, documents[cite: 1408].
-"Reporting Simplifié" : Accès aux tableaux de bord et rapports d'activité préparés par eLaska[cite: 1409].
+"Reporting Simplifié" : Accès aux tableaux de bord et rapports d'activité préparés par eSaiko[cite: 1409].
 "Suivi RH Administratif" : Consultation des informations relatives aux prestations RH externalisées (si applicable)[cite: 1410].
-"Mes Abonnements Professionnels" : Suivi des abonnements professionnels gérés par eLaska[cite: 1411].
+"Mes Abonnements Professionnels" : Suivi des abonnements professionnels gérés par eSaiko[cite: 1411].
 D. Pour Créateurs d'Entreprises (A.2) :
 "Mon Parcours Création" : Timeline interactive des étapes de création (de l'idée à l'immatriculation et premiers pas), avec tâches, documents et conseils associés à chaque étape[cite: 1412].
 "Mes Aides à la Création" : Suivi des dispositifs d'aide sollicités ou obtenus[cite: 1413].
 "Mes Demandes de Financement Initial" : Suivi des dossiers de prêts d'honneur, micro-crédits, etc.[cite: 1414].
-"Mon Business Plan" : Accès aux versions du business plan travaillées avec eLaska (si stocké sur la plateforme)[cite: 1414].
-E. Section Commune : "Mes Paiements et Recouvrements" : Suivi des factures eLaska, historique des paiements, informations sur les éventuels dossiers de recouvrement concernant les factures du cabinet[cite: 1415].
+"Mon Business Plan" : Accès aux versions du business plan travaillées avec eSaiko (si stocké sur la plateforme)[cite: 1414].
+E. Section Commune : "Mes Paiements et Recouvrements" : Suivi des factures eSaiko, historique des paiements, informations sur les éventuels dossiers de recouvrement concernant les factures du cabinet[cite: 1415].
 
 3.5.9 Fonctionnalités Transversales du Portail (SPA React) : Notifications push (configurables), moteur de recherche interne (documents, dossiers, communications), FAQ dynamique, assistance en ligne (chatbot simple ou formulaire de contact)[cite: 1416].
 
@@ -975,8 +975,8 @@ E. Section Commune : "Mes Paiements et Recouvrements" : Suivi des factures eLask
 Choix Conseiller/Service, Type de RDV (avec durée et description)[cite: 1417].
 Affichage Disponibilités (lues depuis Google Agenda conseiller via API sécurisée, en temps réel)[cite: 1418].
 Réservation Créneau (avec champ pour note optionnelle pour le client)[cite: 1419].
-Confirmation (email client avec fichier .ics pour ajout à son agenda), RDV créé automatiquement dans Google Agenda du conseiller et synchronisé avec l'agenda Dolibarr/eLaska (avec référence ID externe Google Calendar stockée dans llx_actioncomm ou table eLaska)[cite: 1420].
-Annulation/Reprogrammation par le client (selon règles configurables par eLaska, ex: X heures à l'avance)[cite: 1421].
+Confirmation (email client avec fichier .ics pour ajout à son agenda), RDV créé automatiquement dans Google Agenda du conseiller et synchronisé avec l'agenda Dolibarr/eSaiko (avec référence ID externe Google Calendar stockée dans llx_actioncomm ou table eSaiko)[cite: 1420].
+Annulation/Reprogrammation par le client (selon règles configurables par eSaiko, ex: X heures à l'avance)[cite: 1421].
 
 3.6 Module Accompagnement Spécifique des Particuliers (Backoffice & Portail) Ce module intègre et gère en backoffice les services détaillés dans le fichier particuliers.rtf, et expose les fonctionnalités pertinentes sur le portail client (voir 3.5.8.A)[cite: 1422]. Les dossiers de crédit pour particuliers sont gérés via le sous-module dédié (3.10.3)[cite: 1423].
 Gestion Administrative Personnelle Quotidienne et Suivi Budgétaire :
@@ -1090,7 +1090,7 @@ A. Initialisation et Analyse du Besoin Client :
 Fiche "Demande de Crédit" au sein du Dossier de Crédit :
 Champs structurés pour : Type de projet à financer (immobilier, consommation, équipement pro, BFR, création, rachat de crédits, etc.), description détaillée du projet[cite: 1486].
 Montant souhaité, durée envisagée, apport personnel (montant, origine)[cite: 1487].
-Informations financières du demandeur (revenus, charges, patrimoine - liaison avec Fiche Tiers eLaska section "Situation Financière (Crédit)")[cite: 1487].
+Informations financières du demandeur (revenus, charges, patrimoine - liaison avec Fiche Tiers eSaiko section "Situation Financière (Crédit)")[cite: 1487].
 Simulateurs Intégrés :
 Calcul de capacité d'emprunt[cite: 1488].
 Estimation du taux d'endettement[cite: 1488].
@@ -1099,7 +1099,7 @@ Conseil initial sur la faisabilité, les types de prêts adaptés, les garanties
 Génération d'une liste de pièces justificatives initiales (personnalisable par type de crédit/client)[cite: 1490].
 B. Constitution et Montage du Dossier de Crédit :
 Utilisation d'un modèle de timeline "Dossier de Crédit" (personnalisable et pré-remplissable, étapes en attente grisées) avec étapes types : Collecte et vérification des pièces justificatives (statut par pièce : manquante, reçue, validée - avec badges)[cite: 1491].
-Analyse approfondie du dossier par le conseiller eLaska[cite: 1492].
+Analyse approfondie du dossier par le conseiller eSaiko[cite: 1492].
 Préparation de la note de synthèse/présentation pour les banques[cite: 1492].
 Soumission aux organismes financiers[cite: 1493].
 Réception et analyse des propositions[cite: 1493].
@@ -1151,10 +1151,10 @@ Possibilité de délégation de gestion[cite: 1519].
 Intégrations : Lien avec module abonnements/courtage, signature électronique (option), multi-entité, export CSV/PDF, historique des actions[cite: 1521].
 
 3.11 Module Gestion des Services/Prestations (Backoffice)
-(Fiche Prestation eLaska avec Référence eLaska, onglet "Temps Passé & Consommations") [cite: 1522]
+(Fiche Prestation eSaiko avec Référence eSaiko, onglet "Temps Passé & Consommations") [cite: 1522]
 
 3.12 Module Tâches et Suivi Opérationnel (Backoffice) (Précisé : granularité temps/coûts)
-3.12.1 Gestion des Tâches eLaska : (Tel que CdC V4.0)[cite: 1522].
+3.12.1 Gestion des Tâches eSaiko : (Tel que CdC V4.0)[cite: 1522].
 3.12.2 Suivi du Temps et Checklists :
 Saisie de Temps : Liaison à Dossier, Prestation, Tâche, et Étape de Timeline spécifique (B.4)[cite: 1523].
 3.12.3 Vues des Tâches (Liste, Kanban React, Calendrier) : (Tel que CdC V4.0)[cite: 1524].
@@ -1202,13 +1202,13 @@ Suivi des partenaires, apporteurs d'affaires (coordonnées, type de partenariat,
 4 Systèmes transversaux
 
 4.1 Paramètres Étendus et Personnalisation Totale (Enrichi : numérotation, menus/TB par rôle)
-Interface d'Administration eLaska (admin/) :
+Interface d'Administration eSaiko (admin/) :
 Configuration des modèles de numérotation avec variables dynamiques (pour dossiers, prestations, contrats, etc. - B.6)[cite: 1547].
 Configuration Prise RDV en Ligne (types de RDV, durées par défaut, règles d'annulation)[cite: 1548].
 Gestion des modèles de timelines par type de dossier (y compris pour les dossiers de crédit), incluant la définition des étapes standards et leur statut initial (ex: grisé)[cite: 1549].
 Personnalisation des menus et tableaux de bord par rôle utilisateur interne[cite: 1550].
 Gestion des listes déroulantes personnalisables (ex: types d'objectifs de vie, catégories de dépenses, types de crédit)[cite: 1551].
-Configuration des icônes Font Awesome pour les menus eLaska[cite: 1552].
+Configuration des icônes Font Awesome pour les menus eSaiko[cite: 1552].
 Gestion centralisée des types de badges de statut (libellés, couleurs, icônes) utilisables dans les timelines[cite: 1553].
 Gestion centralisée des bibliothèques de tags (couleurs, icônes) utilisables à travers le module[cite: 1554].
 
@@ -1227,7 +1227,7 @@ Modèles d'emails HTML personnalisables avec variables dynamiques (nom client, r
 Types de canaux :
 Notifications Push Web : Pour des alertes en temps réel sur le navigateur (Portail Client et Backoffice, avec consentement utilisateur)[cite: 1562]. Design discret et informatif[cite: 1563].
 Emails : Pour des notifications formelles, récapitulatifs, ou lorsque l'utilisateur n'est pas actif sur la plateforme[cite: 1563]. Templates HTML personnalisables, au design épuré et professionnel[cite: 1564].
-Notifications sur Tableau de Bord : Un centre de notifications intégré au tableau de bord principal (eLaska et Portail Client) affichant un flux des notifications non lues et récentes, avec des liens directs vers les éléments concernés[cite: 1564]. Les notifications lues peuvent être archivées ou masquées[cite: 1565].
+Notifications sur Tableau de Bord : Un centre de notifications intégré au tableau de bord principal (eSaiko et Portail Client) affichant un flux des notifications non lues et récentes, avec des liens directs vers les éléments concernés[cite: 1564]. Les notifications lues peuvent être archivées ou masquées[cite: 1565].
 Contenu et Suivi de Progression :
 Les notifications indiqueront clairement l'objet, le contexte (client, dossier, tâche concernée avec lien direct) et l'action requise ou l'information fournie[cite: 1565].
 Pour les processus longs ou les timelines, des notifications de suivi de progression pourront être envoyées à des étapes clés (ex: "Dossier de crédit X : Pièces validées, en attente soumission banque") ou lorsqu'un certain pourcentage d'avancement est atteint[cite: 1566].
@@ -1273,23 +1273,23 @@ Permettre au client de lier son compte Google Drive pour un partage de documents
 Permettre au cabinet de stocker certains documents liés aux dossiers dans un Google Drive partagé (si politique interne le permet)[cite: 1592].
 
 6.2 Intégration Email IMAP
-Liaison des boîtes email des conseillers pour synchroniser les emails envoyés/reçus avec les fiches Tiers et Dossiers concernés dans eLaska[cite: 1593].
+Liaison des boîtes email des conseillers pour synchroniser les emails envoyés/reçus avec les fiches Tiers et Dossiers concernés dans eSaiko[cite: 1593].
 Aide à l'archivage et à la traçabilité des communications[cite: 1594].
 
 6.3 Notifications Push (Portail Client)
 Utilisation de technologies web push pour notifier les clients en temps réel sur leur appareil (si autorisé) des événements importants sur le portail[cite: 1595].
 
 6.4 Intégration Google Agenda (pour Prise de RDV en Ligne) (Précisé : ID externe)
-Objectif : Synchronisation des disponibilités des conseillers et création automatique des RDV pris depuis le portail eLaska[cite: 1596].
+Objectif : Synchronisation des disponibilités des conseillers et création automatique des RDV pris depuis le portail eSaiko[cite: 1596].
 Technologie : API Google Calendar, authentification OAuth2 sécurisée[cite: 1597].
 Fonctionnalités :
 Lecture des disponibilités des calendriers Google des conseillers (en respectant les plages de travail et les types de RDV configurés)[cite: 1597].
-Création d'événements dans le Google Agenda du conseiller (avec informations client, motif du RDV, et un lien retour vers le dossier/RDV dans eLaska pour accès rapide)[cite: 1598].
-Mise à Jour/Annulation : Synchronisation bidirectionnelle à étudier pour une phase ultérieure (modification/annulation depuis Google Agenda reflétée dans eLaska et vice-versa, avec notifications)[cite: 1599].
-Notifications Google Agenda natives en complément des notifications eLaska[cite: 1600].
-Stockage de l'ID de l'événement Google Calendar dans l'objet llx_actioncomm de Dolibarr ou une table de liaison eLaska dédiée pour référence et synchronisation (B.7)[cite: 1601].
+Création d'événements dans le Google Agenda du conseiller (avec informations client, motif du RDV, et un lien retour vers le dossier/RDV dans eSaiko pour accès rapide)[cite: 1598].
+Mise à Jour/Annulation : Synchronisation bidirectionnelle à étudier pour une phase ultérieure (modification/annulation depuis Google Agenda reflétée dans eSaiko et vice-versa, avec notifications)[cite: 1599].
+Notifications Google Agenda natives en complément des notifications eSaiko[cite: 1600].
+Stockage de l'ID de l'événement Google Calendar dans l'objet llx_actioncomm de Dolibarr ou une table de liaison eSaiko dédiée pour référence et synchronisation (B.7)[cite: 1601].
 Configuration : Interface pour chaque conseiller pour lier son compte Google Agenda, sélectionner les calendriers à utiliser pour les disponibilités professionnelles, définir les types de RDV et durées associées[cite: 1602].
 
 6.5 Intégration Signature Électronique (Optionnelle)
 Intégration avec un service de signature électronique tiers (ex: Yousign, DocuSign) pour permettre la signature dématérialisée de documents (mandats, contrats de service, devis, lettres de mission, consentements, offres de prêt si autorisé par la banque)[cite: 1603].
-Workflow : Envoi du document depuis eLaska, suivi du statut de signature, archivage du document signé[cite: 1604].
+Workflow : Envoi du document depuis eSaiko, suivi du statut de signature, archivage du document signé[cite: 1604].
