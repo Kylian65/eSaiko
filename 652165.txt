@@ -1,0 +1,884 @@
+# Cahier des Charges Fonctionnel - Module eLaska (Version Finale et Ultra-Détaillée)
+Date de finalisation : 2 juin 2025 Référence : CdC-eLaska-VF-UltraDetaillé-20250602 
+
+## Table des Matières
+* INTRODUCTION 
+* 1 Vue d'ensemble du module 
+    * 1.1. Objectif du module 
+    * 1.2. Modules principaux (Description détaillée) 
+    * 1.3. Intégration avec les modules natifs Dolibarr (Interactions détaillées) 
+    * 1.4. Public Cible (Utilisateurs) (Description détaillée) 
+    * 1.5. Périmètre du Module (Description détaillée) 
+* 2 Architecture technique 
+    * 2.1. Approche UI/UX : Portail Client en SPA et Backoffice Amélioré (Principes et inspirations détaillés) 
+    * 2.2. Responsive design et Icônes (Exigences détaillées) 
+    * 2.3. Sécurité (Mesures et stratégies détaillées) 
+* 3 Structure et fonctionnalité des modules (Chaque module et sous-module détaillé) 
+    * 3.1. Menu principal eLaska (Backoffice) 
+    * 3.2. Tableaux de bord eLaska (Backoffice) 
+    * 3.3. Module Cœur : Gestion des Tiers (Backoffice) 
+    * 3.4. Module Gestion Centralisée des Dossiers Généraux (Backoffice) 
+    * 3.5. Module Portail Web Client & Communication (SPA React) 
+    * 3.6. Module Accompagnement Spécifique des Particuliers 
+    * 3.7. Module Accompagnement Spécifique des Associations 
+    * 3.8. Module Accompagnement Spécifique des Créateurs d'Entreprises 
+    * 3.9. Module Conseil & Gestion Externalisée pour Entreprises 
+    * 3.10. Module Conseil en Gestion de Patrimoine, Assurances, Crédits & Sinistres 
+	* 3.10.1. Sous-module : Bilan & Stratégie Patrimoniale 
+    * 3.10.2. Sous-module : Contrats d'Assurance 
+    * 3.10.3. Sous-module : Dossiers de Crédit 
+    * 3.10.4. Sous-module : Gestion des Sinistres 
+    * 3.11. Module Gestion des Services/Prestations 
+    * 3.12. Module Tâches et Suivi Opérationnel 
+    * 3.13. Module de Courtage et d'Intermédiation en Abonnements Clients 
+    * 3.14. Module Recouvrements 
+    * 3.15. Module de Pilotage Interne Avancé 
+    * 3.16. Module Gestion des Partenariats & Apporteurs d'Affaires 
+* 4 Systèmes transversaux (Chaque système détaillé) 
+    * 4.1. Paramètres Étendus et Personnalisation Totale 
+    * 4.2. Système de champs dynamiques et conditionnels 
+    * 4.3. Système de Tags/Étiquettes personnalisables 
+    * 4.4. Historique et Suivi Détaillé des Communications et Envois 
+    * 4.5. Système de Notifications & Alertes Intelligentes 
+    * 4.6. Suivi des Consommations et Frais Engagés 
+    * 4.7. Base de Connaissances Interne & Veille Réglementaire/Locale 
+    * 4.8. Gestion Affinée des Consentements RGPD 
+* 5 Points d'attention spécifiques (Détaillés) 
+* 6 Intégrations (Détaillées) 
+
+# INTRODUCTION : Liste des missions exercées par le cabinet en fonction de la typologie des clients :
+
+## A. Particuliers
+L'objectif global de cette section est de fournir un soutien individualisé et complet aux particuliers, visant à simplifier leur quotidien administratif, les assister dans la gestion de leurs finances personnelles, les aider à comprendre et faire valoir leurs droits, et leur permettre de naviguer plus sereinement dans leurs obligations et démarches. 
+
+### 1. Gestion Administrative Personnelle Quotidienne et Suivi Budgétaire 
+Cette sous-section se concentre sur l'organisation administrative courante et la gestion financière personnelle, en apportant méthode, clarté et soutien actif. 
+
+* Audit des systèmes de classement existants (physique et numérique) : Cette mission initiale implique une analyse approfondie de la méthode actuelle de classement des documents du particulier, qu'ils soient au format papier (classeurs, pochettes, boîtes d'archives) ou numérique (organisation des fichiers sur ordinateur, utilisation de services cloud). 
+* L'objectif est de comprendre les habitudes du client, d'identifier les points forts et les points faibles de son système, de repérer les éventuels documents égarés ou mal archivés, et de diagnostiquer les sources de perte de temps ou de stress liées à la gestion documentaire. 
+* Mise en place d'une méthode de classement personnalisée et pérenne (arborescence numérique, classeurs physiques thématiques, etc.) : Suite à l'audit, il s'agit de concevoir et de mettre en œuvre, en collaboration avec le client, un système de classement sur mesure, logique et facile à utiliser. 
+* Cela peut inclure la création d'une arborescence de dossiers claire pour les documents numériques, l'organisation de classeurs physiques avec des intercalaires thématiques (ex: Logement, Santé, Impôts, Banque, Véhicule), et la définition de règles simples pour nommer et ranger les nouveaux documents afin d'assurer la pérennité du système. 
+* Numérisation sécurisée des documents importants, création d'archives numériques : Cette prestation consiste à scanner les documents papier importants du client (contrats, factures essentielles, diplômes, pièces d'identité, etc.) pour en créer des copies numériques. 
+* Ces fichiers seront ensuite organisés dans l'arborescence numérique définie, et des conseils seront donnés pour leur sauvegarde sécurisée (disque dur externe, cloud chiffré) afin de prévenir les pertes dues aux aléas (dégâts des eaux, incendie, perte). 
+* Conseil sur les durées légales de conservation des documents : Vous informerez le particulier sur les délais légaux pendant lesquels il doit conserver ses différents types de documents (factures, relevés bancaires, avis d'imposition, bulletins de salaire, contrats d'assurance, etc.). 
+* Cela lui permettra de faire du tri de manière éclairée et de ne pas s'encombrer inutilement, tout en gardant les pièces qui pourraient lui être demandées ultérieurement. 
+* Mise en place d'un coffre-fort numérique (conseil sur les solutions existantes) : Pour une sécurisation accrue des documents numériques sensibles, vous conseillerez le client sur le choix et l'utilisation d'un service de coffre-fort numérique. 
+* Ces services offrent un espace de stockage en ligne hautement sécurisé, souvent avec des fonctionnalités de chiffrement et de partage contrôlé, pour les documents les plus importants. 
+* Création et maintenance d'un échéancier partagé et interactif (impôts, assurances, prêts, factures récurrentes, contrôles techniques, renouvellements de documents d'identité, etc.) : Il s'agit de développer un outil personnalisé (tableau Excel, agenda Google partagé, application spécialisée) recensant toutes les dates butoirs et échéances importantes du foyer. 
+* Cet échéancier sera conçu pour être facilement consultable et mis à jour, permettant une visualisation claire des obligations à venir. 
+* Configuration de rappels personnalisés (email, SMS) : En complément de l'échéancier, vous mettrez en place un système d'alertes automatiques (par email ou SMS, selon la préférence du client) pour lui rappeler à l'avance les échéances importantes, lui laissant ainsi le temps de préparer les documents ou les fonds nécessaires. 
+* Assistance à la mise en place de paiements dématérialisés sécurisés (prélèvements, virements programmés, TIP en ligne) : Pour simplifier le paiement des factures récurrentes et éviter les retards, vous aiderez le client à mettre en place des prélèvements automatiques auprès de ses fournisseurs, à configurer des virements programmés via son service de banque en ligne, ou à utiliser le Titre Interbancaire de Paiement (TIP) SEPA en ligne, tout en veillant à la sécurité des transactions. 
+* Rédaction de tous types de correspondances : demandes (attestations, informations), réclamations simples, résiliations (hors contentieux juridique), lettres de motivation pour des démarches non professionnelles : Cette mission couvre la rédaction de courriers clairs, bien structurés et sans fautes, adaptés à diverses situations administratives courantes : demander une attestation, solliciter une information, formuler une réclamation de premier niveau auprès d'un fournisseur, résilier un abonnement simple, ou encore rédiger une lettre de motivation pour une demande de logement social ou une inscription. 
+* Le but est de s'assurer que la demande du client est bien comprise et traitée efficacement. 
+* Mise en forme professionnelle et relecture orthographique/grammaticale : Tous les courriers ou documents rédigés feront l'objet d'une mise en page soignée et d'une relecture attentive pour corriger les éventuelles erreurs de français, garantissant ainsi une présentation professionnelle et crédible. 
+* Gestion des envois (suivi de lettres recommandées, envois électroniques sécurisés) et archivage des correspondances : Vous pourrez prendre en charge l'envoi physique des courriers importants (notamment les lettres recommandées avec accusé de réception) ou guider le client pour l'utilisation des services d'envoi électronique sécurisé (comme la LRE). 
+* Une copie de chaque courrier envoyé et reçu sera systématiquement classée dans le système d'archivage du client. 
+* Relances téléphoniques ou écrites si nécessaire : En cas d'absence de réponse à un courrier ou à une demande, vous effectuerez des relances appropriées (par téléphone ou par un nouveau courrier/email) pour vous assurer du bon suivi du dossier par l'organisme concerné. 
+* Vulgarisation et explication détaillée de documents administratifs, juridiques simples ou contractuels (contrats d'assurance, baux de location, factures détaillées, notifications d'organismes sociaux, avis d'imposition, devis complexes) : Votre rôle sera de "traduire" le jargon administratif ou juridique souvent complexe de ces documents en termes simples et compréhensibles pour le client. 
+* L'objectif est qu'il saisisse pleinement le contenu, les implications, ses droits et ses obligations liés à chaque document. 
+* Aide au remplissage et à la vérification de formulaires divers : Vous assisterez le client pour remplir correctement les nombreux formulaires administratifs qu'il peut rencontrer, en veillant à ce que toutes les informations requises soient présentes et exactes, afin d'éviter les rejets ou les retards de traitement. 
+* Prise de rendez-vous et préparation des dossiers en amont : Vous contacterez les administrations ou organismes concernés pour fixer des rendez-vous pour le client. 
+* En amont de ces rendez-vous, vous l'aiderez à constituer un dossier complet avec toutes les pièces justificatives nécessaires pour optimiser l'efficacité de l'entretien. 
+* Accompagnement physique aux rendez-vous si besoin et si géographiquement possible : Si le client le souhaite et si cela est réalisable (proximité géographique à Tarbes et en Occitanie), vous pourrez l'accompagner physiquement lors de rendez-vous importants pour lui apporter un soutien moral, l'aider à comprendre les échanges ou à poser les bonnes questions. 
+* Facilitation de la communication et médiation pour résoudre des situations de blocage simples (incompréhensions, erreurs administratives) : En cas de difficulté de communication avec une administration ou un fournisseur, vous pourrez intervenir en tant que facilitateur neutre pour aider à clarifier la situation, expliquer le point de vue du client, ou identifier l'origine d'une erreur administrative simple et proposer une solution. 
+* Établissement d'un budget mensuel/annuel détaillé (revenus, dépenses fixes, variables, épargne) : Vous aiderez le client à lister l'intégralité de ses revenus (salaires, allocations, rentes, etc.) et de ses dépenses, en les catégorisant (dépenses fixes incompressibles comme le loyer et les prêts, dépenses variables comme l'alimentation et les loisirs, et potentiel d'épargne). 
+* Cela fournira une image claire de sa situation financière. 
+* Analyse des postes de dépenses, identification des leviers d'économie : À partir du budget établi, vous analyserez avec le client chaque poste de dépense pour identifier ceux qui pourraient être réduits ou optimisés (abonnements superflus, habitudes de consommation coûteuses, comparaison de fournisseurs pour certains services, etc.), sans jugement et dans le respect de son mode de vie. 
+* Mise en place d'outils de suivi budgétaire (tableurs personnalisés, applications) : Vous proposerez et aiderez à configurer des outils adaptés pour que le client puisse suivre régulièrement ses dépenses par rapport à son budget : un tableau Excel personnalisé, une application mobile de gestion budgétaire, ou d'autres solutions selon ses préférences et son aisance avec le numérique. 
+* Sensibilisation aux bonnes pratiques de gestion financière : Au-delà des outils, vous transmettrez des conseils pratiques et des principes de base pour une gestion saine des finances personnelles : anticiper les grosses dépenses, se constituer une épargne de précaution, éviter le surendettement, comprendre les produits financiers simples. 
+* La mise en place d'une interface de suivi du traitement des pièces jointes déposé par le client ou le gestionnaire de dossier (type timeline).
+
+### 2. Accompagnement aux Démarches Administratives Spécifiques et Complexes 
+Cette section détaille l'assistance apportée pour des démarches souvent perçues comme lourdes, techniques ou anxiogènes par les particuliers. 
+
+* Information détaillée sur la procédure de surendettement et ses implications : Avant toute démarche, vous expliquerez clairement au client en quoi consiste la procédure de surendettement auprès de la Banque de France, les conditions pour y être éligible, les différentes étapes, les conséquences possibles sur sa situation financière et patrimoniale (inscription au FICP, plan de redressement, etc.). 
+* Constitution rigoureuse du dossier pour la Banque de France (collecte des justificatifs, remplissage des formulaires) : Vous guiderez le client pas à pas pour rassembler l'ensemble des pièces justificatives exigées (relatives à son identité, ses revenus, ses charges, ses dettes, son patrimoine) et pour remplir de manière exhaustive et précise le formulaire officiel de déclaration de surendettement. 
+* Rédaction de la lettre de saisine argumentée : Vous aiderez le client à rédiger la lettre qui accompagne le dossier, expliquant sa situation, les causes de son surendettement et sa volonté de trouver des solutions. 
+* Cette lettre doit être sincère et bien argumentée. 
+* Suivi de l'avancement du dossier auprès de la Banque de France : Une fois le dossier déposé, vous pourrez aider le client à suivre son traitement, à répondre aux éventuelles demandes d'informations complémentaires de la Banque de France et à comprendre les courriers reçus. 
+* Explication des plans conventionnels de redressement ou des mesures imposées (hors négociation juridique) : Si la commission de surendettement propose un plan (effacement partiel de dettes, rééchelonnement), vous aiderez le client à en comprendre les termes, les engagements et les conséquences. 
+* Vous ne mènerez pas de négociation juridique, qui relève d'un avocat. 
+* Diagnostic complet des droits sociaux potentiels au niveau national et local (CAF, MSA, Pôle Emploi, MDPH, Conseil Départemental, CCAS) : RSA, APL/ALS/ALF, prime d'activité, AAH, PCH, APA, bourses scolaires/étudiantes, chèque énergie, aides exceptionnelles : Cette mission consiste en une évaluation exhaustive de la situation personnelle, familiale et financière du client pour identifier toutes les aides sociales et allocations auxquelles il pourrait prétendre, qu'elles soient nationales (gérées par la CAF, Pôle Emploi) ou locales (proposées par le Conseil Départemental d'Occitanie, la mairie de Tarbes via son CCAS, ou d'autres organismes spécifiques à la région). 
+* Constitution, dépôt et suivi proactif des dossiers de demande et de renouvellement : Pour chaque aide identifiée, vous assisterez le client dans la constitution complète du dossier (formulaires, justificatifs), vous l'aiderez à le déposer auprès de l'organisme compétent (en ligne ou par courrier) et assurerez un suivi pour vérifier sa bonne réception et son traitement. 
+* Assistance en cas de demande de pièces complémentaires, de contrôle ou de recours gracieux : Si un organisme demande des informations supplémentaires, procède à un contrôle, ou si une décision est défavorable, vous aiderez le client à y répondre, à préparer les éléments nécessaires, ou à rédiger un recours gracieux pour demander un réexamen de sa situation. 
+* Information sur les dispositifs d'accès au logement social et les critères d'éligibilité : Vous expliquerez au client le fonctionnement du système de demande de logement social en France (et spécifiquement en Occitanie ou à Tarbes si des particularités existent), les plafonds de ressources à ne pas dépasser, et les autres critères d'attribution. 
+* Constitution et dépôt du dossier de demande de logement social (numéro unique régional/départemental) : Vous aiderez le client à remplir le formulaire unique de demande de logement social (en ligne sur le portail national ou via le formulaire Cerfa) et à joindre toutes les pièces justificatives requises pour obtenir son numéro unique d'enregistrement. 
+* Suivi et actualisation annuelle du dossier : Vous rappellerez au client l'importance d'actualiser annuellement sa demande de logement social pour qu'elle reste active et pour que ses informations soient à jour, et vous pourrez l'assister dans cette démarche. 
+* Assistance pour les démarches liées au bail (compréhension, état des lieux), au dépôt de garantie, aux aides d'Action Logement (ex: avance Loca-Pass) : Si le client trouve un logement, vous l'aiderez à comprendre les clauses de son bail de location, à préparer l'état des lieux d'entrée. 
+* Vous l'informerez également sur les aides possibles pour le dépôt de garantie, comme l'avance Loca-Pass proposée par Action Logement, et l'assisterez pour en faire la demande si éligible. 
+* Information sur les régimes de retraite (base, complémentaire) : Vous fournirez au client des explications claires sur le fonctionnement du système de retraite français, la distinction entre le régime de base (Assurance Retraite) et les régimes complémentaires (Agirc-Arrco pour les salariés du privé, etc.), et les principes de calcul des droits. 
+* Aide à la création et à l'utilisation du compte personnel retraite (info-retraite.fr) : Vous guiderez le client pour créer son espace personnel sur le portail officiel info-retraite.fr, qui centralise les informations de tous ses régimes de retraite et lui permet de consulter son relevé de carrière et d'utiliser des simulateurs. 
+* Vérification et demande de correction du relevé de carrière (identification d'anomalies, recherche de justificatifs) : Vous accompagnerez le client dans l'analyse de son relevé de carrière pour y déceler d'éventuelles erreurs ou omissions (périodes non prises en compte, erreurs sur les salaires reportés). 
+* Si des anomalies sont constatées, vous l'aiderez à rassembler les justificatifs nécessaires (bulletins de salaire, contrats de travail) et à effectuer les démarches de demande de régularisation auprès des caisses concernées. 
+* Estimation de l'âge de départ et du montant potentiel (via les simulateurs officiels) : En utilisant les simulateurs disponibles sur info-retraite.fr ou les sites des caisses de retraite, et sur la base du relevé de carrière du client, vous l'aiderez à obtenir une estimation de son âge légal de départ à la retraite, de l'âge pour une retraite à taux plein, et du montant brut/net de sa future pension. 
+* Assistance à la préparation et au dépôt du dossier de demande de liquidation des droits à la retraite : Lorsque le client approche de l'âge de la retraite, vous l'assisterez pour remplir les formulaires de demande de retraite (unique ou par caisse), joindre toutes les pièces requises, et déposer son dossier dans les délais impartis. 
+* Information sur le cumul emploi-retraite, la retraite progressive : Vous informerez le client sur les possibilités de continuer à travailler tout en percevant une partie ou la totalité de sa retraite (cumul emploi-retraite) ou de réduire son activité en fin de carrière tout en commençant à toucher une fraction de sa pension (retraite progressive), en expliquant les conditions et les implications. 
+* Aide à la compréhension du système fiscal français (IR, prélèvement à la source, taxes locales) : Vous expliquerez au particulier les grands principes de l'impôt sur le revenu, le fonctionnement du prélèvement à la source (PAS), et la nature des différentes taxes locales (taxe foncière, taxe d'habitation sur les résidences secondaires). 
+* Assistance à la déclaration annuelle des revenus (en ligne via l'espace personnel sur impots.gouv.fr ou formulaires papier) : salaires, revenus fonciers simples, pensions, crédits et réductions d'impôt courants : Vous guiderez le client pour remplir sa déclaration de revenus, que ce soit en ligne (mode privilégié) ou sur papier, en l'aidant à déclarer correctement ses différents types de revenus (salaires et traitements, pensions, revenus fonciers pour des locations non meublées simples) et à identifier les crédits et réductions d'impôt auxquels il peut avoir droit (dons, emploi à domicile, frais de garde d'enfants, etc.). 
+* Calcul et vérification de l'impôt : Après la déclaration, vous pourrez aider le client à comprendre son avis d'imposition, à vérifier le calcul effectué par l'administration fiscale, et à anticiper le montant final de son impôt ou de son éventuel remboursement. 
+* Aide à la gestion du prélèvement à la source (modulation de taux, gestion des acomptes) : Vous expliquerez comment fonctionne le PAS et comment le gérer depuis son espace personnel sur impots.gouv.fr : signaler un changement de situation (mariage, naissance, baisse de revenus) pour actualiser son taux, ou gérer ses acomptes pour les revenus non salariés. 
+* Assistance pour les demandes de délais de paiement, de remises gracieuses : En cas de difficultés financières passagères, vous aiderez le client à formuler une demande de délai de paiement pour ses impôts ou, dans des situations exceptionnelles, une demande de remise gracieuse, en l'aidant à argumenter sa requête et à fournir les justificatifs nécessaires. 
+* Démarches pour l'obtention d'actes d'état civil (naissance, mariage, décès) en France et à l'étranger (via consulats) : Vous assisterez le client pour effectuer les demandes d'actes d'état civil (copie intégrale ou extrait) auprès des mairies de naissance, de mariage, ou de décès en France, ou auprès du Service central d'état civil de Nantes ou des consulats pour les événements survenus à l'étranger. 
+* Assistance à la constitution de dossiers pour mariage, PACS, changement de nom/prénom (préparation des pièces) : Vous aiderez à rassembler toutes les pièces justificatives nécessaires pour la constitution d'un dossier de mariage civil ou de PACS, ou pour une procédure de changement de nom ou de prénom, en veillant à la conformité des documents. 
+* Accompagnement pour les démarches de carte d'identité, passeport (pré-demande en ligne ANTS, prise de rendez-vous en mairie) : Vous guiderez le client pour effectuer la pré-demande en ligne sur le site de l'Agence Nationale des Titres Sécurisés (ANTS) pour un renouvellement ou une première demande de carte nationale d'identité ou de passeport, et vous l'aiderez à prendre rendez-vous dans une mairie équipée pour finaliser la demande (dépôt des empreintes, photos). 
+* Inscription sur les listes électorales, procuration de vote : Vous assisterez le client pour s'inscrire sur les listes électorales de sa commune (notamment via le service en ligne) ou pour établir une procuration de vote s'il ne peut pas se déplacer le jour du scrutin. 
+* Assistance pour toutes les démarches en ligne sur le site de l'ANTS (certificat d'immatriculation/carte grise, permis de conduire, déclaration de cession de véhicule) : Le site de l'ANTS étant central pour de nombreuses démarches liées aux véhicules et au permis, vous fournirez une assistance pas à pas pour créer un compte, effectuer les demandes (changement d'adresse sur la carte grise, demande de duplicata, déclaration de vente d'un véhicule, demande de permis de conduire après réussite à l'examen). 
+* Suivi des dossiers ANTS et aide en cas de difficultés : Les démarches sur l'ANTS pouvant parfois être complexes ou rencontrer des blocages, vous aiderez le client à suivre l'avancement de son dossier en ligne et à contacter les services d'assistance de l'ANTS si nécessaire. 
+* Aide à la création et à la gestion du compte Ameli et de Mon Espace Santé : Vous accompagnerez le client pour créer et utiliser son compte Ameli (assurance maladie) pour suivre ses remboursements, télécharger des attestations, contacter sa caisse, etc., ainsi que son profil sur "Mon Espace Santé" pour stocker et partager ses informations de santé en toute sécurité. 
+* Assistance pour les demandes de Complémentaire Santé Solidaire (CSS) : Si le client a des revenus modestes, vous l'aiderez à vérifier son éligibilité à la Complémentaire Santé Solidaire (qui remplace la CMU-C et l'ACS) et à constituer le dossier de demande. 
+* Aide à la compréhension des décomptes de remboursement de la Sécurité Sociale et de la mutuelle : Vous expliquerez au client comment lire et comprendre ses relevés de remboursements de frais de santé, tant ceux de la Sécurité Sociale que ceux de sa complémentaire santé, pour vérifier que tous ses droits ont été pris en compte. 
+* Accompagnement dans la constitution de dossiers auprès de la MDPH (Maison Départementale des Personnes Handicapées) pour la reconnaissance de droits (AAH, PCH, CMI) : Pour les personnes en situation de handicap, vous apporterez une aide précieuse pour remplir le formulaire unique de demande à la MDPH (celle des Hautes-Pyrénées pour Tarbes), pour rédiger le projet de vie, et pour rassembler toutes les pièces médicales et administratives nécessaires à l'évaluation de leurs besoins et à l'ouverture de droits (Allocation aux Adultes Handicapés, Prestation de Compensation du Handicap, Carte Mobilité Inclusion). 
+* Formation individualisée et patiente à l'utilisation des outils informatiques (ordinateur, tablette, smartphone) et d'Internet (navigation, recherche d'information) : Cette mission s'adresse aux personnes peu à l'aise avec le numérique. 
+* Vous proposerez des sessions de formation personnalisées, adaptées à leur rythme et à leurs besoins, pour leur apprendre les bases de l'utilisation d'un ordinateur, d'une tablette ou d'un smartphone, ainsi que les principes de la navigation sur Internet et de la recherche d'informations utiles. 
+* Création et gestion sécurisée d'adresses e-mail : Vous aiderez le client à créer une adresse e-mail personnelle, à choisir un mot de passe robuste, à organiser sa boîte de réception, à envoyer et recevoir des messages, et à identifier les emails frauduleux. 
+* Prise en main des principaux portails administratifs en ligne (FranceConnect, et tous ceux listés ci-dessus) : Vous formerez le client à utiliser FranceConnect (le système d'identification sécurisé pour accéder à de nombreux services publics en ligne) et à naviguer sur les sites essentiels tels que ceux de la CAF, Pôle Emploi, Ameli, impots.gouv.fr, ANTS, info-retraite.fr, etc., pour qu'il gagne en autonomie. 
+* Sensibilisation à la cybersécurité : protection des données personnelles, identification des fraudes et arnaques en ligne (phishing, etc.), gestion des mots de passe : Vous donnerez des conseils pratiques pour protéger ses informations personnelles en ligne, pour reconnaître les tentatives d'hameçonnage (phishing) et autres arnaques courantes sur Internet, et pour créer et gérer des mots de passe forts et uniques pour ses différents comptes. 
+
+### 3. Conseil, Intermédiation et Courtage en Abonnements et Assurances 
+Cette section aborde l'optimisation des contrats et abonnements, avec une distinction claire pour le courtage en assurances qui est une activité réglementée. 
+
+#### A. Conseil et Intermédiation en Abonnements du Quotidien (Énergie, Télécommunications, Médias, etc.) 
+* Audit et Bilan des Abonnements Existants (tel que détaillé précédemment en I.1) : Recensement, analyse des coûts, conditions, adéquation aux besoins. 
+* Cette première étape, déjà évoquée, est fondamentale. Elle consiste à dresser un inventaire complet de tous les abonnements courants du particulier (énergie, eau, téléphone, internet, streaming, etc.), à analyser les factures et contrats pour en extraire les coûts, les dates d'échéance, les conditions d'engagement, et à évaluer avec le client si ces services correspondent toujours à ses besoins et à son utilisation réels. 
+* Analyse Approfondie des Besoins et des Usages : Compréhension fine des habitudes de consommation du foyer pour chaque type d'abonnement. 
+* Au-delà du simple recensement, cette mission vise à comprendre en détail comment le client et son foyer utilisent chaque service : nombre de personnes au foyer, type de chauffage pour l'énergie, consommation moyenne de données mobiles et d'internet fixe, chaînes de télévision réellement regardées, fréquence d'utilisation des plateformes de streaming, etc. Cette analyse fine est cruciale pour identifier les offres véritablement adaptées. 
+* Veille Active du Marché et Comparaison Rigoureuse des Offres : Énergie (électricité, gaz), eau, téléphonie fixe/mobile, internet, bouquets TV, plateformes de streaming, logiciels, etc. Utilisation de comparateurs et analyse directe des offres fournisseurs. 
+* Vous effectuerez une surveillance constante des offres proposées par les différents fournisseurs pour les abonnements ciblés. 
+* Cela implique l'utilisation de comparateurs en ligne (en expliquant leur fonctionnement et en vérifiant leur neutralité), mais aussi une analyse directe des sites des fournisseurs pour dénicher des promotions spécifiques ou des offres non référencées par les comparateurs. 
+* La comparaison portera sur le prix, mais aussi sur la qualité de service, les options incluses, la durée d'engagement, le service client. 
+* Conseil en Optimisation et Présentation de Solutions Personnalisées : Recommandation d'offres plus économiques ou mieux adaptées, explication des avantages/inconvénients, simulation des économies. 
+* Sur la base de l'analyse des besoins et de la veille marché, vous présenterez au client une sélection de 2 à 3 offres alternatives jugées plus avantageuses ou mieux adaptées pour chaque abonnement. 
+* Chaque proposition sera accompagnée d'une explication claire de ses bénéfices (économies financières, services supplémentaires, meilleure qualité) et de ses éventuels inconvénients ou contraintes (changement de matériel, nouvelle durée d'engagement). 
+* Une simulation des économies annuelles potentielles sera également fournie. 
+* Assistance à la Souscription et à la Transition entre Fournisseurs : Aide au remplissage des formulaires, collecte des pièces, accompagnement dans les démarches en ligne ou téléphoniques, coordination pour éviter les coupures de service. 
+* Une fois que le client a choisi une nouvelle offre, vous l'assisterez activement dans toutes les étapes de la souscription : remplissage des formulaires (en ligne ou papier), rassemblement des pièces justificatives (RIB, pièce d'identité, justificatif de domicile), accompagnement lors des contacts téléphoniques avec le nouveau fournisseur. 
+* Une attention particulière sera portée à la coordination de la transition pour minimiser les risques de coupure de service (ex: portabilité du numéro de téléphone, continuité de la fourniture d'énergie). 
+* Assistance à la Résiliation des Anciens Contrats : Vérification des conditions, rédaction des courriers, suivi de la confirmation et de la restitution de matériel. 
+* Parallèlement à la souscription de nouvelles offres, vous aiderez le client à résilier ses anciens contrats. 
+* Cela inclut la vérification des conditions de résiliation (préavis, éventuels frais de résiliation anticipée en tenant compte des lois Chatel et Hamon), la rédaction des lettres de résiliation (souvent en recommandé avec accusé de réception), le suivi de la confirmation de résiliation par l'ancien fournisseur, et l'assistance pour la restitution éventuelle de matériel (box internet, décodeur TV, etc.). 
+* Gestion Déléguée des Abonnements (sur mandat spécifique) : Prise en charge (avec l'accord explicite et un mandat clair) de certaines interactions avec les fournisseurs. 
+* Si le client le souhaite et vous donne un mandat écrit clair et précis pour chaque type d'intervention, vous pourrez prendre en charge directement certaines interactions avec les fournisseurs en son nom (par exemple, appeler un service client pour une question simple, suivre une demande). 
+* Ce mandat devra spécifier la nature des actions autorisées et leur durée. 
+* Suivi des Échéances Contractuelles et Alertes Proactives : Information avant la fin des périodes promotionnelles ou des dates d'anniversaire des contrats pour anticiper renégociation ou changement. 
+* Vous mettrez en place un système de suivi des contrats du client et configurerez des alertes pour l'informer (et vous informer) bien avant la fin d'une période promotionnelle (pour éviter une hausse de tarif surprise) ou avant la date anniversaire d'un contrat (moment opportun pour renégocier, changer d'offre ou résilier sans frais si l'engagement est terminé). 
+* Accompagnement en cas de Litiges Simples : Aide à la rédaction de réclamations, orientation vers les médiateurs compétents. 
+* En cas de désaccord avec un fournisseur (facturation erronée, service non conforme), vous aiderez le client à formuler une réclamation écrite argumentée. 
+* Si la réponse du fournisseur n'est pas satisfaisante, vous l'informerez sur les démarches de médiation possibles (Médiateur de l'énergie, Médiateur des communications électroniques, etc.) et l'assisterez pour préparer son dossier de saisine du médiateur. 
+
+#### B. Courtage en Assurances (UNIQUEMENT si vous détenez l'immatriculation ORIAS requise) 
+Avertissement : La présentation de cette section est conditionnée à votre statut réglementaire. 
+* Si vous n'êtes pas immatriculé(e) à l'ORIAS en tant que courtier d'assurance (ou mandataire), vous ne pouvez légalement pas exercer ces activités. 
+* Votre rôle se limiterait alors à de l'information générale et à l'orientation vers des professionnels qualifiés. 
+* Analyse Approfondie des Besoins en Assurance du Client (Devoir de Conseil) : 
+    * Évaluation de sa situation personnelle, familiale, patrimoniale et professionnelle ; 
+    * Identification des risques à couvrir (dommages aux biens, responsabilité civile, prévoyance, santé, emprunt, etc.) ; 
+    * Définition du niveau de garanties souhaité et du budget. 
+* Cette étape cruciale, au cœur du devoir de conseil du courtier, implique de mener un entretien approfondi avec le client pour comprendre précisément sa situation globale (âge, composition du foyer, profession, revenus, patrimoine mobilier et immobilier, crédits en cours, projets futurs) afin d'identifier l'ensemble des risques auxquels il est exposé. 
+* Sur cette base, vous déterminerez avec lui les besoins en couverture d'assurance (assurance habitation, automobile, responsabilité civile vie privée, complémentaire santé, prévoyance en cas d'arrêt de travail ou de décès, assurance emprunteur, protection juridique, etc.), le niveau de garanties souhaité pour chaque risque, et le budget qu'il peut y consacrer. 
+* Recherche et Comparaison d'Offres d'Assurance sur un Large Panel du Marché : 
+    * Consultation de multiples compagnies d'assurances, mutuelles, institutions de prévoyance pour trouver les contrats les plus adaptés ; 
+    * Analyse comparative des garanties, des exclusions, des franchises, des tarifs. 
+* En tant que courtier, vous agissez en toute indépendance vis-à-vis des organismes d'assurance. 
+* Votre mission est de sonder un large éventail d'acteurs du marché (compagnies d'assurances traditionnelles, mutuelles, bancassureurs, assureurs directs, institutions de prévoyance) pour rechercher les contrats qui répondent le mieux aux besoins spécifiques et au profil de votre client. 
+* Vous ne vous contenterez pas de comparer les tarifs, mais analyserez en détail les conditions générales et particulières de chaque contrat : l'étendue des garanties proposées, les exclusions de garantie (situations non couvertes), les montants des franchises (part restant à la charge de l'assuré en cas de sinistre), les plafonds d'indemnisation, et les services associés. 
+* Conseil Personnalisé et Présentation des Solutions d'Assurance les Plus Pertinentes : 
+    * Explication claire et objective des différentes propositions ; 
+    * Remise des documents d'information précontractuelle obligatoires (fiche d'information et de conseil, etc.) ; 
+    * Motivation du conseil fourni par écrit. Suite à votre recherche, vous sélectionnerez plusieurs offres (généralement deux ou trois) qui vous semblent les plus adaptées et les présenterez au client de manière claire, pédagogique et objective, en soulignant les points forts et les points faibles de chacune par rapport à ses besoins. 
+* Vous lui remettrez les documents d'information précontractuelle requis par la réglementation (tels que la fiche d'information sur le produit d'assurance - IPID, et une fiche de conseil personnalisée expliquant pourquoi vous recommandez tel ou tel contrat). 
+* Votre conseil devra être formalisé par écrit et motivé. 
+* Intermédiation pour la Souscription des Contrats d'Assurance : 
+    * Assistance au remplissage des questionnaires de souscription ; 
+    * Transmission du dossier à l'assureur choisi ; 
+    * Vérification de la conformité des pièces et du contrat émis. 
+* Une fois que le client a fait son choix, vous l'assisterez dans toutes les démarches de souscription du contrat d'assurance. 
+* Cela comprend l'aide au remplissage du questionnaire de déclaration du risque (qui doit être exact et complet), la collecte des pièces justificatives demandées par l'assureur, la transmission du dossier complet à l'organisme d'assurance, et la vérification, à réception du contrat, que celui-ci est bien conforme à ce qui avait été convenu et aux besoins exprimés par le client. 
+* Suivi des Contrats d'Assurance tout au Long de leur Vie : 
+    * Information sur les évolutions contractuelles ou législatives ; 
+    * Aide à l'adaptation des contrats en cas de changement de situation du client ; 
+    * Assistance pour les démarches de modification ou de résiliation des contrats. 
+* Votre rôle de courtier ne s'arrête pas à la souscription. Vous assurez un suivi régulier des contrats de vos clients. 
+* Vous les informerez des évolutions importantes (changement de législation impactant leurs contrats, modifications apportées par l'assureur). 
+* Vous les inciterez à vous signaler tout changement dans leur situation personnelle ou professionnelle (déménagement, mariage, naissance, changement de profession, acquisition de nouveaux biens) afin d'adapter leurs garanties en conséquence. 
+* Vous les assisterez également pour toute demande de modification de contrat ou pour les démarches de résiliation dans le respect des conditions contractuelles et légales (loi Hamon, résiliation à l'échéance). 
+* Assistance et Conseil en Cas de Sinistre : 
+    * Aide à la déclaration du sinistre auprès de l'assureur ; 
+    * Conseil sur les démarches à suivre et les documents à fournir ; 
+    * Facilitation des échanges avec l'assureur ou l'expert ; 
+    * Défense des intérêts du client auprès de l'assureur (dans le cadre du mandat de courtage). 
+* En cas de survenance d'un sinistre garanti par l'un des contrats que vous avez aidé à souscrire, vous apporterez une assistance active à votre client. 
+* Vous le guiderez pour effectuer sa déclaration de sinistre dans les délais et formes requis, vous le conseillerez sur les mesures conservatoires à prendre, sur les documents à fournir à l'assureur (photos, factures, devis de réparation). 
+* Vous pourrez faciliter ses échanges avec la compagnie d'assurance ou l'expert mandaté, et vous interviendrez pour défendre au mieux ses intérêts afin qu'il obtienne une indemnisation juste et conforme aux termes de son contrat. 
+
+## B. Entreprises 
+L'objectif de cette section est d'apporter un soutien sur mesure aux petites et moyennes entreprises, artisans et professions libérales, notamment celles implantées à Tarbes et en Occitanie, mais aussi plus largement. 
+Il s'agit de leur fournir une expertise externalisée en matière d'organisation administrative, de gestion des processus, de ressources humaines (volet administratif), et de suivi financier de base, afin de leur permettre d'optimiser leur efficacité, de réduire leurs charges administratives et de se concentrer pleinement sur le développement de leur cœur de métier. 
+
+### 1. Conseil en Organisation et Optimisation des Processus Administratifs 
+Cette sous-section vise à améliorer la structure et l'efficacité des opérations administratives de l'entreprise. 
+
+* Diagnostic organisationnel : Analyse des workflows, identification des points de friction, des tâches chronophages, évaluation des outils. 
+* Cette mission commence par une immersion dans l'entreprise pour comprendre en détail ses flux de travail administratifs actuels (workflows). 
+* Il s'agit d'observer et d'analyser comment l'information circule, qui fait quoi, quelles sont les étapes de chaque processus clé (de la réception d'une commande à la facturation, de la gestion du courrier à l'archivage). 
+* L'objectif est d'identifier les "points de friction" (goulets d'étranglement, erreurs récurrentes), les tâches qui consomment un temps excessif par rapport à leur valeur ajoutée, et d'évaluer si les outils de gestion (logiciels, tableurs) actuellement utilisés sont adaptés et performants. 
+* Optimisation des processus : Proposition de réorganisation, mise en place de procédures claires, accompagnement au changement. 
+* Sur la base du diagnostic, vous formulerez des propositions concrètes pour réorganiser et simplifier les processus administratifs. 
+* Cela peut inclure la redéfinition de certaines tâches, l'élimination d'étapes inutiles, la clarification des responsabilités de chacun. 
+* Vous aiderez ensuite l'entreprise à mettre en place des procédures écrites, claires et standardisées pour les tâches récurrentes, afin d'assurer une meilleure qualité et une plus grande efficacité. 
+* Un accompagnement au changement auprès des équipes concernées sera proposé pour faciliter l'adoption des nouvelles méthodes de travail. 
+* Conseil et mise en place d'outils numériques : Aide au choix et déploiement d'ERP, CRM, outils de gestion de projet, GED, outils de facturation. 
+* Pour moderniser et automatiser certaines tâches, vous conseillerez l'entreprise dans le choix d'outils numériques adaptés à sa taille et à ses besoins. 
+* Cela peut concerner : 
+    * Un ERP (Enterprise Resource Planning) ou PGI (Progiciel de Gestion Intégré) pour les entreprises souhaitant une solution centralisée pour gérer l'ensemble de leurs processus (comptabilité, ventes, stocks, RH, etc.). 
+    * Un CRM (Customer Relationship Management) ou GRC (Gestion de la Relation Client) pour optimiser le suivi des clients et des prospects. 
+    * Des outils de gestion de projet pour planifier, suivre et collaborer sur les projets. 
+    * Une GED (Gestion Électronique des Documents) pour dématérialiser, classer et partager les documents de manière sécurisée. 
+    * Des outils de facturation modernes et conformes (par exemple, en prévision de la facturation électronique obligatoire). 
+* Votre rôle ira de l'aide à la définition du cahier des charges jusqu'à l'assistance au choix de la solution (comparaison des offres, tests) et potentiellement à la coordination de son déploiement et à la formation des utilisateurs. 
+
+### 2. Externalisation Administrative Complète ou Modulaire (Office Management Externalisé) 
+Cette sous-section propose une prise en charge externalisée de tout ou partie des tâches administratives de l'entreprise. 
+
+* Gestion administrative générale : Courrier, emails, comptes rendus, classement, archivage, gestion d'agendas, organisation de déplacements, gestion des fournitures, interface avec prestataires généraux. 
+* Vous offrirez un service d'Office Management externalisé, incluant : 
+    * Traitement du courrier entrant et sortant : Réception, tri, numérisation, distribution, préparation des envois. 
+    * Gestion des emails professionnels : Tri, réponse aux demandes courantes, redirection des messages importants. 
+    * Prise de notes et rédaction de comptes rendus de réunion. 
+    * Classement et archivage : Organisation et maintenance d'un système de classement physique et numérique efficace et sécurisé. 
+    * Gestion d'agendas : Prise de rendez-vous pour les dirigeants, organisation de réunions (convocations, réservation de salles). 
+    * Organisation des déplacements professionnels : Réservation de billets de train/avion, hôtels, location de véhicules. 
+    * Gestion des fournitures de bureau : Suivi des stocks, passation des commandes. 
+    * Interface avec les prestataires de services généraux : Gestion des relations avec les fournisseurs d'entretien, de maintenance des locaux, de téléphonie, etc. 
+* Gestion commerciale et relation client : Devis, facturation, suivi des encaissements, relances impayés (pré-contentieux), gestion des commandes fournisseurs, mise à jour CRM. 
+* Vous prendrez en charge le cycle administratif des ventes et des achats : 
+    * Établissement et envoi des devis aux clients, en respectant les mentions légales. 
+    * Création et envoi des factures clients (conformes à la réglementation, y compris la facturation électronique si applicable). 
+    * Suivi rigoureux des encaissements clients : Pointage des règlements, lettrage des comptes clients. 
+    * Gestion des relances pour impayés : Envoi de relances amiables (téléphoniques, écrites) selon un processus défini, préparation des dossiers pour un éventuel recouvrement contentieux (en lien avec des sociétés de recouvrement ou des avocats si nécessaire). 
+    * Préparation des bons de commande fournisseurs et suivi des livraisons. 
+    * Vérification des factures fournisseurs par rapport aux bons de commande et aux livraisons. 
+    * Mise à jour régulière de la base de données clients/prospects dans l'outil CRM de l'entreprise. 
+* Pré-comptabilité et liaison avec l'expert-comptable : Collecte, vérification, numérisation des pièces comptables, préparation des remises en banque, suivi de trésorerie simple, transmission structurée à l'expert-comptable. 
+* Vous assurerez l'interface entre l'entreprise et son expert-comptable (profession réglementée dont vous ne remplacerez pas les missions) : 
+    * Collecte et vérification de toutes les pièces comptables : Factures d'achat, factures de vente, notes de frais, relevés bancaires. 
+    * Numérisation et classement méthodique de ces pièces. 
+    * Préparation des remises de chèques ou d'espèces en banque. 
+    * Suivi de la trésorerie quotidienne : Tenue d'un tableau de suivi des encaissements et décaissements, réalisation de rapprochements bancaires simples. 
+    * Transmission régulière et structurée (par exemple, mensuelle ou trimestrielle) de l'ensemble des éléments préparés à l'expert-comptable pour qu'il puisse effectuer la saisie, la révision et l'établissement des comptes annuels et des déclarations fiscales. 
+* Suivi des obligations légales et réglementaires : Veille et rappel des échéances, préparation de documents pour déclarations (TVA en lien avec expert-comptable), conformité RGPD. 
+* Vous aiderez l'entreprise à rester en conformité avec certaines de ses obligations : 
+    * Veille et rappel des principales échéances administratives, fiscales et sociales (déclarations, paiements). 
+    * Préparation des éléments nécessaires aux déclarations fiscales périodiques (comme la TVA), en étroite collaboration avec l'expert-comptable qui valide et télédéclare. 
+    * Aide à la mise en conformité avec le RGPD (Règlement Général sur la Protection des Données) : Sensibilisation, aide à la tenue du registre des traitements de données personnelles, vérification des mentions d'information sur les documents de collecte de données. 
+
+### 3. Gestion Externalisée des Ressources Humaines (Soutien Administratif RH) 
+Cette sous-section concerne l'assistance dans la gestion administrative du personnel, en complément des missions d'un éventuel service RH interne ou d'un expert-comptable/juriste social pour les aspects les plus techniques ou légaux. 
+
+* Administration du personnel : Formalités d'embauche (DPAE, aide à la rédaction de contrats de travail simples), affiliation aux caisses, suivi des périodes d'essai, gestion administrative des absences (congés, maladie), organisation des visites médicales, préparation des éléments pour documents de fin de contrat. 
+* Vous prendrez en charge une partie de l'administration courante du personnel : 
+    * Formalités d'embauche : Réalisation de la Déclaration Préalable à l'Embauche (DPAE), aide à la rédaction de contrats de travail simples (CDD, CDI non-cadres) sur la base de modèles validés par l'entreprise ou son conseil juridique, en veillant à inclure les clauses obligatoires et spécifiques. 
+    * Affiliation des nouveaux salariés aux caisses de retraite, de prévoyance et à la mutuelle d'entreprise. 
+    * Suivi des périodes d'essai (alertes avant l'échéance, préparation des courriers de confirmation ou de rupture). 
+    * Gestion administrative des absences : Suivi des demandes de congés payés et RTT, collecte des arrêts de travail pour maladie ou accident, préparation des attestations de salaire pour les indemnités journalières. 
+    * Organisation et suivi des visites médicales (d'embauche, périodiques, de reprise) auprès du service de santé au travail. 
+    * Préparation des éléments nécessaires à l'établissement des documents de fin de contrat (certificat de travail, attestation Pôle Emploi, solde de tout compte), en lien avec le gestionnaire de paie ou l'expert-comptable. 
+* Soutien au recrutement : Aide à la définition de poste, rédaction/diffusion d'offres, tri CV, organisation entretiens. 
+* Vous pourrez assister l'entreprise dans ses processus de recrutement : 
+    * Aide à la définition précise du besoin et à la rédaction de la fiche de poste. 
+    * Rédaction d'offres d'emploi attractives et non discriminantes. 
+    * Diffusion des offres sur les supports adaptés (sites d'emploi généralistes ou spécialisés, réseaux sociaux professionnels, Pôle Emploi, APEC, partenaires locaux en Occitanie). 
+    * Réception et tri des candidatures (CV et lettres de motivation) selon les critères définis. 
+    * Présélection téléphonique des candidats. 
+    * Organisation logistique des entretiens (planification, convocations, préparation des salles). 
+    * Gestion des réponses aux candidats (retenus et non retenus). 
+* Gestion administrative de la formation : Identification des besoins, recherche d'organismes/financements (OPCO), inscriptions, suivi administratif. 
+* Vous participerez à la gestion administrative du plan de développement des compétences : 
+    * Aide à l'identification des besoins de formation en lien avec les managers et les salariés. 
+    * Recherche d'organismes de formation répondant aux besoins identifiés. 
+    * Recherche de financements possibles auprès de l'Opérateur de Compétences (OPCO) de l'entreprise ou d'autres dispositifs (régionaux en Occitanie, FNE-Formation, etc.). 
+    * Gestion des inscriptions des salariés aux formations. 
+    * Suivi administratif des dossiers de formation (conventions, feuilles de présence, factures, demandes de remboursement). 
+* Préparation et suivi des relations sociales de base : Aide à l'organisation des élections CSE, préparation ordres du jour/CR, affichages obligatoires, aide à la rédaction du DUERP (partie administrative). 
+* Pour les entreprises concernées par la mise en place d'un Comité Social et Économique (CSE) : 
+    * Aide à l'organisation des élections professionnelles : Rétroplanning, préparation des documents (protocole d'accord préélectoral si négociation, listes électorales, matériel de vote). 
+    * Préparation des ordres du jour des réunions du CSE en collaboration avec le président du CSE. 
+    * Aide à la rédaction des comptes rendus ou procès-verbaux des réunions du CSE. 
+    * Veille et mise à jour des affichages obligatoires en entreprise. 
+    * Aide à la formalisation et à la mise à jour du Document Unique d'Évaluation des Risques Professionnels (DUERP) : Contribution à la partie administrative, au suivi du plan d'action (sans se substituer à un expert en prévention des risques). 
+
+### 4. Suivi de Gestion et Reporting Simplifié 
+Cette sous-section vise à fournir au dirigeant des outils et des informations pour piloter son activité. 
+
+* Élaboration et suivi de budgets prévisionnels (exploitation). En collaboration avec le dirigeant, vous l'aiderez à construire un budget prévisionnel d'exploitation pour l'année à venir (chiffre d'affaires attendu, coûts des marchandises vendues ou des services rendus, charges externes, charges de personnel, etc.). 
+* Vous mettrez en place un suivi régulier pour comparer les réalisations au budget et analyser les écarts. 
+* Mise en place de tableaux de bord avec indicateurs clés (suivi CA, dépenses, trésorerie). 
+* Vous concevrez et mettrez à jour des tableaux de bord synthétiques et visuels, présentant les indicateurs clés de performance (KPI) pertinents pour l'entreprise : évolution du chiffre d'affaires, suivi des principales postes de dépenses, état de la trésorerie, suivi des délais de paiement clients, etc. Ces outils d'aide à la décision seront adaptés aux besoins spécifiques du dirigeant. 
+* Suivi de trésorerie avancé et prévisions. Au-delà du suivi quotidien, vous aiderez à établir des plans de trésorerie prévisionnels sur plusieurs semaines ou mois, en intégrant les encaissements et décaissements attendus. 
+* Cela permettra d'anticiper les éventuelles tensions de trésorerie et de prendre des mesures correctives (recherche de financements à court terme, priorisation des dépenses). 
+* Reporting d'activité pour le dirigeant. Vous préparerez des rapports périodiques (mensuels ou trimestriels) synthétisant les informations administratives, commerciales (suivi des devis, facturation), RH (mouvements de personnel, absences) et financières de base, pour donner au dirigeant une vision globale de la situation et des tendances. 
+
+### 5. Assistance à la Gestion de Projets Administratifs et Transversaux 
+Cette sous-section couvre l'accompagnement sur des projets spécifiques ayant une forte composante administrative. 
+
+* Réponse aux appels d'offres (volet administratif). Vous assisterez l'entreprise dans la préparation de la partie administrative des dossiers de réponse aux appels d'offres publics ou privés : collecte des documents requis (attestations fiscales et sociales, Kbis, assurances, références, etc.), remplissage des formulaires administratifs (DC1, DC2, DC4 pour les marchés publics), vérification de la conformité du dossier avant dépôt. 
+* Montage de dossiers de financement spécifiques (aides publiques, prêts). 
+* Vous aiderez l'entreprise à identifier les aides publiques auxquelles elle pourrait être éligible (subventions de la Région Occitanie, de Bpifrance, aides sectorielles, crédits d'impôt) et à constituer les dossiers de demande. 
+* Vous pourrez également l'assister dans la préparation des éléments administratifs et prévisionnels pour une demande de prêt bancaire. 
+* Coordination de projets (déménagement, certification qualité, dématérialisation). Pour des projets transversaux comme un déménagement de locaux, la mise en place d'une démarche qualité (ISO 9001 par exemple, pour la partie documentaire et organisationnelle), ou un projet de dématérialisation des processus, vous pourrez assurer un rôle de coordination administrative : planification des tâches, suivi des actions, gestion documentaire du projet, communication entre les parties prenantes. 
+
+### 6. Conseil et Intermédiation en Abonnements Professionnels et Assurances Spécifiques 
+Cette sous-section étend l'offre de gestion des abonnements et de courtage (si applicable) au contexte professionnel. 
+
+#### A. Conseil et Intermédiation en Abonnements Professionnels : 
+* Analyse des besoins spécifiques de l'entreprise (flotte mobile, licences logicielles, contrats d'énergie professionnels, services en ligne, etc.) ; 
+* Recherche et comparaison d'offres B2B ; 
+* Négociation tarifaire avec les fournisseurs lorsque possible ; 
+* Assistance à la souscription et à la gestion optimisée des contrats professionnels. 
+* Vous réaliserez un audit des abonnements professionnels de l'entreprise (téléphonie fixe et mobile pour la flotte, accès internet haut débit, licences logicielles, contrats de fourniture d'énergie pour les locaux professionnels, abonnements à des services en ligne, contrats de maintenance, etc.). 
+* Vous analyserez les besoins réels, rechercherez et comparerez les offres B2B du marché, et tenterez de négocier les tarifs et conditions avec les fournisseurs. 
+* Vous assisterez ensuite l'entreprise dans la souscription des nouveaux contrats et mettrez en place un suivi pour leur gestion optimisée (échéances, renouvellements). 
+
+#### B. Courtage en Assurances Professionnelles : 
+* Analyse des risques spécifiques à l'activité de l'entreprise (RC Professionnelle, multirisque professionnelle, protection juridique, assurance flotte automobile, cyber-risques, prévoyance et santé collective des salariés, assurance homme-clé, etc.) ; 
+* Recherche sur le marché des solutions d'assurance adaptées ; 
+* Conseil, présentation des offres, intermédiation pour la souscription ; 
+* Suivi des contrats et assistance en cas de sinistre. 
+
+## C. Créateurs d'entreprises 
+L'objectif de cette section est d'offrir un accompagnement complet et pas à pas aux porteurs de projet, depuis la formalisation de leur idée initiale jusqu'aux premiers mois d'activité de leur nouvelle entreprise. 
+Il s'agit de les guider à travers les étapes clés de la création, de sécuriser leurs démarches administratives et juridiques (en les informant et en les orientant vers les professionnels compétents lorsque nécessaire), de les aider à structurer leur projet et à mobiliser les ressources nécessaires pour un lancement réussi, notamment dans l'écosystème entrepreneurial d'Occitanie. 
+
+### 1. Phase de Pré-Création : Structuration du Projet 
+Cette première phase est cruciale et vise à transformer une idée en un projet d'entreprise viable et bien défini. 
+
+* De l'idée au projet : Clarification, validation de l'idée, étude de marché préliminaire, formalisation du concept et de la proposition de valeur. 
+* Cette mission initiale consiste à aider le créateur à passer du stade de l'idée brute à un concept d'entreprise plus élaboré. 
+* Vous l'accompagnerez pour : 
+    * Clarifier son idée : Définir précisément le produit ou service, le problème qu'il résout, la clientèle cible. 
+    * Valider l'adéquation homme/projet : S'assurer que le projet correspond bien aux aspirations, compétences et contraintes du porteur. 
+    * Réaliser une étude de marché préliminaire : L'assister dans la recherche d'informations sur le marché visé (taille, tendances, concurrence existante à Tarbes, en Occitanie ou au niveau national, attentes des clients potentiels). 
+    * Cela peut impliquer des recherches documentaires, l'analyse de données statistiques (INSEE, études sectorielles), voire des enquêtes simples. 
+    * Formaliser le concept et la proposition de valeur unique : Aider à définir clairement ce qui rendra l'offre de la future entreprise attractive et différente de celle des concurrents. 
+* Assistance à la rédaction du Business Plan : Structuration, co-rédaction de la partie descriptive, aide à la collecte d'informations pour les prévisionnels financiers (en vue d'une validation par expert-comptable). 
+* Le business plan (ou plan d'affaires) est le document de référence qui présente le projet de manière détaillée et argumentée. 
+* Votre rôle sera de : 
+    * Aider à la structuration du document : Définir les différentes parties du business plan (présentation du porteur et de l'équipe, étude de marché, stratégie commerciale et marketing, moyens de production, structure juridique, prévisionnels financiers). 
+    * Co-rédiger la partie descriptive : Assister le créateur dans la rédaction claire et convaincante de la présentation de son projet, de son offre, de sa stratégie, et des moyens qu'il compte mettre en œuvre. 
+    * Aider à la collecte des informations pour les prévisionnels financiers : L'accompagner dans la recherche des données nécessaires à l'établissement des projections financières (chiffre d'affaires prévisionnel, estimation des charges, plan de financement initial, budget de trésorerie). 
+* Il est crucial de préciser que l'établissement final et la validation de ces prévisionnels financiers doivent être effectués par un expert-comptable, profession réglementée. 
+* Votre rôle est de préparer le terrain. 
+* Information et orientation pour le choix du statut juridique : Présentation des options (EI, micro, EURL, SASU, SARL, SAS), implications sociales/fiscales (sans fournir de conseil juridique engageant). 
+* Le choix de la structure juridique est une étape déterminante. 
+* Vous apporterez une information claire et pédagogique sur les principales options qui s'offrent au créateur : 
+    * Entreprise Individuelle (EI), y compris le régime de la micro-entreprise : Simplicité de création et de fonctionnement. 
+    * Sociétés unipersonnelles : EURL (Entreprise Unipersonnelle à Responsabilité Limitée), SASU (Société par Actions Simplifiée Unipersonnelle). 
+    * Sociétés pluripersonnelles : SARL (Société à Responsabilité Limitée), SAS (Société par Actions Simplifiée). 
+* Pour chaque option, vous présenterez les grandes caractéristiques, les avantages et inconvénients en termes de responsabilité du dirigeant, de régime social (travailleur non salarié ou assimilé salarié), de régime fiscal (impôt sur le revenu ou impôt sur les sociétés), et de complexité administrative. 
+* Vous soulignerez que cette information ne constitue pas un conseil juridique personnalisé et qu'il est fortement recommandé de consulter un professionnel du droit (avocat, notaire) ou un expert-comptable pour valider le choix le plus adapté à sa situation spécifiques. 
+* Information sur les aides à la création/reprise d'entreprise : ACRE, ARCE, prêts d'honneur, subventions, concours, dispositifs d'accompagnement. 
+* Vous aiderez le créateur à s'y retrouver dans le panel des aides financières et des dispositifs de soutien à la création d'entreprise : 
+    * Aides nationales : ACRE (Aide à la Création ou à la Reprise d'une Entreprise) permettant une exonération partielle de charges sociales, ARCE (Aide à la Reprise ou à la Création d'Entreprise) versée par Pôle Emploi sous forme de capital. 
+    * Prêts d'honneur : Prêts personnels à taux zéro accordés par des réseaux comme Initiative France (par exemple, Initiative Pyrénées à Tarbes) ou Réseau Entreprendre (présent en Occitanie). 
+    * Subventions et aides régionales/locales : Information sur les dispositifs spécifiques proposés par la Région Occitanie, le Département des Hautes-Pyrénées, ou les collectivités locales. 
+    * Concours à la création d'entreprise. 
+    * Dispositifs d'accompagnement : Orientation vers les structures d'appui (Chambres de Commerce et d'Industrie - CCI Tarbes et Hautes-Pyrénées, Chambres de Métiers et de l'Artisanat - CMA des Hautes-Pyrénées, pépinières d'entreprises comme Crescendo à Tarbes, incubateurs, couveuses, réseaux d'accompagnement). 
+* Vous l'informerez également sur les services de Bpifrance. 
+
+### 2. Création et Formalités d'Immatriculation 
+Cette phase concrétise administrativement la naissance de l'entreprise. 
+
+* Constitution du dossier d'immatriculation (formulaires P0, M0, etc.). En fonction du statut juridique choisi, vous aiderez le créateur à rassembler toutes les pièces justificatives nécessaires (pièce d'identité, justificatif de domicile, attestation de non-condamnation, etc.) et à remplir les formulaires Cerfa correspondants (P0 pour une entreprise individuelle, M0 pour une société, etc.) en vue de l'immatriculation de l'entreprise. 
+* Assistance à la rédaction des statuts simplifiés (EI, statuts types pour EURL/SASU sous responsabilité du créateur, conseiller validation par juriste pour cas complexes). 
+* Pour une Entreprise Individuelle, il n'y a pas de statuts à rédiger. 
+* Pour les sociétés unipersonnelles simples (EURL, SASU), vous pourrez fournir une assistance à la rédaction des statuts en utilisant des modèles types, en soulignant que le créateur en assume la responsabilité. 
+* Pour toute situation plus complexe (société avec plusieurs associés, apports spécifiques, clauses particulières), vous recommanderez systématiquement de faire appel à un professionnel du droit (avocat, notaire) pour une rédaction sur mesure et sécurisée. 
+* Accompagnement des démarches auprès du Guichet Unique (INPI) et organismes compétents. 
+* Depuis le 1er janvier 2023, toutes les formalités de création d'entreprise doivent être effectuées en ligne via le portail du Guichet Unique géré par l'INPI (Institut National de la Propriété Industrielle). 
+* Vous guiderez le créateur à travers cette plateforme : création de son compte, saisie des informations, dépôt des pièces justificatives numérisées. 
+* Vous l'aiderez également à identifier et à contacter les organismes compétents qui pourraient être concernés suite à la création (services des impôts des entreprises - SIE, URSSAF, caisses de retraite spécifiques selon l'activité). 
+* Autres formalités initiales : Aide à l'ouverture du compte pro, information sur assurances professionnelles obligatoires. 
+* Vous conseillerez le créateur sur les démarches pour ouvrir un compte bancaire professionnel dédié à son activité (obligatoire pour les sociétés, fortement recommandé pour les entreprises individuelles). 
+* Vous l'informerez également sur les assurances professionnelles qui pourraient être obligatoires ou fortement recommandées en fonction de son activité (Responsabilité Civile Professionnelle - RC Pro, assurance décennale pour les métiers du bâtiment, assurance des locaux, etc.), en l'orientant si besoin vers des courtiers ou assureurs. 
+
+### 3. Lancement et Suivi Administratif des Premiers Pas 
+Cette phase vise à aider le créateur à bien démarrer son activité sur le plan administratif et organisationnel. 
+
+* Mise en place de l'organisation administrative initiale : Classement, choix/paramétrage outil de facturation, échéancier fiscal/social. 
+* Dès le démarrage, il est essentiel de mettre en place une bonne organisation administrative. 
+* Vous aiderez le créateur à : 
+    * Organiser son classement documentaire (papier et numérique) pour séparer clairement les documents de l'entreprise de ses documents personnels. 
+    * Choisir et paramétrer un outil de facturation simple et conforme à la législation (mentions obligatoires sur les factures). 
+    * Établir un échéancier personnalisé des premières obligations fiscales (TVA si applicable, CFE) et sociales (paiement des cotisations). 
+* Assistance pour la compréhension et la gestion des premières obligations : Déclarations de chiffre d'affaires (micro-entreprise), de TVA. 
+* Vous expliquerez au nouveau chef d'entreprise le fonctionnement de ses premières obligations déclaratives : 
+    * Pour les micro-entrepreneurs : Comment et quand déclarer son chiffre d'affaires (mensuellement ou trimestriellement) à l'URSSAF pour le calcul de ses cotisations sociales et, si option pour le versement libératoire, de son impôt sur le revenu. 
+    * Pour les entreprises soumises à la TVA : Les principes de la TVA (collectée, déductible), les différents régimes (réel normal, réel simplifié), et comment préparer les informations pour les déclarations de TVA (qui seront généralement effectuées par l'expert-comptable). 
+* Information sur les cotisations sociales initiales. Vous apporterez des informations sur le mode de calcul et de paiement des premières cotisations sociales du dirigeant (selon son statut : TNS ou assimilé salarié) et sur les éventuelles exonérations ou taux réduits dont il pourrait bénéficier (comme l'ACRE). 
+* Conseils pratiques pour la gestion administrative courante. Vous fournirez des conseils pratiques pour bien gérer l'administratif au quotidien : tenue d'un livre des recettes et d'un registre des achats (obligatoire pour les micro-entrepreneurs sous certaines conditions et utile pour tous), bonnes pratiques pour la relation avec les clients et les fournisseurs, etc. 
+* Mise en relation avec des partenaires clés (experts-comptables, avocats, assureurs). 
+* Fort de votre réseau, vous pourrez orienter le créateur vers des professionnels de confiance et compétents (experts-comptables pour la tenue de la comptabilité et les conseils fiscaux, avocats pour les questions juridiques complexes, assureurs ou courtiers pour les assurances professionnelles) à Tarbes ou dans la région Occitanie, en fonction de ses besoins spécifiques. 
+* Votre rôle sera celui d'un facilitateur, sans vous substituer à ces experts. 
+
+## D. Associations 
+L'objectif de cette section est de fournir un soutien spécialisé et adapté aux associations de toutes tailles et de tous secteurs (culturel, sportif, social, éducatif, etc.), que ce soit à Tarbes, en Occitanie ou ailleurs en France. 
+Ce soutien vise à faciliter leur création, à structurer leur fonctionnement, à optimiser leur gestion administrative et financière, à les aider dans leur recherche de financements et à accompagner leur développement stratégique et la réalisation de leurs projets. 
+
+### 1. Création, Structuration et Évolution 
+Cette sous-section se concentre sur les étapes fondatrices et les évolutions structurelles de la vie d'une association. 
+
+* Phase de pré-création et définition du projet : Aide à la formalisation du projet associatif (objet social, buts, public cible, valeurs, activités envisagées). 
+* Avant même de penser aux statuts, cette mission consiste à accompagner les membres fondateurs dans la maturation de leur idée. 
+* Vous les aiderez, par des séances de travail et de réflexion, à définir clairement et précisément l'objet social de la future association (sa raison d'être principale), ses buts concrets, le public qu'elle vise à servir ou à atteindre, les valeurs fondamentales qui guideront son action, et les types d'activités qu'elle envisage de mettre en œuvre pour atteindre ses objectifs. 
+* Une bonne définition initiale est la clé d'une association cohérente et pérenne. 
+* Rédaction des documents fondateurs : Co-rédaction ou assistance à la rédaction des statuts (conformes à la loi 1901 et adaptés), du règlement intérieur. 
+* Préparation du PV de l'AG constitutive. Les statuts sont l'acte fondateur de l'association. 
+* Vous assisterez les fondateurs dans leur rédaction, en veillant à ce qu'ils soient conformes aux dispositions de la loi du 1er juillet 1901 et à ses décrets d'application, mais aussi adaptés aux spécificités du projet associatif (mode de gouvernance, conditions d'adhésion, ressources, etc.). 
+* De même, vous aiderez à la rédaction d'un éventuel règlement intérieur, qui précisera les modalités de fonctionnement non détaillées dans les statuts. 
+* Enfin, vous préparerez le procès-verbal de l'assemblée générale constitutive, document officiel attestant de la volonté des fondateurs de créer l'association et de l'adoption des statuts. 
+* Formalités de déclaration et d'immatriculation : Constitution et dépôt du dossier de déclaration en préfecture (téléservice e-création), suivi de la publication au JOAFE, assistance pour l'obtention du RNA et, si besoin, SIREN/SIRET (activités lucratives, subventions, emploi de salariés). 
+* Une fois les statuts adoptés, l'association doit être déclarée pour acquérir la personnalité juridique. 
+* Vous guiderez les responsables dans la constitution du dossier de déclaration à déposer auprès du greffe des associations de la préfecture (ou sous-préfecture) du siège social (par exemple, la préfecture des Hautes-Pyrénées à Tarbes). 
+* Vous les assisterez pour utiliser le téléservice "e-création" ou pour remplir les formulaires Cerfa nécessaires. 
+* Vous assurerez le suivi jusqu'à l'obtention du récépissé de déclaration portant le numéro RNA (Répertoire National des Associations) et la publication de l'extrait de déclaration au Journal Officiel des Associations et Fondations d'Entreprise (JOAFE). 
+* Si l'association envisage d'employer du personnel, de recevoir des subventions publiques ou d'exercer des activités qui entraînent le paiement de la TVA ou de l'impôt sur les sociétés, vous l'assisterez également dans les démarches auprès de l'INSEE pour obtenir un numéro SIREN et un code SIRET. 
+* Lancement initial : Conseils pour l'ouverture du compte bancaire, mise en place des registres obligatoires. 
+* Après la déclaration, vous conseillerez les dirigeants sur les démarches à effectuer pour ouvrir un compte bancaire au nom de l'association, ce qui est indispensable pour gérer ses finances. 
+* Vous les informerez également sur les registres que la loi ou les statuts peuvent rendre obligatoires (registre spécial consignant les modifications et changements, registre des membres, registre des délibérations des instances). 
+* Modification statutaire et dissolution : Accompagnement dans toutes les démarches de modification (objet, siège, dirigeants) et de dissolution/liquidation. 
+* La vie d'une association peut nécessiter des modifications de ses statuts (changement d'objet, de dénomination, de siège social, des règles de gouvernance) ou de ses dirigeants. 
+* Vous accompagnerez l'association dans la convocation de l'assemblée générale compétente pour voter ces modifications, la rédaction du procès-verbal, et les formalités de déclaration modificative en préfecture. 
+* De même, en cas de décision de dissolution de l'association, vous l'assisterez dans les démarches légales : convocation de l'AG de dissolution, nomination d'un liquidateur, réalisation des opérations de liquidation (paiement des dettes, réalisation de l'actif), déclaration de la dissolution en préfecture et publication. 
+
+### 2. Gouvernance, Organisation et Vie Associative 
+Cette section porte sur l'optimisation du fonctionnement interne et la dynamique de la vie associative. 
+
+* Conseil en organisation interne : Optimisation du fonctionnement des instances (AG, CA, Bureau), clarification des rôles et responsabilités. 
+* Vous aiderez l'association à structurer ou à améliorer le fonctionnement de ses instances dirigeantes : l'Assemblée Générale (organe souverain), le Conseil d'Administration (s'il existe, chargé de la gestion courante) et le Bureau (président, trésorier, secrétaire, etc.). 
+* Cela passera par une clarification des rôles et des responsabilités de chacun, la mise en place de processus de décision efficaces, et l'amélioration de la communication entre les différentes instances et avec les membres. 
+* Préparation, animation et suivi des instances : Aide à la rédaction des convocations, ordres du jour, documents supports. 
+* Animation neutre (facilitateur) ou formation des dirigeants. Rédaction des PV, suivi des décisions. 
+* Pour garantir l'efficacité des réunions statutaires, vous apporterez votre aide dans leur préparation : rédaction des convocations dans le respect des délais statutaires, élaboration d'un ordre du jour clair et pertinent, préparation des documents supports nécessaires à la prise de décision (rapport d'activité, rapport financier, propositions de résolutions). 
+* Vous pourrez également proposer d'animer les réunions en tant que facilitateur neutre pour garantir des échanges constructifs, ou former les dirigeants à des techniques d'animation. 
+* Après chaque réunion, vous assisterez à la rédaction rigoureuse des procès-verbaux et à la mise en place d'un système de suivi des décisions prises. 
+* Gestion des membres et des bénévoles : Mise en place d'outils de gestion des adhésions, information sur les droits/devoirs des bénévoles, valorisation du bénévolat, rédaction de chartes. 
+* Vous aiderez l'association à mettre en place un système simple et efficace pour gérer ses membres (bulletins d'adhésion, suivi des cotisations, fichier des membres conforme au RGPD). 
+* Vous informerez les dirigeants et les bénévoles sur le cadre juridique du bénévolat (droits, devoirs, assurances). 
+* Vous proposerez des pistes pour valoriser l'engagement des bénévoles (formation, reconnaissance) et pourrez aider à la rédaction d'une charte du bénévolat clarifiant les engagements réciproques entre l'association et ses bénévoles. 
+* Mise en place d'outils collaboratifs et de communication interne : Conseil et formation sur des outils partagés (agendas, stockage, listes de diffusion). 
+* Pour fluidifier le travail en équipe et la communication au sein de l'association, vous conseillerez sur le choix et la mise en place d'outils numériques collaboratifs adaptés à ses besoins et à ses moyens : agendas partagés pour planifier les activités, solutions de stockage et de partage de documents en ligne, listes de diffusion pour communiquer avec les membres, plateformes de gestion de projet simples. 
+* Vous pourrez également assurer une formation de base à l'utilisation de ces outils. 
+
+### 3. Recherche de Financements et Développement de Ressources 
+Cette section est cruciale pour la pérennité et le développement des projets associatifs. 
+
+* Veille et identification des sources de financement : Subventions publiques (État, collectivités, Europe), fondations privées, appels à projets. 
+* Vous mettrez en place une veille active et ciblée pour identifier les opportunités de financement correspondant à l'objet et aux projets de l'association. 
+* Cela inclut les subventions publiques (État via les directions régionales comme la DRAC ou la DRAJES en Occitanie, Conseil Régional d'Occitanie, Conseil Départemental des Hautes-Pyrénées, communes comme Tarbes, agences de l'eau, fonds européens), les financements provenant de fondations d'entreprises ou de fondations reconnues d'utilité publique, ainsi que les appels à projets thématiques lancés par divers organismes. 
+* Montage et suivi de dossiers de demande de financement : Analyse des cahiers des charges, aide à la rédaction des argumentaires, élaboration des budgets prévisionnels de l'action, constitution des dossiers administratifs, suivi, préparation des bilans d'action. 
+* Cette mission est centrale. Elle consiste à accompagner l'association de A à Z dans ses démarches de demande de financement : 
+    * Analyse des cahiers des charges : Décortiquer les attentes précises de chaque financeur potentiel. 
+    * Aide à la rédaction des argumentaires : Formuler de manière claire, concise et persuasive la présentation du projet, ses objectifs, son public, son caractère innovant, son impact attendu. 
+    * Élaboration des budgets prévisionnels : Construire des budgets détaillés et réalistes pour chaque action ou projet faisant l'objet d'une demande de financement, en veillant à la cohérence des dépenses et des recettes. 
+    * Constitution des dossiers administratifs : Rassembler toutes les pièces administratives requises par le financeur (statuts, récépissé de déclaration, RIB, rapports d'activité, comptes approuvés, etc.). 
+    * Suivi des dossiers : Assurer le suivi après le dépôt, répondre aux éventuelles demandes de compléments d'information. 
+    * Préparation des bilans d'action : Aider l'association à rédiger les rapports qualitatifs et financiers à fournir aux financeurs une fois l'action réalisée, pour justifier de la bonne utilisation des fonds. 
+* Développement de nouvelles sources de revenus : Conseils pour campagnes de dons (reçus fiscaux), crowdfunding, mécénat, sponsoring, organisation d'événements de collecte, information sur les activités lucratives accessoires. 
+* Au-delà des subventions, vous aiderez l'association à diversifier ses ressources : 
+    * Campagnes de dons : Conseils pour organiser des appels aux dons auprès du public et gestion des reçus fiscaux pour les donateurs (si l'association est habilitée à en émettre). 
+    * Financement participatif (crowdfunding) : Accompagnement dans le choix d'une plateforme, la préparation de la campagne, la communication autour du projet. 
+    * Mécénat et sponsoring : Aide à l'identification d'entreprises mécènes ou sponsors potentiels (locaux à Tarbes/Occitanie ou nationaux), à la préparation de dossiers de partenariat. 
+    * Événements de collecte de fonds : Conseils pour l'organisation d'événements (gala, tombola, vente de produits) dans le respect de la réglementation. 
+    * Activités lucratives accessoires : Information sur la possibilité pour une association de développer des activités commerciales de manière limitée pour financer son objet non lucratif, et sur les implications fiscales (franchise des impôts commerciaux, sectorisation). 
+
+### 4. Gestion Administrative, Comptable (Simplifiée) et Juridique (Informationnelle) 
+Cette section vise à assurer une gestion rigoureuse et conforme de l'association. 
+
+* Organisation administrative et pré-comptable : Classement des pièces, tenue d'une comptabilité de trésorerie simple, préparation des éléments pour l'expert-comptable. 
+* Vous aiderez à mettre en place une organisation administrative efficace : classement méthodique des courriers, des factures, des contrats, etc. Pour la comptabilité, vous pourrez assister l'association dans la tenue d'une comptabilité de trésorerie simple (enregistrement des recettes et des dépenses) si sa taille et ses obligations ne nécessitent pas une comptabilité d'engagement complexe. 
+* Si l'association fait appel à un expert-comptable, vous l'aiderez à préparer et à classer les pièces et informations nécessaires à sa mission. 
+* Élaboration et suivi budgétaire : Construction de budgets prévisionnels (annuels, par projet), suivi de l'exécution, analyse des écarts. 
+* Vous accompagnerez l'association dans l'élaboration de son budget prévisionnel annuel global, ainsi que des budgets prévisionnels spécifiques pour ses principaux projets. 
+* Vous mettrez en place des outils simples pour suivre l'exécution de ces budgets au fil de l'eau, comparer les réalisations aux prévisions, analyser les écarts et alerter les dirigeants si nécessaire. 
+* Respect des obligations légales : Veille et information sur les obligations (déclarations, rapports), préparation des documents, information RGPD. 
+* Vous assurerez une veille informationnelle sur les obligations légales et réglementaires qui s'imposent aux associations (déclaration des modifications statutaires ou de dirigeants, approbation annuelle des comptes, rédaction du rapport d'activité et du rapport financier, etc.). 
+* Vous aiderez à la préparation de ces documents. Vous informerez également l'association de ses obligations en matière de protection des données personnelles (RGPD), notamment si elle gère un fichier de membres ou de donateurs. 
+
+### 5. Stratégie, Communication et Développement de Projets 
+Cette section est tournée vers l'avenir de l'association et la valorisation de ses actions. 
+
+* Accompagnement à la définition du projet associatif pluriannuel : Animation d'ateliers, aide à la formalisation de la stratégie. 
+* Vous proposerez aux dirigeants et aux membres actifs des temps de réflexion stratégique (ateliers, séminaires) pour définir ou actualiser le projet associatif sur plusieurs années : vision à long terme, grands objectifs, priorités d'action, indicateurs de réussite. 
+* Vous aiderez à formaliser ce projet dans un document qui servira de feuille de route. 
+* Valorisation des actions et communication : Conseils pour la visibilité, aide à la création de supports simples (flyers, newsletters), conseils pour les réseaux sociaux, site web vitrine. 
+* Pour faire connaître ses activités et toucher son public, vous conseillerez l'association sur sa stratégie de communication : 
+    * Supports de communication : Aide à la conception et à la rédaction de supports simples et efficaces (flyers, affiches, plaquettes de présentation, newsletters). 
+    * Réseaux sociaux : Conseils pour choisir les plateformes adaptées à sa cible (Facebook, Instagram, LinkedIn, etc.) et pour y développer une présence pertinente. 
+    * Relations presse : Initiation à la communication avec les médias locaux (presse écrite, radios, TV de Tarbes et de la région Occitanie). 
+    * Site web : Accompagnement pour la création ou l'amélioration d'un site internet vitrine simple, présentant l'association, ses actions et comment la soutenir. 
+* Soutien à la transition numérique : Diagnostic, accompagnement au choix et à la mise en place d'outils digitaux. 
+* Vous aiderez l'association à évaluer sa maturité numérique et à identifier les outils digitaux qui pourraient améliorer son fonctionnement, sa gestion, sa communication ou la réalisation de ses activités (outils collaboratifs, logiciels de gestion de projet, plateformes de dons en ligne, outils de création graphique simples, etc.). 
+* Vous l'accompagnerez dans le choix et la prise en main de ces outils. 
+* Développement de partenariats : Identification de partenaires, conseils pour la formalisation. 
+* Vous assisterez l'association dans la recherche et le développement de partenariats avec d'autres acteurs de son territoire (autres associations, collectivités locales, entreprises, établissements scolaires) pour mutualiser des moyens, monter des projets communs ou renforcer son impact. 
+* Vous conseillerez sur la manière de formaliser ces partenariats (conventions de partenariat). 
+
+# 1 Vue d'ensemble du module 
+
+## 1.1. Objectif du module 
+Le module eLaska est conçu pour être une solution de gestion intégrale et d'optimisation des services d'accompagnement proposés par le cabinet. Il s'adresse à une clientèle variée, comprenant les particuliers, les associations, les créateurs d'entreprises, ainsi que les entreprises établies (TPE/PME, artisans, professions libérales). L'ambition principale est de centraliser l'ensemble des informations clients et dossiers au sein d'une plateforme unique, de simplifier et rationaliser les démarches administratives et de gestion tant pour les conseillers que pour les clients, d'améliorer significativement la communication et la collaboration, et d'offrir un suivi personnalisé, proactif et à forte valeur ajoutée. Pour atteindre ces objectifs, le module permettra un suivi méticuleux des dossiers clients grâce à des timelines de projet hautement dynamiques et entièrement personnalisables. Ces timelines visualiseront les étapes progressives de chaque mission, avec la possibilité de les modifier au cas par cas (par instance de dossier). Les étapes en attente ou non commencées seront clairement identifiables (par exemple, grisées ou avec une icône spécifique), tandis que des badges de statut modernes, colorés et visuels indiqueront de manière explicite l'état d'avancement de chaque étape (ex: "À faire", "En cours", "Validé", "Bloqué"). La gestion des tâches sera intégrée, permettant d'assigner, de suivre et de prioriser les actions. Le stockage documentaire sera sécurisé et polyvalent, avec une gestion native de pièces jointes plurielles (multiples fichiers de formats variés avec métadonnées associées) pour chaque entité (dossier, tâche, client, etc.), une option d'intégration avec Google Drive pour plus de flexibilité, et un Coffre-Fort Numérique Avancé spécifiquement pour les particuliers, garantissant une confidentialité et une sécurité accrues pour leurs documents les plus sensibles. La gestion des communications sera optimisée grâce à des templates d'emails HTML personnalisables (permettant d'insérer dynamiquement des informations clients ou dossiers), des sujets d'email dynamiques pour une meilleure organisation, et un suivi centralisé des échanges avec les clients ainsi qu'avec les intervenants externes (banques, administrations, etc.). Une vision client à 360° sera offerte aux conseillers via la fiche tiers enrichie, et aux clients eux-mêmes via un portail web client développé en Single Page Application (SPA), garantissant une expérience utilisateur fluide, réactive et moderne. Les bénéfices attendus incluent une optimisation significative du temps de traitement des dossiers, une amélioration tangible de la qualité du suivi client, une traçabilité complète des échanges et des actions, et une meilleure efficacité opérationnelle. Le module intégrera des fonctionnalités avancées telles que le recouvrement (pour le cabinet et en délégation pour les clients TPE/PME), la numérotation automatique et personnalisable des objets métier (dossiers, contrats, factures, etc.) avec utilisation de variables dynamiques (ex: année, type de client, initiales conseiller), et une personnalisation totale de l'interface et des fonctionnalités (icônes Font Awesome ou similaires, tags et catégories personnalisables, champs additionnels, vues de listes configurables, menus et tableaux de bord adaptables par rôle utilisateur). Des outils spécialisés seront inclus pour le conseil en gestion de patrimoine, la gestion des contrats d'assurances et d'abonnements (particuliers et professionnels), le montage et le suivi de dossiers de crédit, ainsi que la gestion des sinistres. La prise de rendez-vous en ligne sera facilitée, avec synchronisation bidirectionnelle avec Google Agenda et stockage de la référence de l'événement Google Calendar. Un accompagnement spécifique sera proposé pour chaque typologie de client : basé sur les objectifs de vie pour les particuliers, une aide structurée et un suivi du parcours pour les créateurs d'entreprises, un soutien adapté aux spécificités de gouvernance et de financement pour les associations, et des services d'externalisation administrative et de conseil pour les professionnels. Le module intégrera un système de notifications modernes et multicanales (push web, email, notifications sur tableau de bord) avec des indicateurs de suivi de progression pour tenir informés les utilisateurs des avancées et des actions requises. Enfin, un suivi détaillé des consommations (frais, fournitures spécifiques au dossier) et des heures de travail (avec une granularité fine par dossier, prestation, tâche et même par étape de timeline) sera possible, permettant une analyse de rentabilité et une facturation précise. Des outils de veille sur les dispositifs d'aide locaux/régionaux (spécifiquement pour la zone Occitanie/Tarbes) et un annuaire de partenaires viendront compléter l'offre de services. L'ensemble de ces fonctionnalités sera présenté au travers d'un design et d'une interface utilisateur (UI) très modernes, épurés et intuitifs, s'inspirant des meilleures pratiques et des exemples visuels fournis, afin d'assurer une adoption aisée et une utilisation agréable au quotidien. 
+
+## 1.2. Modules principaux (Description détaillée) 
+* **Cœur : Gestion des Tiers :** Ce module fondamental est la pierre angulaire du système. Il permet une gestion complète et détaillée de tous les contacts et entités interagissant avec le cabinet. 
+    * Typologies de Tiers : Gestion fine des différentes catégories de tiers : 
+        * Particuliers : Personnes physiques clientes pour des services d'accompagnement personnel. 
+        * Associations : Organisations à but non lucratif de divers types (culturelles, sportives, sociales, etc.). 
+        * Entreprises (TPE/PME, Artisans, Libéraux) : Structures professionnelles clientes pour des services de conseil et d'externalisation. 
+        * Créateurs d'Entreprises : Porteurs de projet en phase de création ou de lancement. 
+        * Intervenants Externes : Professionnels ou organismes partenaires ponctuels sur des dossiers (ex: notaires, avocats, experts-comptables non-clients, banquiers). 
+        * Organismes : Administrations, institutions publiques ou privées (ex: CAF, Pôle Emploi, URSSAF, organismes de formation). 
+        * Partenaires : Entreprises ou professionnels avec lesquels le cabinet a des accords de partenariat structurés. 
+        * Apporteurs d'Affaires : Individus ou entités qui recommandent les services du cabinet. 
+    * Fiche Tiers Enrichie : Chaque tiers dispose d'une fiche détaillée, synchronisée avec le module Tiers natif de Dolibarr, mais enrichie par eLaska pour offrir une vue à 360° (voir section 3.3). 
+    * Gestion des Contacts et Adresses Multiples. 
+    * Historique des Interactions Transversales. 
+* **Gestion Centralisée des Dossiers Généraux :** Ce module est le moteur du suivi opérationnel. Il permet de créer, gérer et suivre tous les types de dossiers d'accompagnement. 
+    * Références eLaska Personnalisables : Système de numérotation unique et configurable pour chaque dossier. 
+    * Modèles de Timelines par Type de Dossier : L'administrateur pourra configurer des modèles de timelines prédéfinis pour chaque grand type de service ou de dossier (ex: modèle "Accompagnement Particulier - Déclaration de revenus", "Suivi Association - Demande de subvention", "Création d'Entreprise - Parcours complet", "Prestation TPE/PME - Audit administratif", "Recouvrement - Phase amiable", "Dossier de Crédit Immobilier"). 
+    * Ces modèles incluront des étapes types, des durées estimées, et des documents requis. 
+    * Logique des Timelines Dynamiques : Gestion de l'affichage des étapes, de leur progression, des dépendances. 
+    * Gestion des Badges de Statut : Administration des types de badges, de leurs couleurs et icônes. 
+    * Gestion Documentaire Plurielle : Capacité à attacher de multiples documents à chaque dossier, étape, ou tâche, avec versioning et métadonnées. 
+* **Portail Web Client & Communication (SPA React) :** Interface dédiée aux clients pour un accès sécurisé à leurs informations et une interaction facilitée avec le cabinet. 
+    * Sections et Fonctionnalités Enrichies et Personnalisées : Le contenu et les fonctionnalités disponibles sur le portail seront adaptés dynamiquement en fonction du type de client connecté (Particulier, Association, Entreprise, Créateur). 
+    * Tableaux de Bord Personnalisés. 
+    * Messagerie Sécurisée. 
+    * Prise de Rendez-vous en Ligne. 
+* **Accompagnement Spécifique des Particuliers :** Ensemble de fonctionnalités et de services dédiés aux besoins des clients particuliers. 
+    * Gestion Administrative Quotidienne et Suivi Budgétaire : Aide à l'organisation, classement, numérisation, échéanciers, rédaction de courriers, analyse de budget. 
+    * Démarches Spécifiques : Accompagnement pour dossiers complexes (surendettement, droits sociaux CAF/MSA, logement social, retraite, fiscalité, état civil, démarches ANTS, santé/MDPH). 
+    * Inclusion Numérique : Formation et assistance à l'utilisation des outils numériques et portails administratifs. 
+    * Coffre-Fort Numérique Avancé : Espace de stockage ultra-sécurisé pour les documents sensibles du particulier. 
+    * Module "Mes Objectifs de Vie & Projets" : Outil interactif pour que le client définisse et suive ses projets personnels (achat immobilier, voyage, formation) avec le soutien du conseiller. 
+    * Suivi "Démarches Complexes en Cours" : Vue synthétique de l'avancement des démarches longues et multi-étapes. 
+* **Accompagnement Spécifique des Associations :** Outils et services pour répondre aux enjeux des associations. 
+    * Aide à la Création/Structuration/Évolution : Accompagnement pour la rédaction des statuts, les formalités de déclaration, les modifications statutaires, la dissolution. 
+    * Gouvernance et Vie Associative : Conseil en organisation interne, préparation et suivi des instances (AG, CA, Bureau), gestion des membres et bénévoles. 
+    * Recherche de Financements : Veille sur les subventions (publiques, privées, européennes), les appels à projets, le mécénat, le crowdfunding. 
+    * Gestion Administrative et Comptable Simplifiée : Aide au classement, tenue de comptabilité de trésorerie, élaboration de budgets. 
+    * Stratégie et Communication : Aide à la définition du projet associatif, conseils en communication, création de supports. 
+    * Gestion des Instances Statutaires et Obligations Réglementaires. 
+    * Module "Demandes de Financement/Subvention" : Suivi détaillé des dossiers de demande. 
+* **Accompagnement Spécifique des Créateurs d'Entreprises :** Suivi pas à pas des porteurs de projet. 
+    * De l'Idée au Projet : Aide à la clarification du concept, validation de l'idée, étude de marché préliminaire. 
+    * Business Plan : Assistance à la structuration et à la rédaction de la partie descriptive. 
+    * Choix du Statut Juridique (Information) : Présentation des options et de leurs implications (sans conseil juridique engageant). 
+    * Aides à la Création : Information et orientation vers les dispositifs existants (ACRE, ARCE, prêts d'honneur, subventions régionales Occitanie). 
+    * Formalités d'Immatriculation (Guichet Unique INPI) : Accompagnement dans les démarches en ligne. 
+    * Lancement et Suivi Administratif des Premiers Pas : Organisation administrative initiale, premières déclarations. 
+* **Conseil & Gestion Externalisée pour Entreprises (TPE/PME, Artisans, Libéraux) :** Services d'optimisation et d'externalisation pour les professionnels. 
+    * Optimisation des Processus Administratifs : Diagnostic organisationnel, proposition de réorganisation, mise en place de procédures. 
+    * Externalisation Administrative (Office Management) : Prise en charge de la gestion du courrier, des emails, des devis/factures, du suivi des encaissements, de la pré-comptabilité. 
+    * Soutien Administratif RH : Aide pour les formalités d'embauche, gestion administrative des absences, suivi de la formation. 
+    * Suivi de Gestion et Reporting Simplifié : Élaboration de budgets, tableaux de bord avec indicateurs clés. 
+    * Assistance Projets Administratifs : Aide pour réponses aux appels d'offres, montage de dossiers de financement. 
+    * Gestion Déléguée des Contrats Fournisseurs. 
+* **Module Conseil en Gestion de Patrimoine, Assurances, Crédits & Sinistres :** Expertise financière et assurantielle. 
+    * Sous-module : Bilan & Stratégie Patrimoniale. 
+    * Sous-module : Contrats d'Assurance (Particuliers et Professionnels). 
+    * Sous-module : Dossiers de Crédit. 
+    * Sous-module : Gestion des Sinistres. 
+* **Module de Courtage et d'Intermédiation en Abonnements :** Optimisation des contrats récurrents. 
+    * Pour Particuliers : Énergie, télécommunications, médias, etc. 
+    * Pour Professionnels : Flotte mobile, licences logicielles, contrats d'énergie professionnels, services en ligne. 
+* **Gestion des Services/Prestations (transversal) :** Catalogue des services offerts par le cabinet, avec description, tarification (si applicable), et liaison possible avec les dossiers et la facturation. 
+* **Tâches et Suivi Opérationnel (transversal) :** Module de gestion de tâches avec assignation, priorités, échéances, checklists, et vues multiples (liste, Kanban, calendrier). Incluant suivi détaillé heures/consommations par étape et granularité fine. 
+* **Recouvrements (transversal) :** Gestion des processus de recouvrement des factures impayées du cabinet, et module de recouvrement délégué pour le compte des clients TPE/PME, avec suivi des actions, des communications et des encaissements. 
+* **Pilotage Interne & Rapports Avancés :** Outils de reporting pour la direction du cabinet, incluant des analyses sur la performance des services, la charge de travail, la rentabilité par type de mission ou client. 
+* **Gestion des Partenariats & Apporteurs d'Affaires :** Suivi des relations avec les partenaires et les apporteurs d'affaires, gestion des commissions éventuelles. Avec Annuaire Dynamique des Partenaires Locaux/Régionaux (focus Tarbes/Occitanie). 
+* **Paramètres et Personnalisation Approfondie du module eLaska :** Interface d'administration pour configurer le module, incluant la gestion des workflows automatisés (ex: création automatique de tâches à une certaine étape d'une timeline) et la gestion des consentements RGPD (types de consentement, traçabilité). 
+
+## 1.3. Intégration avec les modules natifs Dolibarr (Interactions détaillées) 
+L'objectif est une fusion totale et une synergie avec les données existantes et les fonctionnalités de Dolibarr. Le module eLaska s'intégrera de manière transparente et complète avec les modules natifs suivants, en les enrichissant : 
+* **Tiers (Clients, Prospects, Partenaires, Fournisseurs) :** 
+    * Utilisation du module "Tiers" de Dolibarr comme base de données centrale pour les entités. eLaska ne dupliquera pas les fiches tiers mais les étendra. 
+    * Synchronisation Bidirectionnelle : Les informations de base (nom, adresse, SIRET, etc.) saisies ou modifiées dans Dolibarr seront reflétées dans eLaska et vice-versa (pour les champs communs). 
+    * Enrichissement des Fiches Tiers : eLaska ajoutera des onglets, des champs spécifiques et des vues dédiées à la fiche tiers Dolibarr pour afficher les informations propres à l'accompagnement eLaska (typologies eLaska, dossiers liés, communications spécifiques, etc.). La fiche Tiers eLaska (accessible depuis la fiche Dolibarr) deviendra le point central pour visualiser l'ensemble de l'accompagnement. 
+    * Gestion des Typologies eLaska : Ajout d'un champ "Type de Tiers eLaska" (Particulier, Association, etc.) pour conditionner l'affichage et les fonctionnalités. 
+    * Gestion des Mandats : Possibilité de lier des mandats de gestion ou de représentation (stockés comme documents ou via un sous-module Contrats) aux fiches tiers. 
+* **Facturation (Propositions commerciales, Commandes, Factures, Paiements) :** 
+    * Génération depuis Prestations eLaska : Les services et prestations définis et suivis dans eLaska (incluant les temps passés facturables et les consommations/frais refacturables avec granularité fine) pourront générer automatiquement des propositions commerciales, des commandes clients, puis des factures dans le module Facturation de Dolibarr. 
+    * Lien Temps Passé/Facturation : Les heures saisies dans eLaska sur des dossiers/tâches facturables pourront être regroupées et transférées pour créer des lignes de facture. 
+    * Suivi des Statuts de Facturation : Visualisation depuis eLaska du statut des factures Dolibarr liées à des prestations eLaska (brouillon, validée, payée, impayée). 
+    * Gestion des Paiements : Utilisation du module Factures et Banque de Dolibarr pour le suivi des règlements. 
+* **Projets et Tâches / Feuilles de temps :** 
+    * Création Automatique ou Manuelle : Les dossiers eLaska pourront, si pertinent, créer automatiquement un projet Dolibarr lié. De même, les tâches eLaska pourront être synchronisées avec les tâches du module Projet de Dolibarr. 
+    * Assignation et Suivi de Statut : Synchronisation des affectations de responsables et des statuts entre eLaska et Dolibarr pour les tâches/projets liés. 
+    * Checklists : Les checklists des tâches eLaska pourront être visibles ou gérées via l'interface Projet de Dolibarr. 
+    * Lien avec "Feuilles de temps" (Timesheet) : Les heures saisies dans eLaska (par dossier, prestation, tâche, étape de timeline) seront enregistrées ou synchronisées avec le module "Feuilles de temps" de Dolibarr, permettant une consolidation des temps passés au niveau du cabinet. 
+* **Gestion Documentaire (GED) :** 
+    * Utilisation du module GED de Dolibarr comme système de stockage de base. eLaska s'appuiera sur l'infrastructure de la GED Dolibarr pour le stockage physique des fichiers. 
+    * Enrichissement par eLaska : eLaska apportera une surcouche pour une gestion de pièces jointes plurielles plus intuitive, permettant d'attacher facilement de multiples fichiers (de divers formats, avec prévisualisation si possible) directement aux dossiers eLaska, missions, contrats, tâches, étapes de timeline, ou toute autre entité pertinente du module. 
+    * Métadonnées Étendues : Ajout de métadonnées spécifiques eLaska aux documents (ex: type de pièce justificative, date de validité, statut de vérification). 
+    * Distinction et Sécurisation pour le Coffre-Fort Numérique Avancé : Les documents destinés au Coffre-Fort Numérique des particuliers bénéficieront d'un niveau de sécurité et de confidentialité accru, potentiellement via un répertoire distinct ou des droits d'accès spécifiques au sein de la GED. 
+* **Messagerie et Communication (Notes/Tickets/Email) :** 
+    * Utilisation de "Notes" (privées/publiques) ou "Tickets" : Le fil de discussion par dossier eLaska pourra s'appuyer sur le système de Notes de Dolibarr (pour les commentaires internes ou partagés avec le client sur le portail) ou sur le module Tickets pour un suivi plus formel de certaines demandes. 
+    * Notifications Internes : Les notifications eLaska pourront utiliser le système de notification natif de Dolibarr pour les utilisateurs internes, en complément des notifications push/email. 
+    * Intégration IMAP pour Emails : Liaison des boîtes email des conseillers pour archiver les emails envoyés/reçus directement dans les dossiers clients eLaska concernés, assurant une traçabilité complète des échanges. 
+* **Agenda et Échéances :** 
+    * Ajout des Échéances eLaska : Les dates clés des dossiers, tâches, étapes de timelines, et autres échéances importantes gérées dans eLaska (ex: fin de contrat d'assurance, date limite de déclaration fiscale) seront automatiquement ajoutées ou synchronisées avec l'"Agenda" Dolibarr des conseillers concernés. 
+    * Rappels et Alertes : Utilisation du système de rappels de l'agenda Dolibarr en complément des notifications eLaska. 
+    * Synchronisation RDV Portail Client : La planification de rendez-vous effectuée par les clients via le portail eLaska (et synchronisée avec Google Agenda) sera également reflétée dans l'agenda Dolibarr interne des conseillers pour une vision consolidée de leur emploi du temps. L'ID de l'événement Google Calendar sera stocké pour référence. 
+* **Produits/Services :** 
+    * Catalogue des Prestations eLaska : Les services et prestations proposés par le cabinet et gérés dans eLaska (avec leurs descriptions, tarifications, etc.) pourront être définis comme des produits/services dans Dolibarr pour faciliter leur intégration dans les propositions commerciales et les factures. 
+* **Contrats :** 
+    * Formalisation des Accords de Services : Pour les missions récurrentes ou les abonnements aux services eLaska (hors contrats d'assurance ou de crédit qui sont gérés spécifiquement), le module Contrats de Dolibarr pourra être utilisé pour formaliser les accords contractuels avec les clients. 
+* **Banque :** 
+    * Suivi des Règlements : Le module Banque de Dolibarr sera utilisé pour le suivi des encaissements des factures émises pour les prestations eLaska. 
+* **Notes de frais :** 
+    * Gestion des Frais Refacturables : Si des frais engagés par les conseillers (déplacements, etc.) sont liés à des prestations eLaska et doivent être refacturés aux clients, le module Notes de Frais de Dolibarr pourra être utilisé pour leur saisie et leur traitement avant intégration à la facturation. 
+
+## 1.4. Public Cible (Utilisateurs) (Description détaillée) 
+* **Gestionnaires / Conseillers du Cabinet eLaska (Utilisateurs Internes) :** 
+    * Profil : Employés du cabinet chargés de l'accompagnement des clients, de la gestion des dossiers, et de la réalisation des prestations. Ils peuvent avoir des spécialisations différentes (administratif, financier, social, juridique, etc.) et des niveaux de responsabilité variés. 
+    * Utilisation : Ils utiliseront quotidiennement le back-office Dolibarr enrichi par le module eLaska pour toutes leurs opérations : gestion des fiches clients, création et suivi des dossiers, planification et exécution des tâches, gestion documentaire, communication avec les clients et les tiers, saisie des temps et des consommations, génération de rapports. 
+    * Attentes : Ils attendent un outil performant, intuitif, qui leur fait gagner du temps, réduit les erreurs, facilite la collaboration interne, et leur donne une vision claire de leur charge de travail et de l'avancement des dossiers. Le design moderne et épuré, ainsi que les tableaux de bord personnalisés par rôle, sont cruciaux pour leur adoption et leur efficacité. La fiche Tiers centralisée offrant une vue à 360° de toutes les interactions et dossiers du client est un élément clé. 
+* **Clients du Cabinet (Utilisateurs Externes via Portail Web SPA) :** 
+    * Profils Variés : 
+        * Particuliers : Personnes recherchant une assistance pour leur gestion administrative personnelle, leurs démarches complexes, la gestion de leur budget, ou des conseils spécifiques (patrimoine, crédit, assurance). Peuvent avoir des niveaux d'aisance variables avec les outils numériques. 
+        * Créateurs d'Entreprises : Porteurs de projet en phase de pré-création ou de lancement, ayant besoin d'un accompagnement structuré pour concrétiser leur idée et réaliser les premières démarches. 
+        * Représentants d'Associations : Dirigeants ou membres actifs d'associations (présidents, trésoriers, secrétaires) nécessitant un soutien pour la gestion administrative, la recherche de financements, la gouvernance, ou la communication de leur structure. 
+        * Représentants d'Entreprises (TPE/PME, Artisans, Professions Libérales) : Dirigeants ou responsables administratifs de petites et moyennes structures cherchant à externaliser certaines tâches administratives, à optimiser leurs processus, ou à obtenir des conseils en gestion. 
+    * Utilisation : Ils accéderont à un portail web SPA sécurisé, conçu pour être accessible depuis différents appareils (ordinateur, tablette, smartphone). Ce portail leur permettra de : 
+        * Consulter leurs informations personnelles et les détails de leur contrat de service avec le cabinet. 
+        * Suivre l'avancement de leurs dossiers en cours via des timelines interactives et des commentaires du conseiller. 
+        * Accéder à leurs documents partagés par le cabinet, et utiliser leur Coffre-Fort Numérique (pour les particuliers). 
+        * Échanger des messages sécurisés avec leur conseiller. 
+        * Prendre ou modifier des rendez-vous en ligne. 
+        * Gérer leurs consentements RGPD. 
+        * Interagir avec des fonctionnalités spécifiques à leur profil (ex: saisir leurs Objectifs de Vie, suivre leur Parcours Création, consulter le statut de leurs demandes de subventions, accéder à des rapports de gestion simplifiés). 
+        * Uploader des pièces justificatives nécessaires à leurs dossiers. 
+    * Attentes : Ils attendent une interface claire, simple à utiliser, moderne et réactive. L'accès facile à l'information, la transparence sur le suivi de leurs dossiers, et la possibilité d'interagir efficacement avec le cabinet sont primordiaux. La sécurité de leurs données est une préoccupation majeure. 
+
+## 1.5. Périmètre du Module (Description détaillée) 
+Le module eLaska vise à couvrir de manière exhaustive et intégrée l'ensemble du cycle de vie de l'accompagnement client, depuis la prospection jusqu'au suivi post-prestation. Son périmètre fonctionnel s'étend sur plusieurs axes majeurs : 
+* Gestion des Tiers (tous types) : Identification, qualification, segmentation, et suivi complet de tous les contacts et entités. 
+* Suivi Détaillé des Dossiers Multi-domaines : Couverture d'une large palette de services, incluant l'accompagnement administratif quotidien et complexe (démarches spécifiques pour particuliers), le suivi social, fiscal, le soutien administratif RH externalisé pour les entreprises, la gestion financière de base, le conseil en gestion de patrimoine, le montage et le suivi des contrats d'assurances, des dossiers de crédit et des sinistres, l'accompagnement à la création d'entreprise de A à Z, la gestion associative (gouvernance, financement, projets), et l'optimisation administrative pour les TPE/PME. Cela inclut également la gestion du recouvrement délégué pour le compte des clients professionnels. 
+* Gestion Documentaire Avancée : Stockage centralisé et sécurisé de tous les documents, avec gestion de pièces jointes plurielles (multiples fichiers de formats variés avec métadonnées, prévisualisation, versioning), option d'intégration Google Drive, et un Coffre-Fort Numérique sécurisé pour les particuliers. 
+* Communication Multicanale Intégrée : Gestion des emails (templates HTML personnalisables, sujets dynamiques), des notes d'appels, des courriers (suivi des envois), des messages échangés via le portail client. Suivi des échanges avec les clients et les intervenants externes, avec options de notification "lu/pris en compte". 
+* Suivi des Tâches et des Échéances : Planification, assignation, suivi de l'avancement des tâches avec granularité fine. Gestion des échéances critiques liées aux dossiers, contrats, ou démarches, avec lien vers le suivi des temps et des consommations. 
+* Gestion des Prestations et Abonnements : Catalogue des services du cabinet, suivi des abonnements des clients (abonnements du quotidien pour particuliers, abonnements professionnels pour entreprises) avec alertes de renouvellement ou de fin d'engagement. 
+* Processus de Facturation et de Recouvrement : Génération de propositions, commandes et factures à partir des prestations et temps passés. Suivi des paiements et gestion des processus de recouvrement des impayés (pour le cabinet et en délégation). 
+* Numérotation Automatique et Personnalisable : Système flexible pour la génération de références uniques pour les objets métier (dossiers, contrats, etc.), utilisant des variables dynamiques. 
+* Portail Client SPA Riche en Fonctionnalités : Offrant une expérience utilisateur moderne et interactive, incluant la prise de RDV en ligne, le suivi d'objectifs de vie (particuliers), le suivi du parcours création (créateurs), des simulateurs simples (capacité d'emprunt, etc.), la gestion des consentements, et un accès personnalisé aux informations et documents selon le profil du client. 
+* Outils de Pilotage Interne Performants : Tableaux de bord personnalisables pour les conseillers et la direction, rapports sur la performance des services, la charge de travail, la rentabilité. Composants interactifs pour une meilleure visualisation des données. 
+* Base de Connaissances Enrichie : Espace de capitalisation du savoir-faire interne, fiches pratiques, modèles de documents, veille réglementaire et locale (Occitanie/Tarbes), annuaire de partenaires. 
+* Outils de Veille : Fonctionnalités pour suivre les évolutions réglementaires ou les opportunités de financement pertinentes pour les clients. 
+* Workflows Automatisés : Possibilité de définir des séquences d'actions automatiques pour simplifier certains processus répétitifs. 
+* Options de Personnalisation Étendues : Configuration des icônes de menu (Font Awesome ou similaire), des tags (couleurs, icônes), des badges de statut, des champs personnalisés, des vues de listes, et des tableaux de bord par rôle utilisateur. 
+* Interface Utilisateur Moderne et Épurée : L'ensemble du module sera conçu avec un souci constant d'ergonomie, de clarté et d'esthétique, en s'inspirant des meilleures pratiques et des exemples visuels fournis. 
+* Système de Notifications Performant : Alertes multicanales (push, email, tableau de bord) pour tenir informés les utilisateurs des événements importants et des actions requises, avec des indicateurs de progression. 
+
+# 2. Architecture technique 
+
+## 2.1. Approche UI/UX : Portail Client en SPA et Backoffice Amélioré (Principes et inspirations détaillés) 
+L'expérience utilisateur (UX) et l'interface utilisateur (UI) sont au cœur de la conception du module eLaska. L'objectif est de fournir un outil non seulement fonctionnel mais aussi agréable et intuitif à utiliser, tant pour les conseillers du cabinet que pour les clients finaux. L'ensemble des interfaces (Portail Client et Backoffice eLaska) adoptera un design moderne, épuré, et intuitif, privilégiant la clarté, la facilité de navigation et une UX optimale. L'esthétique s'inspirera des standards actuels en matière de design d'applications web professionnelles, tels qu'illustrés par les exemples visuels fournis par le client : 
+* **Clarté et Lisibilité :** 
+    * Utilisation généreuse des espaces blancs pour aérer les contenus et éviter la surcharge cognitive. 
+    * Choix d'une typographie soignée et hautement lisible (par exemple, des polices sans-serif modernes comme Inter, Open Sans, Roboto) avec des tailles et des graisses variées pour hiérarchiser l'information. 
+    * Garantie de contrastes de couleurs suffisants entre le texte et l'arrière-plan pour une accessibilité optimale (respect des ratios WCAG). 
+* **Structure Visuelle et Organisation de l'Information :** 
+    * Organisation de l'information en "cartes" (cards) ou blocs distincts pour les tableaux de bord, les listes d'éléments et les sections d'information (inspiration : create-modern-dashboard-crm-web-app-ui-ux-design-in-figma.png). Chaque carte regroupera des informations logiquement liées. 
+    * Utilisation de bordures arrondies sur les éléments (cartes, boutons, champs de saisie) et d'ombres portées douces et subtiles pour donner une impression de profondeur, délimiter clairement les sections et améliorer l'esthétique générale. 
+* **Navigation Intuitive :** 
+    * Mise en place de menus de navigation clairs, concis et bien organisés, utilisant des icônes significatives pour un repérage rapide des fonctionnalités. 
+    * Pour le backoffice, une barre de navigation latérale (sidebar) persistante ou rétractable est envisagée. 
+    * Pour le portail client, un menu hamburger sur mobile et une barre de navigation supérieure sur desktop pourraient être utilisés. 
+    * Utilisation d'un fil d'Ariane (breadcrumbs) si la profondeur de navigation le justifie, pour permettre à l'utilisateur de se situer facilement. 
+* **Palette de Couleurs :** 
+    * Définition d'une palette de couleurs harmonieuse, professionnelle et cohérente avec l'identité visuelle du cabinet eLaska. 
+    * Utilisation de couleurs d'accentuation (primaires et secondaires) pour les éléments interactifs importants (boutons d'action principaux, liens, indicateurs de notification urgentes) afin de guider l'utilisateur, sans pour autant surcharger visuellement l'interface. 
+* **Icônes Modernes et Significatives :** 
+    * Intégration de bibliothèques d'icônes vectorielles modernes et légères (ex: Font Awesome, Phosphor Icons, Material Icons, ou une sélection SVG personnalisée) pour renforcer la compréhension intuitive des fonctionnalités, des actions et des statuts. 
+    * Les icônes seront utilisées de manière cohérente et épurée pour ne pas alourdir l'interface. 
+* **Timelines Visuelles et Interactives :** 
+    * Conception des timelines inspirée de l'exemple Capture d'écran 2025-06-02 à 20.07.14.png, mettant en avant une présentation chronologique claire et aérée. 
+    * Chaque événement ou étape de la timeline sera clairement marqué, potentiellement avec une icône distinctive représentant le type d'action ou de statut. 
+    * Les informations clés (date, heure, responsable, description concise) seront visibles directement sur la timeline. 
+* **Interactions Fluides et Feedback Utilisateur :** 
+    * Mise en place de micro-interactions discrètes pour améliorer le feedback visuel et la réactivité de l'interface (ex: effets de survol (hover effects) subtils sur les boutons et éléments cliquables, indicateurs de chargement non intrusifs, transitions douces entre les vues ou lors de l'affichage de modales). 
+* **Cohérence Visuelle Globale :** 
+    * Maintien d'une identité visuelle forte et cohérente à travers toutes les pages, sections et composants du module eLaska et du portail client (polices, couleurs, espacements, style des boutons, des champs de formulaire, etc.). 
+* **Thèmes Personnalisables (Optionnel) :** 
+    * Possibilité d'implémenter des thèmes visuels commutables (ex: un thème clair par défaut et un thème sombre optionnel) pour le portail client et/ou le backoffice, afin d'améliorer le confort visuel des utilisateurs selon leurs préférences ou les conditions d'éclairage, et de contribuer à une meilleure accessibilité. 
+* **Portail Client Web :** 
+    * Développé en tant que Single Page Application (SPA) pour une navigation fluide et rapide sans rechargements de page complets. 
+    * Technologie privilégiée : ReactJS, en raison de son écosystème riche, de sa performance et de sa popularité pour la création d'interfaces utilisateur dynamiques. 
+    * Utilisation de bibliothèques UI modernes et matures (ex: Material-UI pour un ensemble complet de composants prêts à l'emploi, Ant Design pour une approche orientée entreprise, ou Tailwind CSS pour une approche "utility-first" permettant une grande flexibilité de design en accord avec l'esthétique épurée souhaitée). Le choix final sera fait en concertation avec l'équipe de développement. 
+    * Utilisation de bibliothèques de gestion d'état (ex: Redux Toolkit, Zustand, ou React Context pour des besoins plus simples) et de requêtage de données (ex: React Query/SWR, axios) pour une gestion efficace des données et des interactions avec le backend. 
+    * Hébergé sur le même serveur web que Dolibarr (ou un serveur dédié communiquant étroitement), et communiquant avec le backend via des API REST sécurisées fournies par le module eLaska et potentiellement l'API native de Dolibarr. 
+* **Backoffice Dolibarr (Interfaces du Module eLaska) :** 
+    * Amélioration du Design Natif : Le design des pages et composants spécifiques au module eLaska au sein du backoffice Dolibarr sera soigné et modernisé grâce à l'utilisation de CSS personnalisé et de templates HTML/PHP bien structurés, en respectant scrupuleusement les principes UI/UX énoncés ci-dessus pour assurer une cohérence avec le portail client. 
+    * "Îlots d'Interactivité" React (ou autre technologie front-end moderne) : Pour des fonctionnalités spécifiques nécessitant une interactivité riche et une expérience utilisateur avancée (ex: tableaux de type Kanban pour les tâches, timelines dynamiques et interactives, dashboards avec graphiques complexes), des composants React (ou Vue.js, Svelte, etc.) pourront être intégrés de manière ciblée au sein des pages du backoffice Dolibarr. Ces "îlots" conserveront la cohérence du design global. 
+    * Tableaux de Bord et Menus Adaptatifs : La structure des menus spécifiques à eLaska et le contenu des tableaux de bord pourront être configurés pour s'adapter en fonction du rôle et des permissions de l'utilisateur interne connecté. 
+
+## 2.2. Responsive design et Icônes (Exigences détaillées) 
+* **Portail Client SPA :** 
+    * Adoption d'une approche "Mobile First" lors de la conception et du développement : l'interface sera d'abord pensée pour les petits écrans (smartphones) puis adaptée de manière progressive pour les écrans plus larges (tablettes, ordinateurs de bureau). 
+    * Garantie d'une adaptation fluide et optimale à toutes les tailles d'écran et orientations (portrait/paysage), assurant une lisibilité et une utilisabilité parfaites quel que soit le dispositif utilisé par le client. 
+    * Les éléments interactifs (boutons, liens, champs de formulaire) devront avoir des zones de clic/tactiles suffisamment grandes pour une utilisation aisée sur les écrans tactiles. 
+    * Les images et médias seront optimisés et responsives. 
+* **Backoffice Module eLaska :** 
+    * Les pages spécifiques au module eLaska intégrées dans le backoffice Dolibarr devront également être responsives, grâce à l'utilisation de CSS dédié (ex: un fichier elaska-responsive.css ou l'utilisation de frameworks CSS responsives). 
+    * Les composants React (ou équivalents) intégrés pour des fonctionnalités spécifiques seront conçus pour être nativement responsives. 
+    * Bien que le backoffice soit majoritairement utilisé sur des écrans d'ordinateur, une bonne lisibilité et fonctionnalité sur tablette seront assurées. 
+* **Utilisation des Icônes :** 
+    * Les icônes seront utilisées de manière judicieuse pour renforcer la compréhension intuitive des actions, des statuts, et des types d'information, sans jamais surcharger l'interface. 
+    * Elles devront conserver une esthétique moderne, épurée et cohérente avec le design global. 
+    * Les icônes seront vectorielles (SVG ou polices d'icônes) pour garantir une netteté parfaite à toutes les résolutions et tailles d'affichage. 
+    * Une attention sera portée à la signification universelle ou facilement compréhensible des icônes choisies. 
+
+## 2.3. Sécurité (Mesures et stratégies détaillées) 
+* **Authentification et Gestion des Accès :** 
+    * Authentification à Double Facteur (2FA) pour les Gestionnaires : Mise en place obligatoire du 2FA (ex: via application d'authentification TOTP comme Google Authenticator, Authy, ou via SMS/email si jugé suffisant pour certains rôles moins sensibles) pour tous les utilisateurs internes (conseillers, administrateurs) accédant au backoffice. 
+    * Authentification Robuste pour le Portail Client SPA : Utilisation de tokens JWT (JSON Web Tokens) sécurisés (avec signature forte, expiration courte et mécanisme de rafraîchissement) ou de sessions Dolibarr sécurisées via API pour l'authentification des clients sur le portail. Politiques de mots de passe robustes pour les clients (longueur minimale, complexité, interdiction des mots de passe courants). 
+    * Protection contre les Attaques par Force Brute : Limitation du nombre de tentatives de connexion infructueuses, avec blocage temporaire du compte ou de l'IP. 
+* **Chiffrement des Données :** 
+    * Chiffrement AES-256 (ou équivalent robuste) des Données Sensibles Identifiées : Les données personnelles particulièrement sensibles stockées dans la base de données devront être chiffrées au repos. Cela inclut (liste non exhaustive) : Numéro d'Inscription au Répertoire (NIR), identifiants CAF/Pôle Emploi, numéro fiscal, détails bancaires avancés (RIB complet si stocké en dehors du module Banque natif et non uniquement pour affichage), mots de passe d'accès à des espaces clients tiers si le cabinet est amené à les stocker (avec consentement explicite et pour une durée limitée), informations médicales sensibles (ex: pour les dossiers MDPH), et l'intégralité du contenu du Coffre-Fort Numérique Avancé des particuliers. 
+    * Stratégie de Chiffrement (Point d'attention B.8) : Une discussion approfondie avec l'équipe de développement sera nécessaire pour définir la stratégie de chiffrement optimale : 
+        * Chiffrement au niveau champ pour certains éléments spécifiques. 
+        * Chiffrement de tables dédiées pour des ensembles de données hautement sensibles (ex: contenu du coffre-fort). 
+        * Étude de l'utilisation des capacités de chiffrement natives de Dolibarr (si existantes et suffisantes) ou du Système de Gestion de Base de Données (SGBD) utilisé (ex: TDE - Transparent Data Encryption). 
+    * Gestion Sécurisée et Robuste des Clés de Chiffrement/Déchiffrement : Les clés de chiffrement devront être gérées de manière extrêmement sécurisée (ex: via un HSM - Hardware Security Module, ou un service de gestion de clés dédié), en considérant les impacts sur la performance et la complexité de la recherche sur données chiffrées. L'accès aux clés sera strictement limité. 
+    * Chiffrement des Communications : Utilisation systématique de HTTPS (TLS 1.2 ou supérieur) pour toutes les communications entre le client (navigateur) et le serveur, ainsi qu'entre les différents composants du système si applicable. 
+* **Permissions et Contrôle d'Accès :** 
+    * Système de Permissions Granulaires : Mise en place d'un système de gestion des droits d'accès fin et configurable par l'administrateur du module eLaska. Ce système sera basé sur les rôles natifs de Dolibarr mais pourra être étendu pour définir des permissions spécifiques aux fonctionnalités et données d'eLaska (ex: qui peut voir/modifier quel type de dossier, qui peut accéder aux paramètres du module, etc.). 
+    * Principe du Moindre Privilège : Les utilisateurs n'auront accès qu'aux données et fonctionnalités strictement nécessaires à l'accomplissement de leurs tâches. 
+* **Traçabilité et Audit :** 
+    * Journal d'Audit Complet et Inaltérable : Enregistrement de toutes les actions critiques effectuées dans le système, notamment : accès aux données sensibles, modifications de données sensibles (en particulier financières ou personnelles), création/modification/suppression de dossiers ou de tiers, changements de permissions, actions d'administration, et gestion des consentements RGPD. Le journal d'audit devra inclure l'identifiant de l'utilisateur, la date/heure de l'action, l'adresse IP source, et une description de l'action. 
+* **Protection contre les Failles Web Courantes :** 
+    * Suivi rigoureux des bonnes pratiques de développement sécurisé de Dolibarr et des recommandations de l'OWASP (Open Web Application Security Project). 
+    * Protection contre les injections SQL : Utilisation systématique de requêtes préparées ou d'ORM (Object-Relational Mapper) sécurisés. 
+    * Protection contre les failles XSS (Cross-Site Scripting) : Validation et échappement systématique de toutes les données affichées dans l'interface. Utilisation de Content Security Policy (CSP). 
+    * Protection contre les failles CSRF (Cross-Site Request Forgery) : Utilisation de tokens anti-CSRF sur tous les formulaires et actions sensibles du backoffice Dolibarr et des API eLaska. 
+    * Validation et Nettoyage Systématique des Entrées Utilisateur : Toutes les données provenant des utilisateurs (formulaires, paramètres d'URL, API) devront être rigoureusement validées côté serveur (type, format, longueur, plage de valeurs) et nettoyées (sanitized) avant d'être traitées ou stockées. 
+* **Confidentialité des Données :** 
+    * Niveaux de Confidentialité pour Documents et Notes : Possibilité de marquer certains documents ou notes comme confidentiels, limitant leur accès à certains rôles ou utilisateurs spécifiques, même au sein d'un dossier partagé. 
+* **Sécurité des Intégrations :** 
+    * Gestion Sécurisée des Tokens OAuth2 : Pour les intégrations avec des services tiers comme Google Drive et Google Agenda, utilisation sécurisée du protocole OAuth2, avec stockage chiffré des tokens d'accès et de rafraîchissement, et demande des permissions minimales nécessaires (scope). 
+
+# 3. Structure et fonctionnalité des modules 
+
+## 3.1 Menu principal eLaska (Backoffice) (Précisé et enrichi) 
+Accessible depuis le menu Dolibarr, structuré et personnalisable (avec possibilité de variations par rôle utilisateur interne) : 
+* Tableau de bord eLaska (avec centre de notifications) 
+* [NOUVEAU] Prospection & Opportunités 
+* Tiers (Clients, Créateurs, Partenaires, Organismes, Intervenants Externes, Apporteurs d'Affaires) - Point d'entrée vers la vue 360° client 
+* Prestations/Services eLaska 
+* Dossiers (avec sous-menus par type : Particulier, Association, Création d'Entreprise, TPE/PME, Recouvrement, Crédit, etc.) 
+* Gestion de Patrimoine & Financier 
+    * Bilans Patrimoniaux 
+    * Contrats d'Assurance (Particuliers & Pros) 
+    * Dossiers de Crédit 
+    * Gestion des Sinistres 
+    * Suivi des Investissements 
+* Accompagnement Spécifique (raccourcis ou sections dédiées) 
+    * Particuliers (Démarches complexes, Objectifs de vie) 
+    * Associations (Financements, Instances, Vie associative) 
+    * Créateurs d'Entreprises (Parcours création, Aides) 
+    * Entreprises (TPE/PME) (Optimisation admin, Soutien RH, Recouvrement délégué) 
+* Abonnements & Courtage (Particuliers & Pros) 
+* Tâches & Suivi Opérationnel 
+* Communications (avec suivi des échanges avec intervenants externes) 
+* Base de Connaissances & Veille Réglementaire (incluant veille locale et dispositifs Occitanie/Tarbes) 
+* Partenariats & Apporteurs d'Affaires (avec Annuaire Partenaires Locaux) 
+* Enquêtes de Satisfaction 
+* Configuration eLaska (incluant personnalisation des menus/tableaux de bord par rôle, gestion des modèles de timelines, badges, tags) 
+* Icônes personnalisables pour chaque entrée (Font Awesome via config eLaska). 
+
+## 3.2 Tableaux de bord eLaska (Backoffice - Vues Gestionnaire et Rôles) (Enrichi) 
+* Widgets standards et configurables par rôle (A.1) : Tâches (mes tâches, tâches en retard), Dossiers actifs/récents, Échéances critiques, Centre de Notifications intégré (voir 4.5), Communications récentes, Dossiers bloqués, Activité récente du portail client, Indicateurs de performance clés (KPIs) adaptés au rôle (avec graphiques de progression clairs et lisibles, inspirés de create-modern-dashboard-crm-web-app-ui-ux-design-in-figma.png), Nuage de Tags pertinents, Dernières fiches de Veille Réglementaire/Locale, Activité des Apporteurs d'Affaires, Synthèse Satisfaction Client, RDV à venir (synchronisés Google Agenda). 
+* Vue Gestionnaire : Accès à des widgets de pilotage global du cabinet (charge de travail par conseiller, performance des services, etc.). 
+
+## 3.3 Module Cœur : Gestion des Tiers (Backoffice) (Développé pour une vue 360° Client) 
+* **3.3.1 Liste des Tiers :** Filtres avancés par type de Tiers eLaska (Particulier, Association, Entreprise, Créateur, Intervenant Externe, Organisme Local/Régional, Partenaire, Apporteur d'Affaires) et par tags. Colonnes personnalisables pour afficher des informations clés en un coup d'œil. 
+* **3.3.2 Fiche Tiers eLaska (Vue 360° de l'Accompagnement Client) :** La fiche tiers est le pivot central de l'information client. Elle consolide et donne accès à l'ensemble des interactions, dossiers, et suivis gérés par le cabinet pour ce client. 
+    * En-tête Fiche Tiers : Informations d'identification principales (Nom, Type de Tiers eLaska, Coordonnées principales, Conseiller référent eLaska, Statut global du client). Lien vers la fichier tiers Dolibarr 
+    * Onglet "Synthèse & Accompagnement Global" (NOUVEAU) : 
+        * Tableau de Bord Client Personnalisé : Widgets clés résumant l'activité récente, les dossiers en cours critiques (avec barre de progression), les prochaines échéances importantes pour CE client, les dernières communications non lues. 
+        * Indicateurs Clés de l'Accompagnement : Nombre de dossiers actifs, types d'accompagnement en cours, date du dernier contact significatif, niveau de satisfaction (si applicable). 
+        * Accès Rapides aux Modules d'Accompagnement Actifs : Liens directs vers les sections spécifiques de l'accompagnement du client (ex: vers ses dossiers de recouvrement délégué, ses contrats d'assurance, son parcours création, ses dossiers de crédit). 
+    * Onglets Spécifiques par Type de Tiers (conservés et enrichis) : 
+        * Pour "Particulier" : 
+            * Onglet "eLaska - Informations Détaillées" : 
+            * Section "Patrimoine & Objectifs" : Profil investisseur, Objectifs patrimoniaux (texte/sélection), Horizon, Connaissance produits, Situation nette estimée. Lien vers le module "Mes Objectifs de Vie & Projets" du client. 
+            * Section "Situation Financière (Crédit)" : Revenus (détaillés par source), charges récurrentes (loyer, pensions, autres crédits en cours), apport personnel disponible, patrimoine existant (immobilier, financier). 
+            * Section "Situation Administrative & Sociale" : Informations clés pour l'accompagnement (composition foyer, régimes sociaux, etc.). 
+        * Pour "Association" : 
+            * Onglet "eLaska - Informations Association" : Objet social, date de création, N° RNA/SIREN, instances (membres bureau/CA), nombre d'adhérents, principaux financeurs, structure de gouvernance, informations statutaire. 
+            * Section "Situation Financière (Crédit)" : Subventions récurrentes, autres sources de revenus, état de la trésorerie, capacité d'autofinancement pour projets. 
+        * Pour "Créateur d'Entreprise" (A.2) : 
+            * Onglet "eLaska - Projet de Création" : Description idée/concept, stade d'avancement, étude de marché (synthèse), besoins en accompagnement, aides visées/obtenues (avant formalisation en dossier). 
+            * Section "Prévisionnel Financier (Crédit)" : Plan de financement du projet, apport personnel, besoins en fonds de roulement, chiffre d'affaires prévisionnel. 
+        * Pour "Entreprise (TPE/PME)" : 
+            * Onglet "eLaska - Informations Entreprise" : Activité principale, forme juridique, effectif, principaux interlocuteurs, outils de gestion existants, besoins spécifiques en externalisation. 
+            * Section "Données Financières (Crédit)" : Derniers bilans et comptes de résultat (ou accès), plan de trésorerie, capacité d'autofinancement, encours bancaires. 
+    * Onglet "Tous les Dossiers eLaska" (ÉVOLUTION de "Dossiers Associés") : 
+        * Liste exhaustive et filtrable de TOUS les dossiers eLaska liés à ce tiers, quel que soit leur type (Accompagnement Particulier, Suivi Association, Création d'Entreprise, Prestation TPE/PME, Recouvrement pour le compte du client, Gestion de Patrimoine, Sinistres, Dossier de Crédit, etc.). 
+        * Pour chaque dossier listé : Référence, Type, Statut (avec badge visuel), Conseiller, Date de création/dernière modification, Barre de progression de la timeline, Lien direct vers la fiche dossier. 
+    * Onglet "Communications Unifiées" : Historique complet de toutes les communications (emails, notes d'appels, messages portail, courriers) avec ce client, avec possibilité de filtrer par dossier ou par canal. 
+    * Onglet "Documents Clés du Client" : Accès rapide aux documents les plus importants du client, potentiellement tagués comme "favoris" ou "essentiels" depuis les différents dossiers. La gestion documentaire permettra l'ajout et l'organisation de pièces jointes plurielles (multiples fichiers de divers formats) pour chaque entité. 
+    * Onglet "Suivis Spécifiques Actifs" (Dynamique) : Cet onglet (ou des sous-onglets) pourrait regrouper dynamiquement les informations clés des modules d'accompagnement les plus actifs pour ce client. Par exemple : 
+        * Si Particulier : Résumé des objectifs de vie, état des démarches complexes en cours, synthèse des dossiers de crédit en cours. 
+        * Si Association : État des demandes de financement, calendrier des instances, synthèse des dossiers de crédit en cours. 
+        * Si Entreprise : Synthèse des dossiers de recouvrement délégué en cours (montant total recouvré/à recouvrer, prochaines actions), état des contrats fournisseurs délégués, synthèse des dossiers de crédit professionnel en cours. 
+    * Onglet "Intervenants Externes Associés" (B.1) : Sur la fiche client, liste des intervenants externes impliqués DANS L'ENSEMBLE de ses dossiers, avec leur rôle et le contexte (ex: banque X pour dossier de crédit Y, notaire Z pour prêt immobilier). 
+    * Onglet "Paramètres de Rendez-vous en Ligne" (pour Conseillers) : Lien Google Agenda, types RDV proposables, plages dispo, temps tampon. 
+    * Onglet "Consentements RGPD" : Historique et statut des consentements obtenus pour ce tiers. 
+* **3.3.4 Affichage Conditionnel d'Informations d'Accompagnement (Intégré dans la nouvelle structure de la Fiche Tiers) :** La fiche tiers, via notamment l'onglet "Synthèse & Accompagnement Global" et "Tous les Dossiers eLaska", doit afficher de manière centralisée et facilement accessible toutes les informations pertinentes relatives à l'ensemble de son accompagnement par le cabinet. Les exemples ci-dessous illustrent les types d'informations qui doivent être visibles ou rapidement accessibles depuis la fiche du tiers : 
+    * Pour un Particulier : 
+        * Ses dossiers d'accompagnement administratif (quotidien, budgétaire). 
+        * Ses dossiers de démarches spécifiques (retraite, MDPH, surendettement, logement, fiscalité, etc.). 
+        * Ses contrats d'abonnement gérés (énergie, télécoms). 
+        * Ses contrats d'assurance suivis (habitation, auto, santé, prévoyance). 
+        * Ses dossiers de crédit (immobilier, consommation, rachat) et de sinistres. 
+        * Le suivi de ses objectifs de vie et projets. 
+        * L'accès à son Coffre-Fort Numérique. 
+    * Pour une Association : 
+        * Ses dossiers de demande de subvention et de financement. 
+        * Le suivi de ses instances statutaires (AG, CA). 
+        * Ses dossiers d'accompagnement à la création ou à la structuration. 
+        * Ses contrats d'abonnement spécifiques. 
+        * Les projets de communication ou de développement accompagnés. 
+        * Ses dossiers de crédit pour projets associatifs. 
+    * Pour un Créateur d'Entreprise : 
+        * L'état d'avancement détaillé de son parcours de création (timeline visible ou accessible). 
+        * Les aides mobilisées ou en cours de sollicitation. 
+        * Le statut de ses formalités d'immatriculation. 
+        * Les conseils et suivis des premiers pas administratifs. 
+        * Ses dossiers de crédit pour le lancement (prêt d'honneur, micro-crédit professionnel). 
+    * Pour une Entreprise (TPE/PME, Artisan, Libéral) : 
+        * Les prestations d'externalisation administrative en cours (détail des tâches prises en charge). 
+        * Le suivi des contrats fournisseurs délégués. 
+        * Les suivis RH administratifs (formalités d'embauche, formation). 
+        * Les dossiers de recouvrement de créances menés par le cabinet pour le compte de cette entreprise cliente (statut de chaque créance, montants, actions menées, communications avec les débiteurs du client). 
+        * Les rapports de gestion et tableaux de bord fournis. 
+        * Les projets administratifs spécifiques accompagnés (appels d'offres, certifications). 
+        * Ses dossiers de crédit professionnel (investissement, trésorerie, développement). 
+
+## 3.4 Module Gestion Centralisée des Dossiers Généraux (Backoffice) (Précisé : timelines, suivi temps/coûts) 
+Ce module est la fondation pour tous les types de dossiers, y compris les "Dossiers de Crédit". Il fournit les fonctionnalités transversales suivantes : 
+* **3.4.1 Création et Gestion de Dossiers :** 
+    * Création de dossiers pour différents types de services et d'accompagnements, incluant un type "Dossier de Crédit". Chaque dossier est lié à un Tiers et peut avoir une référence eLaska unique et personnalisable (B.6). 
+    * Champs standards et personnalisables (via attributs supplémentaires) pour chaque type de dossier. 
+* **3.4.2 Ajout de Documents et Notes :** 
+    * Intégration avec la GED Dolibarr pour téléverser, classer, prévisualiser et versionner tous les documents pertinents (pièces justificatives, offres de prêt, contrats, courriers, etc.) au sein de chaque dossier. La gestion documentaire permettra l'ajout et l'organisation de pièces jointes plurielles (multiples fichiers de divers formats, avec prévisualisation si possible) pour chaque dossier, mission, contrat, ou toute autre entité pertinente. Chaque document pourra être versionné, et des métadonnées (description, tags, date d'ajout) pourront y être associées. Interface de type "drag and drop" pour faciliter l'upload (similaire à interface_illustration_FR.jpg). 
+    * Système de notes (privées ou partagées avec le client via le portail) pour un suivi complet des échanges, des réflexions et des actions menées. 
+* **3.4.3 Archivage et Récupération :** 
+    * Fonctionnalité d'archivage des dossiers terminés ou clos, permettant de les masquer des vues actives tout en conservant l'historique. 
+    * Moteur de recherche avancé pour retrouver facilement les dossiers archivés (par référence, nom du client, dates, mots-clés). 
+* **3.4.4 Timelines Personnalisables (Élément clé pour le suivi) :** 
+    * Création de Timelines : Chaque dossier (y compris "Dossier de Crédit") dispose d'une timeline verticale hautement dynamique et interactive (inspirée de Capture d'écran 2025-06-02 à 20.07.14.png). Les timelines sont entièrement personnalisables : par type de dossier (modèles pré-configurables), par dossier spécifique (instance modifiable), et potentiellement par type d'action ou de sous-processus au sein d'un dossier. 
+    * Modèles de Timelines : Possibilité de prédéfinir des modèles de timelines par type de dossier (ex: un modèle "Crédit Immobilier Particulier", un modèle "Crédit Professionnel TPE"). Les modèles de timelines peuvent être pré-remplis avec des étapes standards. 
+    * Personnalisation des Étapes : Chaque étape de la timeline est configurable (nom, description, responsable, date d'échéance prévue/réelle, documents requis, tâches associées). Les timelines sont modifiables par instance de dossier pour s'adapter aux spécificités. Les étapes en attente ou non encore actives seront visuellement distinctes (ex: grisées, avec une opacité réduite, ou une icône spécifique), tandis que les étapes actives ou en retard seront mises en évidence. 
+    * Badges de Statut Visuels : Utilisation de badges de statut modernes et visuellement clairs pour indiquer le statut de chaque étape (ex: À faire, En cours, En attente client, En attente banque, Validé, Refusé, Terminé, En retard). Les badges seront personnalisables (couleurs, icônes Font Awesome, libellés) par l'administrateur pour s'adapter à la terminologie et aux processus du cabinet. 
+    * Progression et Dépendances :
