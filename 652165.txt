@@ -881,4 +881,415 @@ Ce module est la fondation pour tous les types de dossiers, y compris les "Dossi
     * Modèles de Timelines : Possibilité de prédéfinir des modèles de timelines par type de dossier (ex: un modèle "Crédit Immobilier Particulier", un modèle "Crédit Professionnel TPE"). Les modèles de timelines peuvent être pré-remplis avec des étapes standards. 
     * Personnalisation des Étapes : Chaque étape de la timeline est configurable (nom, description, responsable, date d'échéance prévue/réelle, documents requis, tâches associées). Les timelines sont modifiables par instance de dossier pour s'adapter aux spécificités. Les étapes en attente ou non encore actives seront visuellement distinctes (ex: grisées, avec une opacité réduite, ou une icône spécifique), tandis que les étapes actives ou en retard seront mises en évidence. 
     * Badges de Statut Visuels : Utilisation de badges de statut modernes et visuellement clairs pour indiquer le statut de chaque étape (ex: À faire, En cours, En attente client, En attente banque, Validé, Refusé, Terminé, En retard). Les badges seront personnalisables (couleurs, icônes Font Awesome, libellés) par l'administrateur pour s'adapter à la terminologie et aux processus du cabinet. 
-    * Progression et Dépendances :
+    * Progression et Dépendances : Possibilité de définir des dépendances simples entre étapes. Les timelines afficheront une barre de progression globale pour le dossier, calculée en fonction du nombre d'étapes terminées / nombre total d'étapes, ou d'une pondération configurable des étapes.
+D'accord, je vais continuer à mettre en forme le reste du document `version1.txt` (celui allant jusqu'à la source [1604]) en format texte brut, en commençant après la section "3.4.4 Progression et Dépendances" que nous venons de traiter.
+
+Voici la suite :
+
+3.4.5 Notifications Automatiques (détaillé en 4.5) :
+Envoi de notifications automatiques (internes pour les conseillers, externes pour les clients via le portail si configuré) pour les échéances d'étapes, les changements de statut importants, ou les demandes d'action[cite: 1362].
+
+3.4.6 Liste des Dossiers : Filtres par type (Particulier, Association, Création d'Entreprise, TPE/PME, Recouvrement Client, Recouvrement Délégué, Dossier de Crédit, etc.), statut (avec badges), conseiller, tags[cite: 1363].
+
+3.4.7 Fiche Dossier Complète (Vue 360° Interne du Dossier Spécifique) :
+En-tête : Référence eLaska, Tiers principal (lien vers Fiche Tiers 360°), Conseiller référent, Statut global du dossier (avec badge)[cite: 1364].
+Onglet Principal "Suivi / Timeline" : Affichage de la timeline dynamique du dossier avec ses étapes, statuts (badges), commentaires, et barre de progression[cite: 1365].
+Onglet "Tâches Associées" : Liste des tâches eLaska liées au dossier[cite: 1366].
+Onglet "Documents (GED)" : Accès à tous les documents du dossier (avec gestion plurielle des pièces jointes)[cite: 1367].
+Onglet "Communications" : Historique des échanges spécifiques à ce dossier[cite: 1368].
+Onglet "Temps Passé & Consommations" (B.4) : Tableau récapitulatif des heures saisies et des consommations pour ce dossier[cite: 1369]. Export PDF personnalisable[cite: 1370].
+Onglet "Intervenants Externes" (B.1) : Gestion des liaisons avec les intervenants externes spécifiques à ce dossier (ex: banque, notaire pour un dossier de crédit)[cite: 1370].
+Onglets spécifiques selon le type de dossier (ex: onglet "Détails du Prêt" pour un Dossier de Crédit)[cite: 1371].
+
+3.4.8 Gestion Déléguée des Contrats Fournisseurs du Client (Pour TPE/PME, intégré dans leurs dossiers spécifiques) [cite: 1372]
+
+3.5 Module Portail Web Client & Communication (SPA React) (Fortement enrichi : sections spécifiques, fonctionnalités interactives)
+
+3.5.1 Gestion des Comptes Utilisateurs du Portail (Backoffice) : Création, activation, gestion des droits d'accès aux sections spécifiques[cite: 1372].
+
+3.5.2 Page d'Accueil / Tableau de Bord Principal Personnalisé (Portail Client SPA) :
+Accès Rapides : Bouton "Prendre Rendez-vous", "Mes Messages Non Lus", "Prochaine Échéance"[cite: 1373].
+Centre de Notifications intégré (voir 4.5)[cite: 1374].
+Widgets personnalisables : Synthèse des dossiers en cours (avec barres de progression), dernières communications, documents récents à valider/consulter[cite: 1374].
+Section "Ma Situation en un Clin d'Œil" (Phase avancée) - voir I.5 (CdC initial)[cite: 1375].
+
+3.5.3 Section "Mes Dossiers" / "Mes Missions" (Portail Client SPA) :
+Liste des dossiers actifs et archivés (y compris les dossiers de crédit)[cite: 1376].
+Vue Détaillée : Timeline interactive avec affichage des étapes, de leur statut (badges visuels, étapes grisées si en attente), et des commentaires du conseiller (si partagés)[cite: 1377]. Accès aux documents liés à chaque étape[cite: 1378]. Pour les dossiers de recouvrement délégué, le client entreprise verrait ici le suivi des actions menées par le cabinet sur ses propres créances[cite: 1378]. Pour les dossiers de crédit, le client verrait l'avancement de sa demande[cite: 1379].
+
+3.5.4 Section "Mes Documents" (GED Intégrée - Portail Client SPA) :
+Accès sécurisé aux documents partagés par le cabinet (avec gestion plurielle des pièces jointes)[cite: 1380].
+Espace "Coffre-Fort Numérique Avancé" (pour Particuliers) avec sécurité renforcée (B.2, I.7)[cite: 1381]. Fonctionnalités : classement personnalisé, recherche avancée, partage sécurisé avec le conseiller[cite: 1382].
+Option d'intégration Google Drive si activée par le client[cite: 1383].
+Possibilité pour le client d'uploader des documents (avec notification au conseiller et catégorisation possible par le client, ex: pièces pour dossier de crédit)[cite: 1384].
+
+3.5.5 Section "Ma Messagerie" (Portail Client SPA) :
+Interface pour envoyer/recevoir des messages sécurisés avec le cabinet, liés à des dossiers spécifiques ou généraux[cite: 1385].
+Notification de "Lu / Pris en Compte" par le conseiller (et vice-versa pour le client - B.2)[cite: 1386].
+Possibilité de joindre des fichiers[cite: 1387].
+
+3.5.6 Section "Mes Échéances & Rendez-vous" (Portail Client SPA) :
+Visualisation des échéances importantes (liées aux dossiers, tâches client, renouvellements d'abonnements, échéances de prêt) et des rendez-vous planifiés[cite: 1387].
+Synchronisation avec l'échéancier partagé (si applicable pour le client)[cite: 1388].
+
+3.5.7 Section "Mon Profil" / "Mes Paramètres" (Portail Client SPA) :
+Modification des informations personnelles de base (coordonnées, etc.)[cite: 1389].
+Gestion des préférences de notification (email, push portail, notifications sur tableau de bord)[cite: 1390].
+Section "Mes Consentements RGPD" (I.4) : Visualisation et gestion des consentements donnés (par finalité), accès à l'historique[cite: 1391].
+
+3.5.8 Sections Spécifiques Modulables (Portail Client SPA) (I.1)[cite: 1392]:
+A. Pour Particuliers :
+"Mon Patrimoine" : Consultation des informations gérées par eLaska (bilan, stratégie si applicable)[cite: 1392].
+"Mes Assurances" : Liste des contrats suivis, garanties principales, échéances[cite: 1393]. Accès aux documents clés (attestations)[cite: 1393].
+"Mes Crédits" : Suivi des dossiers de crédit (immobilier, consommation, rachat) montés avec eLaska, état d'avancement (timeline visible), conditions obtenues (taux, durée, mensualité), tableau d'amortissement (si fourni), documents liés (offre de prêt)[cite: 1394].
+"Mes Sinistres" : Suivi des déclarations et de l'avancement des dossiers sinistres[cite: 1395].
+"Mon Budget & Mes Abonnements" : Visualisation des abonnements gérés via eLaska (énergie, télécoms, etc.), coûts, échéances[cite: 1396]. Outils de suivi budgétaire simples si souscrit[cite: 1397].
+"Mes Objectifs de Vie & Projets" : Espace interactif pour définir, suivre et échanger avec le conseiller sur ses objectifs personnels et projets (ex: achat immobilier, préparation retraite, projet de formation)[cite: 1397].
+"Mes Démarches en Cours" : Suivi simplifié du statut des démarches administratives complexes (Retraite, MDPH, Surendettement, Logement social, etc.) gérées avec eLaska[cite: 1398].
+"Mon Coffre-Fort Numérique" : Accès direct[cite: 1399].
+"Mon Inclusion Numérique" : Accès à des tutoriels ou ressources si pertinent[cite: 1399].
+B. Pour Associations :
+"Suivi des Subventions & Financements" (B.2) : Liste des dossiers de demande déposés, statuts (en cours, accepté, refusé, versé), montants, échéances de reporting[cite: 1400].
+"Mes Instances Statutaires" (B.2) : Calendrier des AG/CA/Bureau, accès aux convocations, ordres du jour, PV (si partagés)[cite: 1401].
+"Vie Associative" : Gestion des adhésions (si gérée via portail), accès à des documents partagés (règlement intérieur, chartes)[cite: 1402].
+"Mes Projets" : Suivi des projets clés de l'association accompagnés par eLaska[cite: 1403].
+"Nos Dossiers de Crédit" : Suivi des demandes de financement par emprunt pour les projets de l'association[cite: 1404].
+C. Pour Entreprises (TPE/PME, Artisans, Libéraux) :
+"Suivi des Obligations Réglementaires Clés" : Échéancier personnalisé des obligations suivies par eLaska[cite: 1405].
+"Mes Contrats Fournisseurs Délégués" : Consultation des contrats gérés par eLaska, suivi des échéances[cite: 1406].
+"Mes Dossiers de Recouvrement Délégué" : Vue d'ensemble des créances confiées au cabinet, statut de chaque dossier, montants recouvrés[cite: 1407].
+"Nos Dossiers de Crédit Professionnel" : Suivi des demandes de financement (investissement, trésorerie), conditions, documents[cite: 1408].
+"Reporting Simplifié" : Accès aux tableaux de bord et rapports d'activité préparés par eLaska[cite: 1409].
+"Suivi RH Administratif" : Consultation des informations relatives aux prestations RH externalisées (si applicable)[cite: 1410].
+"Mes Abonnements Professionnels" : Suivi des abonnements professionnels gérés par eLaska[cite: 1411].
+D. Pour Créateurs d'Entreprises (A.2) :
+"Mon Parcours Création" : Timeline interactive des étapes de création (de l'idée à l'immatriculation et premiers pas), avec tâches, documents et conseils associés à chaque étape[cite: 1412].
+"Mes Aides à la Création" : Suivi des dispositifs d'aide sollicités ou obtenus[cite: 1413].
+"Mes Demandes de Financement Initial" : Suivi des dossiers de prêts d'honneur, micro-crédits, etc.[cite: 1414].
+"Mon Business Plan" : Accès aux versions du business plan travaillées avec eLaska (si stocké sur la plateforme)[cite: 1414].
+E. Section Commune : "Mes Paiements et Recouvrements" : Suivi des factures eLaska, historique des paiements, informations sur les éventuels dossiers de recouvrement concernant les factures du cabinet[cite: 1415].
+
+3.5.9 Fonctionnalités Transversales du Portail (SPA React) : Notifications push (configurables), moteur de recherche interne (documents, dossiers, communications), FAQ dynamique, assistance en ligne (chatbot simple ou formulaire de contact)[cite: 1416].
+
+3.5.10 Section "Prendre Rendez-vous" (Portail Client SPA) (Tel que CdC + B.7) :
+Choix Conseiller/Service, Type de RDV (avec durée et description)[cite: 1417].
+Affichage Disponibilités (lues depuis Google Agenda conseiller via API sécurisée, en temps réel)[cite: 1418].
+Réservation Créneau (avec champ pour note optionnelle pour le client)[cite: 1419].
+Confirmation (email client avec fichier .ics pour ajout à son agenda), RDV créé automatiquement dans Google Agenda du conseiller et synchronisé avec l'agenda Dolibarr/eLaska (avec référence ID externe Google Calendar stockée dans llx_actioncomm ou table eLaska)[cite: 1420].
+Annulation/Reprogrammation par le client (selon règles configurables par eLaska, ex: X heures à l'avance)[cite: 1421].
+
+3.6 Module Accompagnement Spécifique des Particuliers (Backoffice & Portail) Ce module intègre et gère en backoffice les services détaillés dans le fichier particuliers.rtf, et expose les fonctionnalités pertinentes sur le portail client (voir 3.5.8.A)[cite: 1422]. Les dossiers de crédit pour particuliers sont gérés via le sous-module dédié (3.10.3)[cite: 1423].
+Gestion Administrative Personnelle Quotidienne et Suivi Budgétaire :
+Outils pour audit de classement, aide à la mise en place de méthodes (modèles d'arborescence, etc.)[cite: 1424].
+Fonctionnalités de gestion des échéanciers partagés, configuration de rappels[cite: 1425].
+Modèles de correspondances, suivi des envois[cite: 1425].
+Base de connaissances interne pour vulgarisation de documents types[cite: 1426].
+Outils pour établissement de budgets, analyse de dépenses (potentiellement avec graphiques simples)[cite: 1427].
+Gestion du Coffre-Fort Numérique Avancé : administration des accès, monitoring de l'espace (si limité)[cite: 1428].
+Accompagnement aux Démarches Administratives Spécifiques et Complexes :
+Modèles de dossiers et timelines spécifiques pour : Surendettement, Droits Sociaux (par organisme/type d'aide), Logement Social, Retraite, Fiscalité (déclaration IR), État Civil, Démarches Véhicules (ANTS), Santé (MDPH, CSS)[cite: 1429].
+Checklists de documents requis pour chaque démarche[cite: 1430].
+Liens vers les formulaires officiels et plateformes (info-retraite.fr, ameli.fr, impots.gouv.fr, ANTS, etc.)[cite: 1430].
+Suivi spécifique des dossiers MDPH, surendettement, etc.[cite: 1431].
+Module "Mes Objectifs de Vie & Projets Client" :
+Interface conseiller pour suivre et commenter les objectifs définis par le client sur le portail[cite: 1431].
+Liaison possible avec des dossiers ou tâches spécifiques[cite: 1432].
+Inclusion Numérique :
+Référencement de ressources de formation, tutoriels[cite: 1432].
+Possibilité de planifier des sessions d'accompagnement[cite: 1433].
+Accompagnement Physique (Tarbes/Occitanie) : Fonctionnalité de planification et de suivi de ces accompagnements spécifiques[cite: 1433].
+
+3.7 Module Accompagnement Spécifique des Associations (Backoffice & Portail) Ce module intègre et gère en backoffice les services détaillés dans le fichier associations.txt, et expose les fonctionnalités pertinentes sur le portail client (voir 3.5.8.B)[cite: 1434]. Les dossiers de crédit pour associations sont gérés via le sous-module dédié (3.10.3)[cite: 1435].
+Création, Structuration et Évolution :
+Modèles de statuts types (adaptables), règlements intérieurs, PV d'AG constitutive[cite: 1436].
+Checklists pour formalités de déclaration (préfecture, JOAFE, RNA, SIREN/SIRET)[cite: 1437].
+Suivi des modifications statutaires et des dissolutions[cite: 1437].
+Gouvernance, Organisation et Vie Associative :
+Outils pour préparation et suivi des instances (convocations, ordres du jour, modèles de PV)[cite: 1438].
+Gestion des membres et bénévoles (modèles de fiches d'adhésion, chartes)[cite: 1439].
+Conseils sur outils collaboratifs[cite: 1439].
+Recherche de Financements et Développement de Ressources :
+[NOUVEAU - B.3] Suivi des Demandes de Financement/Subvention :
+Entité dédiée avec champs : Financeur (lien Tiers), Type d'aide, Montant demandé/obtenu, Statut (en cours, accepté, refusé, versé), Dates clés (dépôt, décision, versement, rapport), Documents associés (dossier de demande, convention, rapports), Personnes contact chez le financeur[cite: 1440].
+Tableaux de bord de suivi des financements (par statut, par financeur, par projet)[cite: 1441].
+Alertes pour échéances de reporting[cite: 1441].
+Base de données des financeurs potentiels (publics, privés) avec critères[cite: 1442].
+Modèles de dossiers de demande, budgets prévisionnels pour actions[cite: 1443].
+Outils de suivi des campagnes de dons, crowdfunding, mécénat[cite: 1443].
+Gestion Administrative, Comptable (Simplifiée) et Juridique (Informationnelle) :
+Modèles pour comptabilité de trésorerie simple[cite: 1444].
+Outils d'élaboration et de suivi budgétaire (annuel, par projet)[cite: 1445].
+Base de connaissances sur obligations légales spécifiques aux associations, RGPD[cite: 1446].
+Stratégie, Communication et Développement de Projets :
+Outils pour formalisation de projet associatif pluriannuel[cite: 1447].
+Conseils et modèles pour supports de communication[cite: 1448].
+Suivi des partenariats[cite: 1448].
+
+3.8 Module Accompagnement Spécifique des Créateurs d'Entreprises (Backoffice & Portail) Ce module intègre et gère en backoffice les services détaillés dans le fichier createurs.txt, et expose les fonctionnalités pertinentes sur le portail client (voir 3.5.8.D)[cite: 1449]. Les dossiers de crédit pour créateurs sont gérés via le sous-module dédié (3.10.3)[cite: 1450].
+Phase de Pré-Création : Structuration du Projet :
+Outils pour formalisation de l'idée, guide pour étude de marché préliminaire[cite: 1451].
+Structure type et guide de rédaction pour Business Plan (partie descriptive)[cite: 1452].
+Base d'information sur les statuts juridiques (avantages/inconvénients, implications - rappel : pas de conseil juridique engageant)[cite: 1453].
+Base de données des aides à la création (nationales, régionales Occitanie, locales Tarbes) avec critères d'éligibilité et liens[cite: 1454].
+Création et Formalités d'Immatriculation :
+Checklists des pièces pour dossier d'immatriculation par statut[cite: 1455].
+Modèles de statuts simplifiés (EI, EURL/SASU types - rappel : sous responsabilité créateur, conseiller validation juriste)[cite: 1456].
+Guide et liens vers le Guichet Unique INPI[cite: 1457].
+Information sur assurances professionnelles de base[cite: 1457].
+Lancement et Suivi Administratif des Premiers Pas :
+Modèles pour organisation administrative (classement, échéancier fiscal/social)[cite: 1458].
+Guides pour premières déclarations (micro-entreprise CA, TVA simplifiée)[cite: 1459].
+Information sur cotisations sociales initiales (ACRE)[cite: 1459].
+Annuaire de partenaires clés (experts-comptables, avocats, assureurs locaux)[cite: 1460].
+Intégration avec Dossiers Généraux : Création d'un type de dossier "Parcours Création d'Entreprise" avec une timeline spécifique reprenant les grandes étapes[cite: 1460].
+
+3.9 Module Conseil & Gestion Externalisée pour Entreprises (TPE/PME, Artisans, Libéraux) (Backoffice & Portail) Ce module intègre et gère en backoffice les services détaillés dans le fichier pro.txt, et expose les fonctionnalités pertinentes sur le portail client (voir 3.5.8.C)[cite: 1461]. Les dossiers de crédit pour entreprises sont gérés via le sous-module dédié (3.10.3)[cite: 1462].
+Conseil en Organisation et Optimisation des Processus Administratifs :
+Méthodologie et outils pour diagnostic organisationnel[cite: 1463].
+Modèles de procédures[cite: 1463].
+Base de connaissances sur outils numériques (ERP, CRM, GED, etc.)[cite: 1464].
+Externalisation Administrative Complète ou Modulaire :
+Fonctionnalités de gestion du courrier, emails, agendas[cite: 1465].
+Outils de devis/facturation (liaison avec module Dolibarr), suivi encaissements, modèles de relances[cite: 1466].
+Processus de pré-comptabilité (collecte, vérification, numérisation, transmission à l'expert-comptable)[cite: 1467].
+Suivi des obligations (échéancier, aide à la conformité RGPD)[cite: 1467].
+Gestion Externalisée des Ressources Humaines (Soutien Administratif RH) :
+Gestion des formalités d'embauche (modèles DPAE, contrats simples)[cite: 1468].
+Suivi administratif du personnel (absences, visites médicales)[cite: 1469].
+Soutien au recrutement (modèles d'offres, aide au tri CV)[cite: 1469].
+Gestion administrative de la formation (suivi dossiers OPCO)[cite: 1470].
+Aide à la gestion des relations sociales de base (élections CSE, DUERP admin)[cite: 1470].
+Suivi de Gestion et Reporting Simplifié :
+Outils d'élaboration/suivi de budgets prévisionnels[cite: 1471].
+Tableaux de bord personnalisables (indicateurs clés)[cite: 1471].
+Modèles de reporting d'activité[cite: 1472].
+Assistance à la Gestion de Projets Administratifs et Transversaux :
+Checklists pour réponse aux appels d'offres (volet administratif)[cite: 1472].
+Suivi des dossiers de financement spécifiques[cite: 1473].
+
+3.10 Module Conseil en Gestion de Patrimoine, Assurances, Crédits & Sinistres (Backoffice & Portail) (Contenu des sous-modules détaillé dans le CdC V4.0 initial, enrichi par les sections spécifiques de particuliers.rtf et pro.txt.) [cite: 1473]
+
+3.10.1 Sous-module : Bilan & Stratégie Patrimoniale (Principalement pour Particuliers)
+Fonctionnalités pour collecter les informations patrimoniales (actifs, passifs)[cite: 1473].
+Outils d'analyse et de simulation (préparation retraite, optimisation fiscale simple)[cite: 1474].
+Génération de rapports de bilan patrimonial[cite: 1474].
+Suivi des objectifs patrimoniaux du client[cite: 1475].
+
+3.10.2 Sous-module : Contrats d'Assurance (Particuliers et Professionnels)
+Important : Le conseil et l'intermédiation en assurance sont des activités réglementées[cite: 1475]. Le module doit permettre de tracer si le cabinet détient l'immatriculation ORIAS requise[cite: 1476]. Si non, les fonctionnalités se limitent à de l'information générale et à l'orientation[cite: 1477].
+Si ORIAS détenu :
+Analyse approfondie des besoins (devoir de conseil) pour Particuliers (habitation, auto, santé, prévoyance, RC, emprunteur) et Professionnels (RC Pro, multirisque, flotte, cyber, santé collective, homme-clé)[cite: 1478].
+Outils de comparaison d'offres (garanties, exclusions, franchises, tarifs) sur un large panel[cite: 1479].
+Génération de fiches de conseil personnalisées et des documents d'information précontractuelle[cite: 1480].
+Suivi des souscriptions, des contrats (évolutions, adaptations), et des résiliations[cite: 1481].
+Enregistrement des contrats : multi-catégories, informations clés (compagnie, N°, garanties, franchises, échéance, montant), pièces jointes[cite: 1482].
+Suivi des contrats actifs, expirés, à renouveler[cite: 1483]. Alertes d'échéance[cite: 1483].
+
+3.10.3 Sous-module : Dossiers de Crédit (Développé) Ce sous-module est dédié à l'accompagnement complet des clients (Particuliers, Associations, Créateurs, Entreprises) dans leurs démarches de recherche et d'obtention de financements[cite: 1484]. Il s'appuie sur les fonctionnalités du "Module Gestion Centralisée des Dossiers Généraux" (3.4) pour la gestion des dossiers, timelines, documents, tâches et communications[cite: 1485].
+A. Initialisation et Analyse du Besoin Client :
+Fiche "Demande de Crédit" au sein du Dossier de Crédit :
+Champs structurés pour : Type de projet à financer (immobilier, consommation, équipement pro, BFR, création, rachat de crédits, etc.), description détaillée du projet[cite: 1486].
+Montant souhaité, durée envisagée, apport personnel (montant, origine)[cite: 1487].
+Informations financières du demandeur (revenus, charges, patrimoine - liaison avec Fiche Tiers eLaska section "Situation Financière (Crédit)")[cite: 1487].
+Simulateurs Intégrés :
+Calcul de capacité d'emprunt[cite: 1488].
+Estimation du taux d'endettement[cite: 1488].
+Simulation de mensualités (selon taux et durée indicatifs)[cite: 1489].
+Conseil initial sur la faisabilité, les types de prêts adaptés, les garanties possibles[cite: 1489].
+Génération d'une liste de pièces justificatives initiales (personnalisable par type de crédit/client)[cite: 1490].
+B. Constitution et Montage du Dossier de Crédit :
+Utilisation d'un modèle de timeline "Dossier de Crédit" (personnalisable et pré-remplissable, étapes en attente grisées) avec étapes types : Collecte et vérification des pièces justificatives (statut par pièce : manquante, reçue, validée - avec badges)[cite: 1491].
+Analyse approfondie du dossier par le conseiller eLaska[cite: 1492].
+Préparation de la note de synthèse/présentation pour les banques[cite: 1492].
+Soumission aux organismes financiers[cite: 1493].
+Réception et analyse des propositions[cite: 1493].
+Présentation et choix avec le client[cite: 1493].
+Acceptation de l'offre de prêt[cite: 1494].
+Mise en place des garanties[cite: 1494].
+Signature notaire / Contrat final[cite: 1494].
+Déblocage des fonds[cite: 1495].
+Clôture du dossier de montage[cite: 1495].
+Checklist dynamique et interactive des pièces à fournir (visible par le client sur le portail avec possibilité d'upload)[cite: 1496].
+Aide au remplissage des formulaires bancaires (modèles ou guides)[cite: 1497].
+Stockage sécurisé de toutes les pièces (gestion plurielle) dans la GED du dossier[cite: 1498].
+C. Recherche de Financement et Intermédiation (si habilitation IOBSP) :
+Traçabilité de l'habilitation IOBSP du cabinet/conseiller[cite: 1499].
+Si IOBSP :
+Base de données des partenaires financiers (banques, organismes de crédit) avec leurs critères, types de prêts, contacts[cite: 1500].
+Fonctionnalité de soumission (partielle ou totale) du dossier numérisé à plusieurs partenaires[cite: 1501].
+Suivi des réponses et des échanges avec chaque partenaire financier (lié aux communications du dossier)[cite: 1502].
+Outil de comparaison des offres de prêt reçues (taux nominal, TAEG, coût total du crédit, assurances, garanties, frais, modularité)[cite: 1503].
+Préparation d'un rapport de synthèse des offres pour le client[cite: 1504].
+Si non IOBSP : Le module aide à la constitution d'un dossier optimal pour que le client le présente lui-même, ou oriente vers des partenaires IOBSP[cite: 1505].
+D. Suivi de l'Offre de Prêt et Déblocage des Fonds :
+Enregistrement des détails de l'offre de prêt acceptée (organisme, montant, taux, durée, mensualité, assurance emprunteur, garanties)[cite: 1506].
+Suivi des délais légaux (réflexion, rétractation)[cite: 1507].
+Gestion des tâches liées à la mise en place des garanties et à la signature (coordination notaire, etc.)[cite: 1507].
+Notification du déblocage des fonds et mise à jour du statut du dossier[cite: 1508].
+E. Gestion Post-Déblocage et Suivi du Crédit (Informationnel) :
+Archivage du dossier de montage[cite: 1509].
+Stockage du tableau d'amortissement définitif et des conditions du prêt[cite: 1510].
+Possibilité de configurer des rappels pour des dates clés du prêt (ex: date anniversaire pour renégociation, fin de période de taux fixe)[cite: 1511].
+F. Reporting et Indicateurs Spécifiques aux Dossiers de Crédit :
+Nombre de dossiers de crédit par type, par statut, par conseiller[cite: 1512].
+Délais moyens de traitement des étapes clés[cite: 1513].
+Taux de succès (dossiers financés / dossiers soumis)[cite: 1513].
+Montants moyens financés[cite: 1514].
+G. Intégration avec le Portail Client (Section "Mes Crédits") :
+Visualisation de la timeline du dossier de crédit (avec étapes grisées si en attente)[cite: 1514].
+Accès aux documents partagés (liste de pièces, simulations, offres)[cite: 1515].
+Upload sécurisé des pièces justificatives[cite: 1515].
+Consultation des informations du prêt obtenu (organisme, montant, taux, mensualité, tableau d'amortissement simplifié)[cite: 1516].
+
+3.10.4 Sous-module : Gestion des Sinistres
+Déclaration de sinistre (workflow : date, type, contexte, dommages, photos, documents)[cite: 1517].
+Lien avec contrat d'assurance concerné[cite: 1518].
+Suivi des étapes personnalisables (déclaration, expertise, devis, relance, indemnisation)[cite: 1518].
+Notifications (relance assurance, échéance expertise)[cite: 1519].
+Possibilité de délégation de gestion[cite: 1519].
+Échéancier & Alertes (transversal assurances & crédits) : Calendrier échéances contrat, rappel dates limites, échéances de prêt[cite: 1520].
+Intégrations : Lien avec module abonnements/courtage, signature électronique (option), multi-entité, export CSV/PDF, historique des actions[cite: 1521].
+
+3.11 Module Gestion des Services/Prestations (Backoffice)
+(Fiche Prestation eLaska avec Référence eLaska, onglet "Temps Passé & Consommations") [cite: 1522]
+
+3.12 Module Tâches et Suivi Opérationnel (Backoffice) (Précisé : granularité temps/coûts)
+3.12.1 Gestion des Tâches eLaska : (Tel que CdC V4.0)[cite: 1522].
+3.12.2 Suivi du Temps et Checklists :
+Saisie de Temps : Liaison à Dossier, Prestation, Tâche, et Étape de Timeline spécifique (B.4)[cite: 1523].
+3.12.3 Vues des Tâches (Liste, Kanban React, Calendrier) : (Tel que CdC V4.0)[cite: 1524].
+
+3.13 Module de Courtage et d'Intermédiation en Abonnements Clients (Particuliers & Professionnels) (Backoffice & Portail) (Intègre les sections I.3.A de particuliers.rtf et III.6.A de pro.txt) [cite: 1525]
+Objectif : Accompagner particuliers et professionnels dans la gestion, l'optimisation et le suivi de leurs abonnements[cite: 1525].
+Répertoire centralisé des abonnements :
+Ajout manuel ou import[cite: 1526]. Catégorisation (énergie, télécoms, SaaS, etc.)[cite: 1526]. Association à un tiers fournisseur[cite: 1526].
+Gestion multi-dossiers/profils[cite: 1527].
+Service de conseil et d'intermédiation (pas de courtage au sens strict si non réglementé pour certains types d'abonnements) :
+Audit des abonnements existants (coûts, conditions, adéquation aux besoins)[cite: 1527].
+Analyse des besoins et usages[cite: 1528].
+Veille marché et comparaison rigoureuse des offres (B2C et B2B)[cite: 1528].
+Conseil en optimisation, présentation de solutions personnalisées (avantages/inconvénients, simulation économies)[cite: 1529].
+Assistance à la souscription et transition entre fournisseurs[cite: 1529].
+Assistance à la résiliation des anciens contrats[cite: 1530].
+Gestion déléguée (sur mandat spécifique)[cite: 1530].
+Négociation tarifaire avec fournisseurs (pour professionnels)[cite: 1531].
+Suivi des échéances et alertes :
+Échéancier global[cite: 1531].
+Alertes (fin d'engagement, résiliation possible, hausses)[cite: 1532].
+Archivage & documentation : Téléversement contrats, factures[cite: 1532]. Récapitulatif annuel[cite: 1532].
+Portail Client : Section "Mes Abonnements" pour consultation, suivi, et potentiellement interaction pour optimisation[cite: 1533].
+
+3.14 Module Recouvrements (Backoffice & Portail) (Basé sur le CdC V4.0, applicable aux créances du cabinet envers ses clients ET à la gestion déléguée de créances pour le compte des clients TPE/PME)[cite: 1534].
+Tableau de bord dynamique et analytique (avec distinction entre recouvrement interne et recouvrement délégué)[cite: 1535].
+Fiche créance/dette détaillée : Informations structurées, historique complet des actions, pièces jointes, responsables, suivi prestataire externe[cite: 1536]. Pour le recouvrement délégué, le "créancier" est le client du cabinet[cite: 1537].
+Workflow de traitement personnalisable : Étapes configurables, modèles, affectation tâches/délais, validation interne[cite: 1538].
+Médiation et gestion précontentieuse : Suivi promesses de paiement, suivi contentieux transmis[cite: 1539].
+Planification et échéanciers personnalisés[cite: 1539].
+Gestion documentaire intelligente[cite: 1540].
+Reporting & indicateurs personnalisables (ex: taux de recouvrement pour le compte du client X)[cite: 1540].
+Portail Client (pour TPE/PME) : Section "Mes Recouvrements Délégués" pour visualiser le suivi des actions menées par le cabinet sur les créances de l'entreprise cliente[cite: 1541].
+
+3.15 Module de Pilotage Interne Avancé (Backoffice - Vue Gestionnaire) (Enrichi : performance services)
+Rapports incluant temps passé par étape, consommations par dossier/type[cite: 1542].
+[NOUVEAU] Analyse de la performance des services : temps moyen réel vs. estimé par type de prestation/dossier, identification des goulets d'étranglement, rentabilité par dossier/client (si données suffisantes)[cite: 1543].
+Suivi de la charge de travail par conseiller[cite: 1544].
+Indicateurs de satisfaction client (si enquêtes intégrées)[cite: 1544].
+
+3.16 Module Gestion des Partenariats & Apporteurs d'Affaires (Backoffice) (Enrichi : CRM interne)
+Suivi des partenaires, apporteurs d'affaires (coordonnées, type de partenariat, affaires apportées, commissions éventuelles)[cite: 1545].
+[NOUVEAU] Annuaire dynamique et structuré des partenaires locaux/régionaux (Tarbes, Occitanie) avec services, contacts, conditions de partenariat[cite: 1546]. Peut être lié à la Base de Connaissances[cite: 1547].
+
+4 Systèmes transversaux
+
+4.1 Paramètres Étendus et Personnalisation Totale (Enrichi : numérotation, menus/TB par rôle)
+Interface d'Administration eLaska (admin/) :
+Configuration des modèles de numérotation avec variables dynamiques (pour dossiers, prestations, contrats, etc. - B.6)[cite: 1547].
+Configuration Prise RDV en Ligne (types de RDV, durées par défaut, règles d'annulation)[cite: 1548].
+Gestion des modèles de timelines par type de dossier (y compris pour les dossiers de crédit), incluant la définition des étapes standards et leur statut initial (ex: grisé)[cite: 1549].
+Personnalisation des menus et tableaux de bord par rôle utilisateur interne[cite: 1550].
+Gestion des listes déroulantes personnalisables (ex: types d'objectifs de vie, catégories de dépenses, types de crédit)[cite: 1551].
+Configuration des icônes Font Awesome pour les menus eLaska[cite: 1552].
+Gestion centralisée des types de badges de statut (libellés, couleurs, icônes) utilisables dans les timelines[cite: 1553].
+Gestion centralisée des bibliothèques de tags (couleurs, icônes) utilisables à travers le module[cite: 1554].
+
+4.2 Système de champs dynamiques et conditionnels (Attributs Supplémentaires)
+Permettre l'ajout de champs personnalisés aux fiches Tiers, Dossiers (y compris Dossiers de Crédit), Prestations, etc., avec affichage conditionnel basé sur d'autres champs[cite: 1555].
+
+4.3 Système de Tags/Étiquettes personnalisables
+Applicable aux Tiers, Dossiers, Documents, Communications, Tâches pour faciliter le tri, la recherche et le reporting[cite: 1556]. Les tags seront un outil clé pour l'organisation et la recherche[cite: 1557]. Ils pourront être multicolores et associés à des icônes pour une identification visuelle rapide[cite: 1558]. Les utilisateurs pourront filtrer les listes (tiers, dossiers, documents, tâches) en utilisant des combinaisons de tags[cite: 1559].
+
+4.4 Historique et Suivi Détaillé des Communications et Envois
+Suivi de tous les échanges (emails entrants/sortants liés, courriers scannés, notes d'appels téléphoniques, messages portail) centralisé et lié à un client, un dossier, une prestation, un contrat externe, un contrat d'assurance, un dossier de crédit, etc.[cite: 1560].
+Option de marquer une communication comme "lue/prise en compte"[cite: 1560].
+Modèles d'emails HTML personnalisables avec variables dynamiques (nom client, référence dossier, etc.) et sujets dynamiques[cite: 1561].
+
+4.5 Système de Notifications & Alertes Intelligentes (Développé) Système de notifications modernes, multicanales et contextuelles :
+Types de canaux :
+Notifications Push Web : Pour des alertes en temps réel sur le navigateur (Portail Client et Backoffice, avec consentement utilisateur)[cite: 1562]. Design discret et informatif[cite: 1563].
+Emails : Pour des notifications formelles, récapitulatifs, ou lorsque l'utilisateur n'est pas actif sur la plateforme[cite: 1563]. Templates HTML personnalisables, au design épuré et professionnel[cite: 1564].
+Notifications sur Tableau de Bord : Un centre de notifications intégré au tableau de bord principal (eLaska et Portail Client) affichant un flux des notifications non lues et récentes, avec des liens directs vers les éléments concernés[cite: 1564]. Les notifications lues peuvent être archivées ou masquées[cite: 1565].
+Contenu et Suivi de Progression :
+Les notifications indiqueront clairement l'objet, le contexte (client, dossier, tâche concernée avec lien direct) et l'action requise ou l'information fournie[cite: 1565].
+Pour les processus longs ou les timelines, des notifications de suivi de progression pourront être envoyées à des étapes clés (ex: "Dossier de crédit X : Pièces validées, en attente soumission banque") ou lorsqu'un certain pourcentage d'avancement est atteint[cite: 1566].
+Les notifications sur le tableau de bord pourront inclure des mini-barres de progression pour les tâches ou dossiers concernés[cite: 1567].
+Personnalisation : Les utilisateurs (internes et externes) pourront personnaliser leurs préférences de notification (quels types d'alertes recevoir, par quel canal et avec quelle fréquence pour certaines) dans la mesure du possible, pour éviter la surcharge informationnelle[cite: 1568].
+Déclencheurs de notifications configurables : Nouvelle tâche assignée, tâche en retard, échéance critique approchant (dossier, contrat, démarche, étape de dossier de crédit), nouveau message/document sur le portail, mise à jour importante d'un dossier, alerte de fin d'engagement d'abonnement, rappel de renouvellement de document d'identité, alerte de réception d'offre de prêt, etc.[cite: 1569].
+
+4.6 Suivi des Consommations et Frais Engagés (Précisé : granularité)
+Saisie des consommations (frais de déplacement, fournitures spécifiques, etc.)[cite: 1569].
+Liaison aux dossiers, prestations, tâches, et étapes de timeline spécifiques (B.4)[cite: 1570].
+Reporting des consommations par projet/client[cite: 1570].
+Intégration à la facturation (refacturation au client si applicable)[cite: 1571].
+
+4.7 Base de Connaissances Interne & Veille Réglementaire/Locale
+Espace pour capitaliser les savoirs : fiches pratiques, procédures internes, modèles de documents (ex: guides pour montage de dossier de crédit)[cite: 1572].
+Section dédiée à la veille réglementaire (alertes sur nouvelles lois, décrets impactant les clients, évolutions des conditions de crédit)[cite: 1573].
+Informations spécifiques aux dispositifs locaux/régionaux (Occitanie/Tarbes) : aides, organismes, contacts[cite: 1574].
+Annuaire des partenaires (voir 3.16) peut être une section de cette base[cite: 1575].
+
+4.8 Gestion Affinée des Consentements RGPD
+Module de gestion des différents types de consentement (par finalité : newsletter, traitement données patrimoniales, partage avec tiers pour recherche de crédit, etc.)[cite: 1576].
+Traçabilité de l'obtention (date, source - ex: portail, formulaire papier, oral avec confirmation écrite - version du texte de consentement validé)[cite: 1577].
+Interface pour le client sur le portail pour visualiser et gérer ses consentements (retirer, modifier)[cite: 1578].
+Outils pour l'export/suppression des données personnelles en backoffice (conformité droit à l'oubli, portabilité)[cite: 1579].
+Alertes en cas de consentement arrivant à expiration si applicable[cite: 1580].
+
+5. Points d'attention spécifiques (issus du CdC V4.0)
+A.1 Widgets de Tableau de Bord : Doivent être hautement configurables par rôle et présenter une information claire et actionnable[cite: 1581].
+A.2 Créateurs d'Entreprises : Prise en charge complète du parcours, depuis l'idée jusqu'aux premiers mois, avec des outils et informations spécifiques[cite: 1582].
+B.1 Intervenants Externes : Gestion fine des contacts et de leur rôle par dossier, suivi des communications[cite: 1583].
+B.2 Coffre-Fort Numérique & Notifications : Sécurité renforcée pour le coffre-fort[cite: 1584]. Système de notification "Lu/Pris en Compte" bidirectionnel[cite: 1584].
+B.3 Financements Associations : Module dédié et détaillé pour le suivi des demandes[cite: 1585].
+B.4 Granularité Suivi Temps/Coûts : Liaison possible à l'étape de timeline[cite: 1586].
+B.6 Numérotation Personnalisable : Avec variables dynamiques pour tous les objets métier clés[cite: 1587].
+B.7 Prise de RDV en Ligne : Stockage ID externe Google Calendar, synchronisation robuste[cite: 1588].
+B.8 Stratégie de Chiffrement : À définir précisément avec le développeur[cite: 1589].
+B.9 Organismes Locaux/Régionaux : Fiches Tiers dédiées avec informations spécifiques[cite: 1590].
+
+6. Intégrations
+
+6.1 Intégration Google Drive (Optionnelle)
+Permettre au client de lier son compte Google Drive pour un partage de documents facilité avec le conseiller (accès contrôlé)[cite: 1591].
+Permettre au cabinet de stocker certains documents liés aux dossiers dans un Google Drive partagé (si politique interne le permet)[cite: 1592].
+
+6.2 Intégration Email IMAP
+Liaison des boîtes email des conseillers pour synchroniser les emails envoyés/reçus avec les fiches Tiers et Dossiers concernés dans eLaska[cite: 1593].
+Aide à l'archivage et à la traçabilité des communications[cite: 1594].
+
+6.3 Notifications Push (Portail Client)
+Utilisation de technologies web push pour notifier les clients en temps réel sur leur appareil (si autorisé) des événements importants sur le portail[cite: 1595].
+
+6.4 Intégration Google Agenda (pour Prise de RDV en Ligne) (Précisé : ID externe)
+Objectif : Synchronisation des disponibilités des conseillers et création automatique des RDV pris depuis le portail eLaska[cite: 1596].
+Technologie : API Google Calendar, authentification OAuth2 sécurisée[cite: 1597].
+Fonctionnalités :
+Lecture des disponibilités des calendriers Google des conseillers (en respectant les plages de travail et les types de RDV configurés)[cite: 1597].
+Création d'événements dans le Google Agenda du conseiller (avec informations client, motif du RDV, et un lien retour vers le dossier/RDV dans eLaska pour accès rapide)[cite: 1598].
+Mise à Jour/Annulation : Synchronisation bidirectionnelle à étudier pour une phase ultérieure (modification/annulation depuis Google Agenda reflétée dans eLaska et vice-versa, avec notifications)[cite: 1599].
+Notifications Google Agenda natives en complément des notifications eLaska[cite: 1600].
+Stockage de l'ID de l'événement Google Calendar dans l'objet llx_actioncomm de Dolibarr ou une table de liaison eLaska dédiée pour référence et synchronisation (B.7)[cite: 1601].
+Configuration : Interface pour chaque conseiller pour lier son compte Google Agenda, sélectionner les calendriers à utiliser pour les disponibilités professionnelles, définir les types de RDV et durées associées[cite: 1602].
+
+6.5 Intégration Signature Électronique (Optionnelle)
+Intégration avec un service de signature électronique tiers (ex: Yousign, DocuSign) pour permettre la signature dématérialisée de documents (mandats, contrats de service, devis, lettres de mission, consentements, offres de prêt si autorisé par la banque)[cite: 1603].
+Workflow : Envoi du document depuis eLaska, suivi du statut de signature, archivage du document signé[cite: 1604].
