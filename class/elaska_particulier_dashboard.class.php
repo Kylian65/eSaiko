@@ -1,13 +1,28 @@
 <?php
+/* Copyright (C) 2025 Elaska Dev Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 /**
  * Classe de gestion du tableau de bord administratif pour les particuliers
  * 
- * @package Elaska
+ * @package    Elaska
  * @subpackage Particuliers
- * @author Elaska Dev Team
- * @version 4.5.0
  */
-class ElaskaParticulierDashboard {
+class ElaskaParticulierDashboard
+{
     /**
      * ID du particulier concerné
      * @var int
@@ -54,7 +69,8 @@ class ElaskaParticulierDashboard {
      * Constructeur
      * @param int $particulier_id ID du particulier
      */
-    public function __construct(int $particulier_id) {
+    public function __construct(int $particulier_id)
+    {
         $this->particulier_id = $particulier_id;
         $this->date_reference = new DateTime();
     }
@@ -64,7 +80,8 @@ class ElaskaParticulierDashboard {
      * @param int $jours Nombre de jours
      * @return self
      */
-    public function setPeriode(int $jours): self {
+    public function setPeriode(int $jours): self
+    {
         $this->periode = max(1, $jours);
         $this->cache = []; // Vider le cache
         return $this;
@@ -75,7 +92,8 @@ class ElaskaParticulierDashboard {
      * @param array|null $types Liste des types ou null pour tous
      * @return self
      */
-    public function setTypesDocuments(?array $types): self {
+    public function setTypesDocuments(?array $types): self
+    {
         $this->types_documents = $types;
         $this->cache = []; // Vider le cache
         return $this;
@@ -86,7 +104,8 @@ class ElaskaParticulierDashboard {
      * @param array|null $types Liste des types ou null pour tous
      * @return self
      */
-    public function setTypesDemarches(?array $types): self {
+    public function setTypesDemarches(?array $types): self
+    {
         $this->types_demarches = $types;
         $this->cache = []; // Vider le cache
         return $this;
@@ -97,7 +116,8 @@ class ElaskaParticulierDashboard {
      * @param array|null $types Liste des types ou null pour tous
      * @return self
      */
-    public function setTypesEvenements(?array $types): self {
+    public function setTypesEvenements(?array $types): self
+    {
         $this->types_evenements = $types;
         $this->cache = []; // Vider le cache
         return $this;
@@ -108,7 +128,8 @@ class ElaskaParticulierDashboard {
      * @param DateTime $date Date de référence
      * @return self
      */
-    public function setDateReference(DateTime $date): self {
+    public function setDateReference(DateTime $date): self
+    {
         $this->date_reference = clone $date;
         $this->cache = []; // Vider le cache
         return $this;
@@ -118,7 +139,8 @@ class ElaskaParticulierDashboard {
      * Récupère toutes les données du tableau de bord
      * @return array Données du tableau de bord
      */
-    public function getDashboardData(): array {
+    public function getDashboardData(): array
+    {
         if (isset($this->cache['dashboard_data'])) {
             return $this->cache['dashboard_data'];
         }
@@ -143,7 +165,8 @@ class ElaskaParticulierDashboard {
      * Récupère les documents du particulier
      * @return array Documents
      */
-    public function getDocuments(): array {
+    public function getDocuments(): array
+    {
         if (isset($this->cache['documents'])) {
             return $this->cache['documents'];
         }
@@ -167,7 +190,8 @@ class ElaskaParticulierDashboard {
      * Récupère les documents à traiter (non validés)
      * @return array Documents à traiter
      */
-    public function getDocumentsATraiter(): array {
+    public function getDocumentsATraiter(): array
+    {
         if (isset($this->cache['documents_a_traiter'])) {
             return $this->cache['documents_a_traiter'];
         }
@@ -193,7 +217,8 @@ class ElaskaParticulierDashboard {
      * Récupère les documents récents (créés dans la période)
      * @return array Documents récents
      */
-    public function getDocumentsRecents(): array {
+    public function getDocumentsRecents(): array
+    {
         if (isset($this->cache['documents_recents'])) {
             return $this->cache['documents_recents'];
         }
@@ -221,7 +246,8 @@ class ElaskaParticulierDashboard {
      * Récupère les démarches actives
      * @return array Démarches actives
      */
-    public function getDemarchesActives(): array {
+    public function getDemarchesActives(): array
+    {
         if (isset($this->cache['demarches_actives'])) {
             return $this->cache['demarches_actives'];
         }
@@ -246,7 +272,8 @@ class ElaskaParticulierDashboard {
      * Récupère les démarches récentes (créées dans la période)
      * @return array Démarches récentes
      */
-    public function getDemarchesRecentes(): array {
+    public function getDemarchesRecentes(): array
+    {
         if (isset($this->cache['demarches_recentes'])) {
             return $this->cache['demarches_recentes'];
         }
@@ -274,7 +301,8 @@ class ElaskaParticulierDashboard {
      * Récupère les notifications actives
      * @return array Notifications
      */
-    public function getNotifications(): array {
+    public function getNotifications(): array
+    {
         if (isset($this->cache['notifications'])) {
             return $this->cache['notifications'];
         }
@@ -296,7 +324,8 @@ class ElaskaParticulierDashboard {
      * @param int $jours_futur Nombre de jours dans le futur (30 par défaut)
      * @return array Échéances
      */
-    public function getEcheances(int $jours_futur = 30): array {
+    public function getEcheances(int $jours_futur = 30): array
+    {
         $cache_key = 'echeances_' . $jours_futur;
         if (isset($this->cache[$cache_key])) {
             return $this->cache[$cache_key];
@@ -377,7 +406,8 @@ class ElaskaParticulierDashboard {
      * Récupère les événements récents ou à venir
      * @return array Événements
      */
-    public function getEvenements(): array {
+    public function getEvenements(): array
+    {
         if (isset($this->cache['evenements'])) {
             return $this->cache['evenements'];
         }
@@ -409,7 +439,8 @@ class ElaskaParticulierDashboard {
      * Récupère les statistiques du tableau de bord
      * @return array Statistiques
      */
-    public function getStatistiques(): array {
+    public function getStatistiques(): array
+    {
         if (isset($this->cache['statistiques'])) {
             return $this->cache['statistiques'];
         }
@@ -445,7 +476,8 @@ class ElaskaParticulierDashboard {
      * Calcule le taux de complétion des documents et démarches
      * @return float Taux de complétion (0-100)
      */
-    private function calculerTauxCompletion(): float {
+    private function calculerTauxCompletion(): float
+    {
         // Documents
         $documents_total = ElaskaDocument::countBy([
             'particulier_id' => $this->particulier_id,
@@ -484,7 +516,8 @@ class ElaskaParticulierDashboard {
      * Génère un résumé des tâches administratives
      * @return array Résumé des tâches
      */
-    public function genererResumeTaches(): array {
+    public function genererResumeTaches(): array
+    {
         $echeances = $this->getEcheances();
         $documents_a_traiter = $this->getDocumentsATraiter();
         
