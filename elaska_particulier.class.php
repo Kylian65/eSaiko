@@ -765,8 +765,10 @@ public $fk_user_conseiller_referent;
         'consentement_rgpd' => array('type' => 'boolean', 'label' => 'ConsentementRGPD', 'enabled' => 1, 'position' => 1320, 'notnull' => 1, 'visible' => 1, 'default' => '0'),
         'date_consentement_rgpd' => array('type' => 'datetime', 'label' => 'DateConsentementRGPD', 'enabled' => 1, 'position' => 1330, 'notnull' => 0, 'visible' => 1),
         'notes_specifiques_particulier' => array('type' => 'text', 'label' => 'NotesSpecifiquesParticulier', 'enabled' => 1, 'position' => 1340, 'notnull' => 0, 'visible' => 1),
-'score_autonomie_numerique' => array('type' => 'varchar(10)', 'label' => 'ScoreAutonomieNumerique', 'enabled' => 1, 'position' => 1350, 'notnull' => 0, 'visible' => 1, 'default' => '3'),
-'mode_communication_prefere' => array('type' => 'varchar(10)', 'label' => 'ModeCommunicationPrefere', 'enabled' => 1, 'position' => 1390, 'notnull' => 0, 'visible' => 1, 'default' => '1'), // CHAMPS TECHNIQUES
+        'score_autonomie_numerique' => array('type' => 'varchar(10)', 'label' => 'ScoreAutonomieNumerique', 'enabled' => 1, 'position' => 1350, 'notnull' => 0, 'visible' => 1, 'default' => '3'),
+        'mode_communication_prefere' => array('type' => 'varchar(10)', 'label' => 'ModeCommunicationPrefere', 'enabled' => 1, 'position' => 1390, 'notnull' => 0, 'visible' => 1, 'default' => '1'),
+       
+        // CHAMPS TECHNIQUES
         'entity' => array('type' => 'integer', 'label' => 'Entity', 'visible' => 0, 'enabled' => 1, 'position' => 1900, 'notnull' => 1, 'default' => '1'),
         'date_creation' => array('type' => 'datetime', 'label' => 'DateCreation', 'visible' => 0, 'enabled' => 1, 'position' => 1910, 'notnull' => 1),
         'tms' => array('type' => 'timestamp', 'label' => 'DateModification', 'visible' => 0, 'enabled' => 1, 'position' => 1920, 'notnull' => 1),
