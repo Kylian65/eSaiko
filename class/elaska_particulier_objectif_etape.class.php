@@ -66,14 +66,14 @@ class ElaskaParticulierObjectifEtape extends CommonObject
     public $date_etape;
     
     /**
-     * @var int Priorité de l'étape (1=faible, 2=moyenne, 3=élevée)
+     * @var string Code de priorité de l'étape (dictionnaire)
      */
-    public $priorite;
+    public $priorite_etape_code;
     
     /**
-     * @var int Étape complétée (0=non, 1=oui)
+     * @var string Code du statut de l'étape (dictionnaire)
      */
-    public $completed;
+    public $statut_etape_code;
     
     /**
      * @var string Date d'achèvement de l'étape (format YYYY-MM-DD HH:MM:SS)
@@ -121,8 +121,8 @@ class ElaskaParticulierObjectifEtape extends CommonObject
         'libelle' => array('type' => 'varchar(255)', 'label' => 'Libelle', 'enabled' => 1, 'position' => 20, 'notnull' => 1, 'visible' => 1),
         'description' => array('type' => 'text', 'label' => 'Description', 'enabled' => 1, 'position' => 30, 'notnull' => 0, 'visible' => 1),
         'date_etape' => array('type' => 'date', 'label' => 'DateEtape', 'enabled' => 1, 'position' => 40, 'notnull' => 0, 'visible' => 1),
-        'priorite' => array('type' => 'integer', 'label' => 'Priorite', 'enabled' => 1, 'position' => 50, 'notnull' => 1, 'visible' => 1, 'default' => '2'),
-        'completed' => array('type' => 'boolean', 'label' => 'Completed', 'enabled' => 1, 'position' => 60, 'notnull' => 1, 'visible' => 1, 'default' => '0'),
+        'priorite_etape_code' => array('type' => 'varchar(50)', 'label' => 'PrioriteEtape', 'enabled' => 1, 'position' => 50, 'notnull' => 1, 'visible' => 1, 'default' => 'NORMAL'),
+        'statut_etape_code' => array('type' => 'varchar(50)', 'label' => 'StatutEtape', 'enabled' => 1, 'position' => 60, 'notnull' => 1, 'visible' => 1, 'default' => 'NOT_STARTED'),
         'date_completion' => array('type' => 'datetime', 'label' => 'DateCompletion', 'enabled' => 1, 'position' => 70, 'notnull' => 0, 'visible' => 1),
         'fk_user_completion' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'UserCompletion', 'enabled' => 1, 'position' => 80, 'notnull' => 0, 'visible' => 1),
         'rang' => array('type' => 'integer', 'label' => 'Rang', 'enabled' => 1, 'position' => 90, 'notnull' => 1, 'visible' => 0, 'default' => '0'),
@@ -150,12 +150,12 @@ class ElaskaParticulierObjectifEtape extends CommonObject
         
         parent::__construct($db);
         
-        // Par défaut, l'étape est active et non complétée
+        // Par défaut, l'étape est active et non démarrée
         if (!isset($this->status)) $this->status = 1;
-        if (!isset($this->completed)) $this->completed = 0;
+        if (!isset($this->statut_etape_code)) $this->statut_etape_code = 'NOT_STARTED';
         
         // Valeurs par défaut
-        $this->priorite = isset($this->priorite) ? $this->priorite : 2;
+        $this->priorite_etape_code = isset($this->priorite_etape_code) ? $this->priorite_etape_code : 'NORMAL';
         $this->rang = isset($this->rang) ? $this->rang : 0;
     }
 
@@ -174,6 +174,13 @@ class ElaskaParticulierObjectifEtape extends CommonObject
             return -1;
         }
         
+        // Vérification que l'objectif parent existe
+        $objectif = new ElaskaParticulierObjectif($this->db);
+        if ($objectif->fetch($this->fk_objectif) <= 0) {
+            $this->error = 'ParentObjectifDoesNotExist';
+            return -1;
+        }
+        
         if (empty($this->libelle)) {
             $this->error = 'LibelleIsMandatory';
             return -1;
@@ -181,8 +188,8 @@ class ElaskaParticulierObjectifEtape extends CommonObject
         
         // Valeurs par défaut
         if (empty($this->status)) $this->status = 1;
-        if (empty($this->priorite)) $this->priorite = 2;
-        if (!isset($this->completed)) $this->completed = 0;
+        if (empty($this->priorite_etape_code)) $this->priorite_etape_code = 'NORMAL';
+        if (empty($this->statut_etape_code)) $this->statut_etape_code = 'NOT_STARTED';
         
         // Récupération du rang automatiquement (dernier rang + 10)
         if (empty($this->rang)) {
@@ -217,21 +224,17 @@ class ElaskaParticulierObjectifEtape extends CommonObject
         
         // Si la création est réussie et qu'on doit déclencher les triggers
         if ($result > 0 && !$notrigger) {
-            // Récupération de l'objectif parent et du particulier associé
-            $objectif = new ElaskaParticulierObjectif($this->db);
-            if ($objectif->fetch($this->fk_objectif) > 0) {
-                // Ajouter à l'historique du particulier
-                require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier.class.php';
-                $particulier = new ElaskaParticulier($this->db);
-                if ($particulier->fetch($objectif->fk_particulier) > 0) {
-                    $particulier->addHistorique(
-                        $user,
-                        'CREATE',
-                        'objectif_etape',
-                        $this->id,
-                        'Création d\'une étape pour l\'objectif "'.$objectif->libelle.'" (Réf: '.$objectif->ref.') : '.$this->libelle.' (Réf: '.$this->ref.')'
-                    );
-                }
+            // Ajouter à l'historique du particulier
+            require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier.class.php';
+            $particulier = new ElaskaParticulier($this->db);
+            if ($particulier->fetch($objectif->fk_particulier) > 0) {
+                $particulier->addHistorique(
+                    $user,
+                    'CREATE',
+                    'objectif_etape',
+                    $this->id,
+                    'Création d\'une étape pour l\'objectif "'.$objectif->libelle.'" (Réf: '.$objectif->ref.') : '.$this->libelle.' (Réf: '.$this->ref.')'
+                );
             }
         }
         
@@ -263,6 +266,15 @@ class ElaskaParticulierObjectifEtape extends CommonObject
         if (empty($this->libelle)) {
             $this->error = 'LibelleIsMandatory';
             return -1;
+        }
+        
+        // Vérification que l'objectif parent existe s'il a été modifié
+        if ($this->fk_objectif) {
+            $objectif = new ElaskaParticulierObjectif($this->db);
+            if ($objectif->fetch($this->fk_objectif) <= 0) {
+                $this->error = 'ParentObjectifDoesNotExist';
+                return -1;
+            }
         }
         
         $this->fk_user_modif = $user->id;
@@ -331,6 +343,9 @@ class ElaskaParticulierObjectifEtape extends CommonObject
                     'Suppression de l\'étape "'.$libelleEtape.'" (Réf: '.$refEtape.') de l\'objectif "'.$libelleObjectif.'" (Réf: '.$refObjectif.')'
                 );
             }
+            
+            // Recalculer la progression de l'objectif après suppression de l'étape
+            $objectif->calculateProgressionFromEtapes($user);
         }
         
         return $result;
@@ -341,11 +356,11 @@ class ElaskaParticulierObjectifEtape extends CommonObject
      *
      * @param int    $fk_objectif ID de l'objectif parent
      * @param int    $status      Filtre optionnel par statut (0=inactif, 1=actif, -1=tous)
-     * @param int    $completed   Filtre par étapes complétées (0=non complétées, 1=complétées, -1=toutes)
+     * @param string $statut_code Filtre optionnel par code de statut d'étape ('COMPLETED', 'NOT_STARTED', etc.), '' pour tous
      * @param string $orderby     Colonnes pour ORDER BY
      * @return array              Tableau d'objets ElaskaParticulierObjectifEtape ou tableau vide
      */
-    public function fetchAllByObjectif($fk_objectif, $status = 1, $completed = -1, $orderby = 'rang ASC, priorite DESC, date_etape ASC')
+    public function fetchAllByObjectif($fk_objectif, $status = 1, $statut_code = '', $orderby = 'rang ASC, priorite_etape_code ASC, date_etape ASC')
     {
         $etapes = array();
         
@@ -356,8 +371,8 @@ class ElaskaParticulierObjectifEtape extends CommonObject
             $sql.= " AND status = ".(int) $status;
         }
         
-        if ($completed >= 0) {
-            $sql.= " AND completed = ".(int) $completed;
+        if (!empty($statut_code)) {
+            $sql.= " AND statut_etape_code = '".$this->db->escape($statut_code)."'";
         }
         
         $sql.= " ORDER BY ".$orderby;
@@ -389,22 +404,30 @@ class ElaskaParticulierObjectifEtape extends CommonObject
     }
 
     /**
-     * Marque une étape comme complétée ou non complétée
+     * Change le statut d'une étape
      *
-     * @param User $user       Utilisateur effectuant l'action
-     * @param int  $completion 1=complétée, 0=non complétée
-     * @param string $commentaire Commentaire optionnel sur l'achèvement
-     * @return int             <0 si erreur, >0 si OK
+     * @param User   $user       Utilisateur effectuant l'action
+     * @param string $statut_code Nouveau code de statut (NOT_STARTED, IN_PROGRESS, COMPLETED, CANCELLED, etc.)
+     * @param string $commentaire Commentaire optionnel sur le changement
+     * @return int               <0 si erreur, >0 si OK
      */
-    public function setCompletion($user, $completion, $commentaire = '')
+    public function setStatut($user, $statut_code, $commentaire = '')
     {
-        $ancienEtat = $this->completed;
-        $this->completed = $completion ? 1 : 0;
+        $statuts_valides = array('NOT_STARTED', 'IN_PROGRESS', 'BLOCKED', 'DELAYED', 'COMPLETED', 'CANCELLED');
         
-        if ($completion) {
+        if (!in_array($statut_code, $statuts_valides)) {
+            $this->error = 'InvalidStatusCode';
+            return -1;
+        }
+        
+        $ancien_statut = $this->statut_etape_code;
+        $this->statut_etape_code = $statut_code;
+        
+        // Mise à jour de la date et de l'utilisateur de complétion si statut COMPLETED
+        if ($statut_code == 'COMPLETED') {
             $this->date_completion = dol_now();
             $this->fk_user_completion = $user->id;
-        } else {
+        } elseif ($statut_code == 'NOT_STARTED' || $statut_code == 'CANCELLED') {
             $this->date_completion = null;
             $this->fk_user_completion = null;
         }
@@ -428,10 +451,15 @@ class ElaskaParticulierObjectifEtape extends CommonObject
                 require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier.class.php';
                 $particulier = new ElaskaParticulier($this->db);
                 if ($particulier->fetch($objectif->fk_particulier) > 0) {
-                    $action = $completion ? 'COMPLETE' : 'UNCOMPLETE';
-                    $message = $completion ? 
-                        'L\'étape "'.$this->libelle.'" (Réf: '.$this->ref.') de l\'objectif "'.$objectif->libelle.'" (Réf: '.$objectif->ref.') a été marquée comme terminée' :
-                        'L\'étape "'.$this->libelle.'" (Réf: '.$this->ref.') de l\'objectif "'.$objectif->libelle.'" (Réf: '.$objectif->ref.') a été marquée comme non terminée';
+                    $action = 'UPDATE_STATUT';
+                    
+                    // Obtenir les libellés traduits des statuts
+                    $statut_options = self::getStatutEtapeOptions($particulier->langs);
+                    $ancien_statut_libelle = isset($statut_options[$ancien_statut]) ? $statut_options[$ancien_statut] : $ancien_statut;
+                    $nouveau_statut_libelle = isset($statut_options[$statut_code]) ? $statut_options[$statut_code] : $statut_code;
+                    
+                    $message = 'Changement de statut de l\'étape "'.$this->libelle.'" (Réf: '.$this->ref.') de l\'objectif "'.$objectif->libelle.'" (Réf: '.$objectif->ref.'): ' .
+                               $ancien_statut_libelle.' → '.$nouveau_statut_libelle;
                     
                     if (!empty($commentaire)) {
                         $message .= ' avec le commentaire : '.$commentaire;
@@ -443,7 +471,7 @@ class ElaskaParticulierObjectifEtape extends CommonObject
                         'objectif_etape',
                         $this->id,
                         $message,
-                        array('completed' => array($ancienEtat, $this->completed))
+                        array('statut_etape_code' => array($ancien_statut, $statut_code))
                     );
                 }
                 
@@ -453,6 +481,23 @@ class ElaskaParticulierObjectifEtape extends CommonObject
         }
         
         return $result;
+    }
+
+    /**
+     * Marque une étape comme complétée ou non complétée (compatibilité avec l'ancienne API)
+     *
+     * @param User $user       Utilisateur effectuant l'action
+     * @param int  $completion 1=complétée, 0=non complétée
+     * @param string $commentaire Commentaire optionnel sur l'achèvement
+     * @return int             <0 si erreur, >0 si OK
+     */
+    public function setCompletion($user, $completion, $commentaire = '')
+    {
+        if ($completion) {
+            return $this->setStatut($user, 'COMPLETED', $commentaire);
+        } else {
+            return $this->setStatut($user, 'NOT_STARTED', $commentaire);
+        }
     }
 
     /**
@@ -471,6 +516,7 @@ class ElaskaParticulierObjectifEtape extends CommonObject
     /**
      * Réordonne toutes les étapes d'un objectif
      * 
+     * @param DoliDB $db         Instance de la base de données
      * @param User $user         Utilisateur effectuant l'action
      * @param int  $fk_objectif  ID de l'objectif parent
      * @return int               <0 si erreur, >0 si OK
@@ -478,7 +524,7 @@ class ElaskaParticulierObjectifEtape extends CommonObject
     public static function reorderAll($db, $user, $fk_objectif)
     {
         $etape = new ElaskaParticulierObjectifEtape($db);
-        $etapes = $etape->fetchAllByObjectif($fk_objectif, 1, -1);
+        $etapes = $etape->fetchAllByObjectif($fk_objectif, 1, '', 'priorite_etape_code DESC, date_etape ASC');
         
         if (is_array($etapes)) {
             $rang = 10;
@@ -511,7 +557,7 @@ class ElaskaParticulierObjectifEtape extends CommonObject
             if (is_numeric($prerequisId) && $prerequisId > 0) {
                 $etapePrereq = new ElaskaParticulierObjectifEtape($this->db);
                 $result = $etapePrereq->fetch($prerequisId);
-                if ($result > 0 && (!$etapePrereq->completed || $etapePrereq->status == 0)) {
+                if ($result > 0 && ($etapePrereq->statut_etape_code != 'COMPLETED' || $etapePrereq->status == 0)) {
                     return false; // Au moins un prérequis n'est pas satisfait
                 }
             }
@@ -528,7 +574,7 @@ class ElaskaParticulierObjectifEtape extends CommonObject
     public function isEnRetard()
     {
         // Si pas de date définie, étape complétée, ou étape inactive, elle n'est pas en retard
-        if (empty($this->date_etape) || $this->completed || $this->status == 0) {
+        if (empty($this->date_etape) || $this->statut_etape_code == 'COMPLETED' || $this->status == 0) {
             return false;
         }
         
@@ -537,7 +583,7 @@ class ElaskaParticulierObjectifEtape extends CommonObject
             $dateActuelle = new DateTime();
             
             // Étape en retard si la date est dépassée et non complétée
-            if ($dateActuelle > $dateEtape && !$this->completed) {
+            if ($dateActuelle > $dateEtape && $this->statut_etape_code != 'COMPLETED') {
                 return true;
             }
             
@@ -623,6 +669,105 @@ class ElaskaParticulierObjectifEtape extends CommonObject
         }
         
         return null;
+    }
+    
+    /**
+     * Vérifie si l'étape est complétée
+     * 
+     * @return bool true si l'étape est complétée, false sinon
+     */
+    public function isCompleted()
+    {
+        return ($this->statut_etape_code == 'COMPLETED');
+    }
+
+    /**
+     * Récupère les options du dictionnaire des statuts d'étapes
+     *
+     * @param Translate $langs      Objet de traduction
+     * @param bool      $usekeys    True pour retourner tableau associatif code=>label
+     * @param bool      $show_empty True pour ajouter une option vide
+     * @return array                Tableau d'options
+     */
+    public static function getStatutEtapeOptions($langs, $usekeys = true, $show_empty = false)
+    {
+        return self::getOptionsFromDictionary($langs, 'etape_statut', $usekeys, $show_empty);
+    }
+
+    /**
+     * Récupère les options du dictionnaire des priorités d'étapes
+     *
+     * @param Translate $langs      Objet de traduction
+     * @param bool      $usekeys    True pour retourner tableau associatif code=>label
+     * @param bool      $show_empty True pour ajouter une option vide
+     * @return array                Tableau d'options
+     */
+    public static function getPrioriteEtapeOptions($langs, $usekeys = true, $show_empty = false)
+    {
+        return self::getOptionsFromDictionary($langs, 'etape_priorite', $usekeys, $show_empty);
+    }
+
+    /**
+     * Méthode factorisée pour récupérer les options depuis un dictionnaire
+     *
+     * @param Translate $langs                 Objet de traduction
+     * @param string    $dictionary_table_suffix_short Suffixe court du nom de la table dictionnaire
+     * @param bool      $usekeys               True pour retourner tableau associatif code=>label
+     * @param bool      $show_empty            True pour ajouter une option vide
+     * @return array                           Tableau d'options
+     */
+    private static function getOptionsFromDictionary($langs, $dictionary_table_suffix_short, $usekeys = true, $show_empty = false)
+    {
+        global $db;
+        
+        $options = array();
+        if ($show_empty) $options[''] = $langs->trans("SelectAnOption");
+        
+        $sql = "SELECT code, label FROM ".MAIN_DB_PREFIX."c_elaska_part_".$dictionary_table_suffix_short;
+        $sql.= " WHERE active = 1";
+        $sql.= " ORDER BY position ASC, label ASC";
+        
+        $resql = $db->query($sql);
+        if ($resql) {
+            while ($obj = $db->fetch_object($resql)) {
+                if ($usekeys) {
+                    $options[$obj->code] = $langs->trans($obj->label);
+                } else {
+                    $obj_option = new stdClass();
+                    $obj_option->code = $obj->code;
+                    $obj_option->label = $obj->label;
+                    $obj_option->label_translated = $langs->trans($obj->label);
+                    $options[] = $obj_option;
+                }
+            }
+            $db->free($resql);
+        } else {
+            // Logguer l'erreur mais ne pas l'afficher à l'utilisateur
+            dol_syslog('Error in ElaskaParticulierObjectifEtape::getOptionsFromDictionary: '.$db->lasterror(), LOG_ERR);
+            
+            // Valeurs par défaut en cas d'erreur pour les statuts d'étape
+            if ($dictionary_table_suffix_short == 'etape_statut') {
+                $options = array(
+                    'NOT_STARTED' => $langs->trans('EtapeNonDemarree'),
+                    'IN_PROGRESS' => $langs->trans('EtapeEnCours'),
+                    'DELAYED' => $langs->trans('EtapeRetardee'),
+                    'BLOCKED' => $langs->trans('EtapeBloquee'),
+                    'COMPLETED' => $langs->trans('EtapeTerminee'),
+                    'CANCELLED' => $langs->trans('EtapeAnnulee')
+                );
+            }
+            // Valeurs par défaut pour les priorités d'étape
+            elseif ($dictionary_table_suffix_short == 'etape_priorite') {
+                $options = array(
+                    'LOW' => $langs->trans('PrioriteBasse'),
+                    'NORMAL' => $langs->trans('PrioriteNormale'),
+                    'HIGH' => $langs->trans('PrioriteHaute'),
+                    'URGENT' => $langs->trans('PrioriteUrgente')
+                );
+            }
+        }
+        
+        return $options;
     }
 }
 
