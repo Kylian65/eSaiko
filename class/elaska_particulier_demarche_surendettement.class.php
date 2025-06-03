@@ -722,6 +722,42 @@ class ElaskaParticulierDemarcheSurendettement extends ElaskaParticulierDemarche
         
         return null;
     }
+
+/**
+ * Associe un contact BDF au dossier
+ *
+ * @param User    $user           Utilisateur effectuant l'action
+ * @param integer $id_contact_bdf ID du contact BDF à associer
+ * @return integer                <0 si erreur, >0 si OK
+ */
+public function setContactBDF($user, $id_contact_bdf)
+{
+    require_once DOL_DOCUMENT_ROOT.'/contact/class/contact.class.php';
+    $contact = new Contact($this->db);
+    
+    // Vérifier que le contact existe
+    if ($contact->fetch($id_contact_bdf) <= 0) {
+        $this->error = 'ContactBDFDoesNotExist';
+        return -1;
+    }
+    
+    $old_contact_id = $this->fk_contact_bdf;
+    $this->fk_contact_bdf = $id_contact_bdf;
+    
+    // Mise à jour de la base
+    $result = $this->update($user, 1);
+    
+    if ($result > 0) {
+        $this->ajouterActionHistorique(
+            $user, 
+            'CHANGEMENT_CONTACT_BDF',
+            'Contact BDF changé: ' . $contact->getFullName($this->langs)
+        );
+    }
+    
+    return $result;
+}
+    
 }
 
 } // Fin de la condition if !class_exists
