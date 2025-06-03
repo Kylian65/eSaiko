@@ -765,13 +765,8 @@ public $fk_user_conseiller_referent;
         'consentement_rgpd' => array('type' => 'boolean', 'label' => 'ConsentementRGPD', 'enabled' => 1, 'position' => 1320, 'notnull' => 1, 'visible' => 1, 'default' => '0'),
         'date_consentement_rgpd' => array('type' => 'datetime', 'label' => 'DateConsentementRGPD', 'enabled' => 1, 'position' => 1330, 'notnull' => 0, 'visible' => 1),
         'notes_specifiques_particulier' => array('type' => 'text', 'label' => 'NotesSpecifiquesParticulier', 'enabled' => 1, 'position' => 1340, 'notnull' => 0, 'visible' => 1),
-'score_autonomie_numerique' => array('type' => 'integer', 'label' => 'ScoreAutonomieNumerique', 'enabled' => 1, 'position' => 1350, 'notnull' => 0, 'visible' => 1, 'default' => '3', 'arrayofkeyval' => array('1' => 'TresFaible', '2' => 'Faible', '3' => 'Moyen', '4' => 'Bon', '5' => 'Expert')),
-'niveau_urgence_administrative' => array('type' => 'integer', 'label' => 'NiveauUrgenceAdministrative', 'enabled' => 1, 'position' => 1360, 'notnull' => 0, 'visible' => 1, 'default' => '1', 'arrayofkeyval' => array('1' => 'Faible', '2' => 'Moyen', '3' => 'Eleve')),
-'score_maturite_administrative' => array('type' => 'integer', 'label' => 'ScoreMaturiteAdministrative', 'enabled' => 1, 'position' => 1370, 'notnull' => 0, 'visible' => 1, 'default' => '50'),
-'date_derniere_evaluation_admin' => array('type' => 'date', 'label' => 'DateDerniereEvaluationAdmin', 'enabled' => 1, 'position' => 1380, 'notnull' => 0, 'visible' => 1),
-'mode_communication_prefere' => array('type' => 'integer', 'label' => 'ModeCommunicationPrefere', 'enabled' => 1, 'position' => 1390, 'notnull' => 0, 'visible' => 1, 'default' => '1', 'arrayofkeyval' => array('1' => 'Email', '2' => 'SMS', '3' => 'Appel', '4' => 'Portail')),
-'fk_user_conseiller_referent' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'ConseillerReferent', 'enabled' => 1, 'position' => 1400, 'notnull' => 0, 'visible' => 1),
-        // CHAMPS TECHNIQUES
+'score_autonomie_numerique' => array('type' => 'varchar(10)', 'label' => 'ScoreAutonomieNumerique', 'enabled' => 1, 'position' => 1350, 'notnull' => 0, 'visible' => 1, 'default' => '3'),
+'mode_communication_prefere' => array('type' => 'varchar(10)', 'label' => 'ModeCommunicationPrefere', 'enabled' => 1, 'position' => 1390, 'notnull' => 0, 'visible' => 1, 'default' => '1'), // CHAMPS TECHNIQUES
         'entity' => array('type' => 'integer', 'label' => 'Entity', 'visible' => 0, 'enabled' => 1, 'position' => 1900, 'notnull' => 1, 'default' => '1'),
         'date_creation' => array('type' => 'datetime', 'label' => 'DateCreation', 'visible' => 0, 'enabled' => 1, 'position' => 1910, 'notnull' => 1),
         'tms' => array('type' => 'timestamp', 'label' => 'DateModification', 'visible' => 0, 'enabled' => 1, 'position' => 1920, 'notnull' => 1),
@@ -1010,42 +1005,82 @@ $this->mode_communication_prefere = isset($this->mode_communication_prefere) ? $
      * @param int $format 0=Prénom Nom, 1=Nom Prénom, 2=Nom (Prénom)
      * @return string Nom complet formaté
      */
-    public function getFullName($format = 0)
-    {
-        global $langs;
-        
-        // Récupérer les infos du tiers parent si nécessaire
-        $nom = $this->nom_usage;
-        $prenom = $this->prenoms_etat_civil;
-        
-        if (empty($nom) || empty($prenom)) {
+   /**
+ * Retourne le nom complet formaté du particulier
+ * 
+ * @param int $format 0=Prénom Nom, 1=Nom Prénom, 2=Nom (Prénom)
+ * @return string Nom complet formaté
+ */
+public function getFullName($format = 0)
+{
+    global $langs;
+    
+    // Récupérer les infos du tiers parent si nécessaire
+    $nom = $this->nom_usage;
+    $prenom = $this->prenoms_etat_civil;
+    
+    if (empty($nom) || empty($prenom)) {
+        // Vérifier si nous avons un tiers associé
+        if ($this->fk_elaska_tiers > 0) {
             // Charger le tiers parent pour récupérer les informations
             require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_tiers.class.php';
             $tiers = new ElaskaTiers($this->db);
-            if ($this->fk_elaska_tiers > 0 && $tiers->fetch($this->fk_elaska_tiers) > 0) {
+            
+            // Vérifier si la récupération du tiers a réussi
+            if ($tiers->fetch($this->fk_elaska_tiers) > 0) {
+                // Récupérer les informations manquantes
                 if (empty($nom)) {
                     $nom = $tiers->nom;
+                    
+                    // Si nécessaire, extraire aussi le nom du champ nom_complet de ElaskaTiers
+                    if (empty($nom) && !empty($tiers->nom_complet)) {
+                        // On assume que nom_complet est au format "Nom Prénom"
+                        $parts = explode(' ', $tiers->nom_complet, 2);
+                        if (!empty($parts[0])) {
+                            $nom = $parts[0];
+                        }
+                        // Si le prénom est aussi manquant, on peut tenter de l'extraire
+                        if (empty($prenom) && !empty($parts[1])) {
+                            $prenom = $parts[1];
+                        }
+                    }
                 }
-                // Le tiers n'a généralement pas la notion de prénom directement
+                
+                // Tenter de récupérer le prénom depuis d'autres champs du tiers si disponible
+                if (empty($prenom) && !empty($tiers->prenom)) {
+                    $prenom = $tiers->prenom;
+                }
             }
         }
-        
-        // Si toujours vide, utiliser des valeurs par défaut
-        if (empty($nom)) $nom = $langs->trans('UnknownName');
-        if (empty($prenom)) $prenom = '';
-        
-        // Formater selon le format demandé
-        switch ($format) {
-            case 1: // Nom Prénom
-                return trim($nom.' '.$prenom);
-            case 2: // Nom (Prénom)
-                return trim($nom.(!empty($prenom) ? ' ('.$prenom.')' : ''));
-            case 0: // Prénom Nom (défaut)
-            default:
-                return trim($prenom.' '.$nom);
-        }
     }
-
+    
+    // Si toujours vide, utiliser des valeurs par défaut
+    if (empty($nom)) $nom = $langs->trans('UnknownName');
+    if (empty($prenom)) $prenom = '';
+    
+    // Formater selon le format demandé
+    switch ($format) {
+        case 1: // Nom Prénom
+            return trim($nom.' '.$prenom);
+        case 2: // Nom (Prénom)
+            return trim($nom.(!empty($prenom) ? ' ('.$prenom.')' : ''));
+        case 0: // Prénom Nom (défaut)
+        default:
+            return trim($prenom.' '.$nom);
+    }
+}
+/**
+ * Récupère les options du dictionnaire des niveaux d'urgence administrative
+ *
+ * @param Translate $langs      Objet de traduction
+ * @param bool      $usekeys    True pour retourner tableau associatif code=>label
+ * @param bool      $show_empty True pour ajouter une option vide
+ * @return array                Tableau d'options
+ */
+public static function getNiveauUrgenceOptions($langs, $usekeys = true, $show_empty = false)
+{
+    return self::getOptionsFromDictionary($langs, 'niveau_urgence', $usekeys, $show_empty);
+}
     /**
      * Méthode factorisée pour récupérer les options depuis un dictionnaire
      *
@@ -1190,7 +1225,102 @@ $this->mode_communication_prefere = isset($this->mode_communication_prefere) ? $
     {
         return self::getOptionsFromDictionary($langs, 'revenus_foyer', $usekeys, $show_empty);
     }
+/**
+ * Ajoute une entrée dans l'historique spécifique du particulier
+ * 
+ * @param User   $user      Utilisateur effectuant l'action
+ * @param string $action    Type d'action (modification, création, suppression...)
+ * @param string $element   Type d'élément concerné (objectif, démarche, etc.)
+ * @param int    $elementId ID de l'élément si applicable
+ * @param string $comment   Commentaire explicatif
+ * @param array  $changes   Tableau des modifications [champ => [ancienne_valeur, nouvelle_valeur]]
+ * @return int              <0 si erreur, ID de l'historique si OK
+ */
+public function addHistorique($user, $action, $element = '', $elementId = 0, $comment = '', $changes = array())
+{
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_historique.class.php';
+    
+    $historique = new ElaskaParticulierHistorique($this->db);
+    $historique->fk_particulier = $this->id;
+    $historique->fk_user = $user->id;
+    $historique->date_action = dol_now();
+    $historique->type_action = $action;
+    $historique->element_type = $element;
+    $historique->fk_element = $elementId;
+    $historique->commentaire = $comment;
+    
+    // Si des changements sont fournis, on les sérialise en JSON
+    if (!empty($changes)) {
+        $historique->modifications = json_encode($changes);
+    }
+    
+    $result = $historique->create($user);
+    
+    // On ajoute également dans le journal d'événements standard Dolibarr pour compatibilité
+    if ($result > 0) {
+        require_once DOL_DOCUMENT_ROOT.'/core/class/events.class.php';
+        $event = new Events($this->db);
+        $event->type = 'ELASKA_PARTICULIER_'.$action;
+        $event->dateevent = dol_now();
+        $event->label = $comment;
+        $event->elementtype = 'elaskaparticulier';
+        $event->fk_element = $this->id;
+        $event->fk_user = $user->id;
+        $event->create($user);
+    }
+    
+    return $result;
+}
 
+/**
+ * Récupère l'historique spécifique du particulier
+ * 
+ * @param string $element   Filtre optionnel sur le type d'élément
+ * @param int    $limit     Limite de résultats
+ * @param int    $offset    Décalage pour pagination
+ * @return array            Tableau des entrées d'historique
+ */
+public function getHistoriqueSpecifique($element = '', $limit = 50, $offset = 0)
+{
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_historique.class.php';
+    
+    $historique = array();
+    
+    $sql = "SELECT h.rowid FROM ".MAIN_DB_PREFIX."elaska_particulier_historique as h";
+    $sql.= " WHERE h.fk_particulier = ".(int) $this->id;
+    
+    if (!empty($element)) {
+        $sql.= " AND h.element_type = '".$this->db->escape($element)."'";
+    }
+    
+    $sql.= " ORDER BY h.date_action DESC";
+    
+    if ($limit) {
+        if ($offset) $sql.= $this->db->plimit($limit, $offset);
+        else $sql.= $this->db->plimit($limit);
+    }
+    
+    $resql = $this->db->query($sql);
+    if ($resql) {
+        $num = $this->db->num_rows($resql);
+        
+        $i = 0;
+        while ($i < $num) {
+            $obj = $this->db->fetch_object($resql);
+            
+            $hist = new ElaskaParticulierHistorique($this->db);
+            if ($hist->fetch($obj->rowid) > 0) {
+                $historique[] = $hist;
+            }
+            
+            $i++;
+        }
+        
+        $this->db->free($resql);
+    }
+    
+    return $historique;
+}
     /**
      * Récupère les options du dictionnaire des estimations de patrimoine net
      *
@@ -1954,6 +2084,79 @@ public function getHistoriqueActions($limit = 50, $offset = 0)
     }
     
     return $actions;
+}
+
+/**
+ * Calcule le score de maturité administrative en fonction des différentes composantes
+ * Peut être utilisé sans passer par un audit complet
+ * 
+ * @param User $user Utilisateur effectuant l'action
+ * @return int <0 si erreur, >0 si OK
+ */
+public function calculScoreMaturiteAdministrative($user)
+{
+    // Composantes du score avec leurs poids respectifs
+    $composantes = array(
+        'classement_papier' => 0.20,   // 20% du score global
+        'classement_numerique' => 0.25, // 25% du score global
+        'connaissances_admin' => 0.20, // 20% du score global
+        'autonomie' => 0.20,          // 20% du score global
+        'rigueur_suivi' => 0.15       // 15% du score global
+    );
+    
+    // Récupération des scores par composante
+    // Si un audit existe, on le récupère
+    $bilan = $this->analyseAdministrativeBilan();
+    
+    $scoreGlobal = 0;
+    
+    // Si des scores existent dans l'audit, on les utilise
+    if (!empty($bilan['scores'])) {
+        foreach ($composantes as $composante => $poids) {
+            if (isset($bilan['scores'][$composante])) {
+                $scoreGlobal += $bilan['scores'][$composante] * $poids;
+            }
+        }
+    } else {
+        // Sinon on fait une estimation basique
+        // Le score d'autonomie numérique compte pour l'estimation
+        $scoreGlobal = $this->score_autonomie_numerique * 20; // Base sur 100
+    }
+    
+    // Arrondi du score
+    $scoreGlobal = round($scoreGlobal);
+    
+    // Mise à jour du score et de la date de dernière évaluation
+    $this->score_maturite_administrative = $scoreGlobal;
+    $this->date_derniere_evaluation_admin = dol_now();
+    
+    // Enregistrement des modifications
+    return $this->update($user);
+}
+    /**
+ * Récupère les options du dictionnaire des scores d'autonomie numérique
+ *
+ * @param Translate $langs      Objet de traduction
+ * @param bool      $usekeys    True pour retourner tableau associatif code=>label
+ * @param bool      $show_empty True pour ajouter une option vide
+ * @return array                Tableau d'options
+ */
+public static function getScoreAutonomieNumeriqueOptions($langs, $usekeys = true, $show_empty = false)
+{
+    return self::getOptionsFromDictionary($langs, 'autonomie_numerique', $usekeys, $show_empty);
+}
+
+/**
+ * Récupère les options du dictionnaire des modes de communication préférés
+ *
+ * @param Translate $langs      Objet de traduction
+ * @param bool      $usekeys    True pour retourner tableau associatif code=>label
+ * @param bool      $show_empty True pour ajouter une option vide
+ * @return array                Tableau d'options
+ */
+public static function getModeCommunicationOptions($langs, $usekeys = true, $show_empty = false)
+{
+    return self::getOptionsFromDictionary($langs, 'mode_communication', $usekeys, $show_empty);
 }
 }
 
