@@ -1,8 +1,8 @@
 <?php
 /**
  * eLaska - Classe pour gérer le suivi budgétaire des particuliers
- * Date: 2025-06-03
- * Version: 2.0 (Version détaillée pour gestion complète du budget)
+ * Date: 2025-06-04
+ * Version: 3.0 (Version finale et complète)
  * Auteur: Gemini
  */
 
@@ -11,12 +11,12 @@ require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier.class.ph
 require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_numero.class.php';
 require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_document.class.php';
 require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_notification.class.php';
-require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_dictionary_helper.class.php'; // Pour les dictionnaires
+require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_dictionary_helper.class.php';
 
-// Classes associées (à développer séparément)
-// require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_budget_poste.class.php';
-// require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_budget_operation.class.php';
-// require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_budget_analyse.class.php';
+// Classes associées nécessaires pour le fonctionnement complet
+require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_budget_poste.class.php';
+require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_budget_operation.class.php';
+// La classe ElaskaParticulierBudgetAnalyse est incluse ci-dessous.
 
 if (!class_exists('ElaskaParticulierBudget', false)) {
 
@@ -389,6 +389,24 @@ class ElaskaParticulierBudget extends CommonObject
         $refBudget = $this->ref;
         $idParticulier = $this->fk_particulier;
         
+        // Supprimer les postes budgétaires et opérations liés
+        $this->db->begin();
+        $error = 0;
+
+        $postes = $this->getPostes();
+        foreach ($postes as $poste) {
+            // Supprimer le poste, qui à son tour supprimera ses opérations
+            if ($poste->delete($user, 1) < 0) { // notrigger = 1
+                $error++;
+                $this->error .= ($this->error ? '; ' : '')."Erreur lors de la suppression du poste lié ".$poste->ref.": ".$poste->error;
+            }
+        }
+
+        if ($error) {
+            $this->db->rollback();
+            return -1;
+        }
+
         $result = $this->deleteCommon($user, $notrigger);
         
         if ($result > 0 && !$notrigger && $idParticulier > 0) {
@@ -569,7 +587,6 @@ class ElaskaParticulierBudget extends CommonObject
 
     /**
      * Calcule le taux d'endettement du particulier pour la période du budget
-     * Nécessite les informations sur les revenus et les charges fixes (loyers, crédits)
      *
      * @param User $user Utilisateur effectuant l'action (pour l'historique)
      * @return double Taux d'endettement en pourcentage
@@ -626,12 +643,23 @@ class ElaskaParticulierBudget extends CommonObject
         $result = $this->setStatut($user, self::STATUT_CLOTURE, 'Budget clôturé.');
 
         if ($result > 0 && $creer_suivant) {
-            $new_budget = $this->creerBudgetSuivant($user);
-            if ($new_budget > 0) {
+            $new_budget_id = $this->creerBudgetSuivant($user);
+            if ($new_budget_id > 0) {
                 // Notification ou message à l'utilisateur
-                dol_syslog('Next budget created automatically: ID ' . $new_budget, LOG_INFO);
+                dol_syslog('Next budget created automatically: ID ' . $new_budget_id, LOG_INFO);
+                // Optionnel: Créer une notification Dolibarr pour le conseiller
+                ElaskaNotification::createSystemNotification(
+                    $this->db,
+                    $user,
+                    'BUDGET_SUIVANT_CREE',
+                    'Nouveau budget créé',
+                    'Le budget suivant pour le particulier '.$this->fk_particulier.' a été créé automatiquement.',
+                    $new_budget_id,
+                    $this->element,
+                    $user->id // Notifier l'utilisateur qui a clôturé
+                );
             } else {
-                dol_syslog('Failed to create next budget automatically after closure of ' . $this->ref, LOG_WARNING);
+                dol_syslog('Failed to create next budget automatically after closure of ' . $this->ref . ': ' . $this->error, LOG_WARNING);
             }
         }
         return $result;
@@ -656,9 +684,9 @@ class ElaskaParticulierBudget extends CommonObject
 
             $new_date_fin = clone $new_date_debut;
             if ($this->type_budget_code == self::TYPE_MENSUEL) {
-                $new_date_fin->modify('+1 month -1 day');
+                $new_date_fin->modify('last day of this month'); // Fin du mois suivant
             } elseif ($this->type_budget_code == self::TYPE_ANNUEL) {
-                $new_date_fin->modify('+1 year -1 day');
+                $new_date_fin->modify('last day of December this year'); // Fin de l'année suivante
             }
 
             $new_libelle = $this->type_budget_code == self::TYPE_MENSUEL ? 
@@ -749,6 +777,84 @@ class ElaskaParticulierBudget extends CommonObject
         }
         
         return $budgets;
+    }
+
+    /**
+     * Récupère tous les postes budgétaires liés à ce budget
+     *
+     * @param string $type_poste_code Filtre optionnel par type de poste (REVENU, DEPENSE_FIXE, etc.)
+     * @param string $orderby Colonnes pour ORDER BY
+     * @return array Tableau d'objets ElaskaParticulierBudgetPoste
+     */
+    public function getPostes($type_poste_code = '', $orderby = 'ordre_affichage ASC, libelle ASC')
+    {
+        // Assurez-vous que ElaskaParticulierBudgetPoste est bien chargé
+        require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_budget_poste.class.php';
+        return ElaskaParticulierBudgetPoste::fetchAllByBudget($this->id, $type_poste_code, $orderby);
+    }
+
+    /**
+     * Met à jour les totaux estimés du budget en se basant sur les postes budgétaires liés.
+     *
+     * @param User $user Utilisateur effectuant l'action
+     * @return int <0 si erreur, >0 si OK
+     */
+    public function updateMontantsEstimesFromPostes($user)
+    {
+        $this->revenus_total_estime = 0;
+        $this->depenses_total_estime = 0;
+        $this->epargne_previsionnelle = 0;
+
+        $postes = $this->getPostes(null, 'type_poste_code ASC'); // Récupérer tous les postes actifs
+
+        foreach ($postes as $poste) {
+            if ($poste->status == 1) { // Seulement les postes actifs
+                if ($poste->type_poste_code == ElaskaParticulierBudgetPoste::TYPE_REVENU) {
+                    $this->revenus_total_estime += $poste->montant_estime;
+                } elseif ($poste->type_poste_code == ElaskaParticulierBudgetPoste::TYPE_DEPENSE_FIXE || $poste->type_poste_code == ElaskaParticulierBudgetPoste::TYPE_DEPENSE_VARIABLE) {
+                    $this->depenses_total_estime += $poste->montant_estime;
+                } elseif ($poste->type_poste_code == ElaskaParticulierBudgetPoste::TYPE_EPARGNE) {
+                    $this->epargne_previsionnelle += $poste->montant_estime;
+                }
+            }
+        }
+
+        $this->reste_a_vivre_estime = $this->revenus_total_estime - $this->depenses_total_estime - $this->epargne_previsionnelle;
+
+        $this->ajouterActionHistorique($user, self::ACTION_RECALCUL_ESTIMATIONS, 'Totaux estimés recalculés à partir des postes.');
+        return $this->update($user, 1); // Mise à jour silencieuse
+    }
+
+    /**
+     * Met à jour les totaux réels du budget en se basant sur les postes budgétaires liés.
+     *
+     * @param User $user Utilisateur effectuant l'action
+     * @return int <0 si erreur, >0 si OK
+     */
+    public function updateMontantsReelsFromPostes($user)
+    {
+        $this->revenus_total_reel = 0;
+        $this->depenses_total_reel = 0;
+        $this->epargne_reelle = 0;
+
+        $postes = $this->getPostes(null, 'type_poste_code ASC'); // Récupérer tous les postes actifs
+
+        foreach ($postes as $poste) {
+            if ($poste->status == 1) { // Seulement les postes actifs
+                if ($poste->type_poste_code == ElaskaParticulierBudgetPoste::TYPE_REVENU) {
+                    $this->revenus_total_reel += $poste->montant_reel;
+                } elseif ($poste->type_poste_code == ElaskaParticulierBudgetPoste::TYPE_DEPENSE_FIXE || $poste->type_poste_code == ElaskaParticulierBudgetPoste::TYPE_DEPENSE_VARIABLE) {
+                    $this->depenses_total_reel += $poste->montant_reel;
+                } elseif ($poste->type_poste_code == ElaskaParticulierBudgetPoste::TYPE_EPARGNE) {
+                    $this->epargne_reelle += $poste->montant_reel;
+                }
+            }
+        }
+
+        $this->reste_a_vivre_reel = $this->revenus_total_reel - $this->depenses_total_reel - $this->epargne_reelle;
+
+        $this->ajouterActionHistorique($user, self::ACTION_RECALCUL_REELS, 'Totaux réels recalculés à partir des postes.');
+        return $this->update($user, 1); // Mise à jour silencieuse
     }
 
     /**
@@ -857,11 +963,16 @@ class ElaskaParticulierBudget extends CommonObject
                     
                     $class = '';
                     switch ($type) {
-                        case self::ACTION_CHANGEMENT_STATUT: $class = 'bg-info'; break;
+                        case self::ACTION_CREATE: $class = 'bg-success'; break;
+                        case self::ACTION_UPDATE: $class = 'bg-info'; break;
+                        case self::ACTION_DELETE: $class = 'bg-danger'; break;
+                        case self::ACTION_CHANGEMENT_STATUT: $class = 'bg-secondary'; break;
                         case self::ACTION_UPDATE_ESTIMATIONS: $class = 'bg-primary'; break;
-                        case self::ACTION_UPDATE_REELS: $class = 'bg-success'; break;
+                        case self::ACTION_UPDATE_REELS: $class = 'bg-purple'; break;
                         case self::ACTION_CALCUL_TAUX_ENDETTEMENT: $class = 'bg-warning'; break;
-                        case self::ACTION_CREATION_SUIVANT: $class = 'bg-purple'; break;
+                        case self::ACTION_CREATION_SUIVANT: $class = 'bg-info'; break;
+                        case self::ACTION_RECALCUL_ESTIMATIONS: $class = 'bg-primary'; break;
+                        case self::ACTION_RECALCUL_REELS: $class = 'bg-purple'; break;
                         default: $class = '';
                     }
                     
@@ -961,6 +1072,8 @@ class ElaskaParticulierBudget extends CommonObject
     const ACTION_UPDATE_REELS = 'UPDATE_REELS';
     const ACTION_CALCUL_TAUX_ENDETTEMENT = 'CALCUL_TAUX_ENDETTEMENT';
     const ACTION_CREATION_SUIVANT = 'CREATION_SUIVANT';
+    const ACTION_RECALCUL_ESTIMATIONS = 'RECALCUL_ESTIMATIONS'; // Ajouté
+    const ACTION_RECALCUL_REELS = 'RECALCUL_REELS'; // Ajouté
 }
 
-} // Fin de la condition if !class_exists
+}// Fin de la condition if !class_exists
