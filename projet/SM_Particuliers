@@ -1,0 +1,1018 @@
+# Documentation complète du sous-Module d'Accompagnement Spécifique des Particuliers
+**Version:** 3.6.2
+**Date:** 2025-06-03
+**Utilisateur:** Kylian65
+
+## Table des matières
+1. [Vue d'ensemble](#1-vue-densemble)
+2. [Gestion Administrative Personnelle](#2-gestion-administrative-personnelle)
+3. [Accompagnement aux Démarches Administratives](#3-accompagnement-aux-démarches-administratives)
+4. [Conseil en Abonnements du Quotidien](#4-conseil-en-abonnements-du-quotidien)
+5. [Module "Objectifs de Vie & Projets"](#5-module-objectifs-de-vie--projets)
+6. [Fonctionnalités transversales et interfaces](#6-fonctionnalités-transversales-et-interfaces)
+7. [Structure des classes et fonctionnalités]
+---
+
+## 1. Vue d'ensemble
+
+Le sous-module d'Accompagnement Spécifique des Particuliers, qui est une composante du module eLaska, est conçu pour fournir une assistance complète aux clients particuliers dans l'ensemble de leurs démarches administratives et projets de vie. Il s'articule autour de quatre piliers:
+
+- **Gestion administrative quotidienne** - Organisation, classement et suivi des documents et échéances
+- **Démarches administratives complexes** - Accompagnement aux procédures spécifiques (surendettement, CAF, retraite, etc.)
+- **Optimisation d'abonnements** - Analyse et conseil sur les contrats du quotidien (énergie, télécom, etc.)
+- **Objectifs de vie** - Suivi des projets personnels et leur volet administratif
+
+### Intégration avec les autres modules
+- **Module Tiers** - Utilise et enrichit les données de base des clients
+- **Module Dossier** - Structure les interventions au sein de dossiers thématiques
+- **Module Document** - Exploite la GED pour l'archivage sécurisé
+- **Module Notification** - Génère des alertes et rappels personnalisés
+
+---
+
+## 2. Gestion Administrative Personnelle
+
+### 2.1. Audit et Organisation du Système de Classement
+
+#### 2.1.1. Diagnostic initial personnalisable
+- **Description:** Évaluation structurée de la maturité administrative du client
+- **Fonctionnalités:**
+  - Questionnaire d'évaluation configurable (60+ questions paramétrables)
+  - Score multidimensionnel sur 5 axes: classement physique, numérique, connaissances administratives, autonomie, rigueur de suivi
+  - Visualisation graphique du niveau de maturité par radar colorimétrique
+  - Rapport de diagnostic détaillé avec points forts/faibles
+  - Recommandations personnalisées générées par le conseiller
+- **Personnalisation possible:**
+  - Ajout/suppression/modification des questions d'évaluation
+  - Paramétrage des axes d'analyse et leur pondération
+  - Configuration du modèle de rapport et recommandations par défaut
+  - Adaptation de la présentation graphique des résultats
+
+#### 2.1.2. Système de classement personnalisé
+- **Description:** Solution structurée pour l'organisation des documents administratifs
+- **Fonctionnalités:**
+  - Bibliothèque de structures d'arborescence prédéfinies
+  - 15+ modèles de plans de classement (familial standard, patrimonial avancé, médical spécifique, etc.)
+  - Générateur d'étiquettes pour classeurs physiques
+  - Suivi progressif de la mise en place du système
+  - Évaluation périodique des améliorations avec historique comparatif
+- **Personnalisation possible:**
+  - Création de structures de classement sur mesure
+  - Adaptation des nomenclatures et catégories documentaires
+  - Configuration des indicateurs de suivi d'adoption
+  - Définition de nouveaux modèles référentiels par type de profil
+
+### 2.2. Numérisation et Archives Numériques
+
+#### 2.2.1. Gestion des documents numérisés
+- **Description:** Système de classement et exploitation des documents dématérialisés
+- **Fonctionnalités:**
+  - Procédures standardisées de numérisation à destination du client
+  - Fiches techniques pour la qualité des scans
+  - Structure de métadonnées personnalisables par document
+  - Classement manuel assisté avec suggestions
+  - Suivi des documents à numériser (checklist)
+- **Personnalisation possible:**
+  - Définition de champs de métadonnées spécifiques
+  - Configuration des procédures de numérisation par type de document
+  - Personnalisation des structures de classification
+  - Adaptation des fiches techniques par profil client
+
+#### 2.2.2. Système d'archivage
+- **Description:** Infrastructure de stockage organisé et sécurisé
+- **Fonctionnalités:**
+  - Classement hiérarchique multi-niveau des documents
+  - Système d'étiquettes virtuelles et tags illimités 
+  - Moteur de recherche paramétrable (titre, contenu, métadonnées, tags)
+  - Permissions d'accès granulaires (lecture, modification, suppression)
+  - Durées de conservation recommandées par type de document
+- **Personnalisation possible:**
+  - Structure de tags et attributs entièrement configurable
+  - Paramétrage des règles de conservation documentaire
+  - Définition des droits d'accès par profil d'utilisateur
+  - Configuration des critères de recherche par défaut
+
+### 2.3. Coffre-Fort Numérique Avancé
+
+#### 2.3.1. Configuration sécurisée
+- **Description:** Espace de stockage hautement sécurisé pour documents sensibles
+- **Fonctionnalités:**
+  - Niveaux de sécurité paramétrables
+  - Options d'authentification renforcée pour l'accès
+  - Journal d'audit complet des accès et actions
+  - Procédures de sauvegarde et restauration
+  - Gestion des clés d'encryption et mots de passe
+- **Personnalisation possible:**
+  - Configuration des mécanismes d'accès et authentification
+  - Paramétrage de la profondeur des logs d'audit
+  - Adaptation des procédures de sauvegarde
+  - Définition des rôles autorisés pour l'accès
+
+#### 2.3.2. Gestion des documents sécurisés
+- **Description:** Outils pour gérer les documents à haute valeur ou confidentialité
+- **Fonctionnalités:**
+  - Classification documentaire à 4 niveaux de confidentialité
+  - Système d'expiration et alerte de renouvellement des documents
+  - Partage sécurisé à durée limitée avec tiers autorisés
+  - Procédures de récupération d'urgence configurables
+  - Historique complet des accès par document
+- **Personnalisation possible:**
+  - Définition des catégories de confidentialité
+  - Configuration des règles d'expiration par type de document
+  - Paramétrage des conditions de partage externe
+  - Adaptation des procédures d'urgence selon le client
+
+### 2.4. Échéanciers et Rappels
+
+#### 2.4.1. Échéancier partagé
+- **Description:** Système centralisé de suivi des dates importantes
+- **Fonctionnalités:**
+  - Calendrier interactif multi-vue (jour/semaine/mois/année)
+  - Catégories d'échéances configurables par contexte
+  - Gestion des récurrences simples et complexes
+  - Association directe documents-échéances
+  - Visualisation filtrée par thématique ou importance
+- **Personnalisation possible:**
+  - Création de catégories personnalisées d'échéances
+  - Configuration des paramètres de récurrence
+  - Définition des champs supplémentaires par type d'événement
+  - Adaptation des vues calendaires par défaut
+
+#### 2.4.2. Système de rappels personnalisé
+- **Description:** Mécanisme intelligent de notifications et alertes
+- **Fonctionnalités:**
+  - Configuration des canaux de notification par préférence client
+  - Paramétrage des fréquences et intensité d'alerte selon priorité
+  - Rappels contextuels avec informations et documents nécessaires
+  - Confirmation de prise en compte avec suivi
+  - Escalade vers conseillers en cas de non-réponse
+- **Personnalisation possible:**
+  - Définition des canaux préférentiels par client
+  - Paramétrage des délais et fréquences d'alerte
+  - Configuration du contenu et format des notifications
+  - Création de règles d'escalade personnalisées
+
+### 2.5. Gestion des Correspondances
+
+#### 2.5.1. Rédaction assistée
+- **Description:** Outils d'aide à la création de courriers administratifs
+- **Fonctionnalités:**
+  - Bibliothèque de 100+ modèles de courriers par catégorie
+  - Assistant de rédaction avec suggestions contextuelles
+  - Système d'analyse de lisibilité et niveau de langage
+  - Vérification orthographique et grammaticale
+  - Assemblage automatisé de paragraphes types selon contexte
+- **Personnalisation possible:**
+  - Ajout et modification des modèles de courriers
+  - Configuration des variables dynamiques dans les templates
+  - Définition des niveaux de formalité par destinataire
+  - Création de paragraphes types spécifiques au cabinet
+
+#### 2.5.2. Suivi des envois avec badges visuels
+- **Description:** Gestion complète des courriers envoyés avec indicateurs visuels
+- **Fonctionnalités:**
+  - Badges d'état colorés ("ENVOYÉ", "EN TRANSIT", "REÇU", "NON-RÉCLAMÉ", etc.)
+  - Saisie manuelle des numéros de suivi postal
+  - Interface de mise à jour des statuts avec commentaires
+  - Archivage structuré des preuves (dépôt, accusés)
+  - Tableau de bord des courriers en attente de statut
+- **Personnalisation possible:**
+  - Configuration des libellés et couleurs des badges
+  - Définition des statuts supplémentaires spécifiques
+  - Paramétrage des délais d'alerte par type d'envoi
+  - Adaptation de l'interface de suivi selon l'utilisateur
+
+#### 2.5.3. Visualisation client des correspondances
+- **Description:** Interface pour le client sur le portail web
+- **Fonctionnalités:**
+  - Visualisation des mêmes badges d'état que le gestionnaire
+  - Accès aux copies des courriers envoyés en son nom
+  - Possibilité de signaler la réception d'un courrier
+  - Historique chronologique des correspondances
+- **Personnalisation possible:**
+  - Configuration des informations visibles par le client
+  - Paramétrage des permissions de téléchargement
+  - Adaptation de l'interface selon profil et préférences
+  - Définition des actions disponibles au client
+
+### 2.6. Suivi Budgétaire
+
+#### 2.6.1. Analyse financière
+- **Description:** Outils de gestion et analyse des finances personnelles
+- **Fonctionnalités:**
+  - Structure de saisie configurable (revenus, dépenses, épargne)
+  - Catégorisation fine avec 20+ postes budgétaires
+  - Tableaux de situation mensuelle et annuelle
+  - Graphiques d'analyse et comparaison temporelle
+  - Projections de trésorerie sur 12 mois glissants
+- **Personnalisation possible:**
+  - Définition de catégories budgétaires spécifiques
+  - Configuration des périodicités d'analyse
+  - Paramétrage des graphiques et visualisations
+  - Adaptation des modèles de saisie selon profil
+
+#### 2.6.2. Optimisation budgétaire
+- **Description:** Conseils et outils pour améliorer la gestion financière
+- **Fonctionnalités:**
+  - Analyse comparative avec profils similaires (anonymisés)
+  - Identification des postes de dépenses optimisables
+  - Simulateur d'impact des modifications budgétaires
+  - Définition d'objectifs d'épargne personnalisés
+  - Suivi visuel des progrès vers objectifs financiers
+- **Personnalisation possible:**
+  - Configuration des seuils d'alerte par poste budgétaire
+  - Paramétrage des groupes de comparaison anonymes
+  - Définition des scénarios de simulation standard
+  - Adaptation des visualisations de progrès
+
+---
+
+## 3. Accompagnement aux Démarches Administratives
+
+### 3.1. Système commun de gestion des démarches
+
+#### 3.1.1. Structure centrale personnalisable
+- **Description:** Architecture unifiée de suivi des démarches administratives
+- **Fonctionnalités:**
+  - Dashboard configurable par typologie de démarche
+  - Système de priorisation multi-critères
+  - Attribution des responsabilités client/conseiller
+  - Journal chronologique d'activité horodaté
+  - Base documentaire associée à chaque démarche
+- **Personnalisation possible:**
+  - Configuration complète des types de démarches
+  - Définition des critères de priorisation
+  - Paramétrage des statuts et workflow par type
+  - Adaptation des champs spécifiques par démarche
+
+#### 3.1.2. Tableau de bord multi-client pour conseillers
+- **Description:** Vue consolidée pour la gestion du portefeuille clients
+- **Fonctionnalités:**
+  - Synthèse visuelle de toutes les démarches en cours
+  - Filtres avancés multi-critères (type, urgence, statut)
+  - Indicateurs de charge de travail et retard
+  - Système de priorisation automatique par échéance
+  - Alertes sur démarches sans avancement
+- **Personnalisation possible:**
+  - Configuration des colonnes et informations affichées
+  - Paramétrage des indicateurs et seuils d'alerte
+  - Définition des règles de priorisation
+  - Adaptation des filtres par défaut selon conseiller
+
+### 3.2. Démarche Surendettement
+
+#### 3.2.1. Analyse préalable
+- **Description:** Évaluation complète de la situation d'endettement
+- **Fonctionnalités:**
+  - Diagnostic financier structuré
+  - Calculateur de taux d'endettement paramétrable
+  - Évaluation de recevabilité prédictive
+  - Simulation des impacts selon scénarios (gel, rééchelonnement, effacement)
+  - Analyse des causes de surendettement
+- **Personnalisation possible:**
+  - Configuration des paramètres de calcul d'endettement
+  - Définition des seuils et critères d'analyse
+  - Adaptation des scénarios de simulation
+  - Paramétrage des facteurs de risque
+
+#### 3.2.2. Constitution du dossier Banque de France
+- **Description:** Accompagnement au montage du dossier de surendettement
+- **Fonctionnalités:**
+  - Checklist dynamique des pièces justificatives (30+ documents)
+  - Assistant de remplissage du formulaire Cerfa 13594
+  - Outil de recensement exhaustif des dettes
+  - Générateur d'argumentaire personnalisé
+  - Calendrier des étapes préparatoires
+- **Personnalisation possible:**
+  - Adaptation de la checklist selon profil débiteur
+  - Configuration des champs d'aide au remplissage
+  - Paramétrage des modèles d'argumentaire
+  - Définition des étapes préparatoires spécifiques
+
+#### 3.2.3. Suivi de procédure
+- **Description:** Gestion du parcours avec la commission de surendettement
+- **Fonctionnalités:**
+  - Timeline spécifique (7-12 étapes selon situation)
+  - Alertes pour compléments de dossier
+  - Gestion des échanges avec la commission
+  - Préparation aux auditions éventuelles
+  - Suivi du plan conventionnel ou mesures imposées
+- **Personnalisation possible:**
+  - Configuration des étapes de la timeline
+  - Paramétrage des délais d'alerte spécifiques
+  - Adaptation des modèles de réponse aux demandes
+  - Définition des modalités de suivi du plan
+
+#### 3.2.4. Champs conditionnels spécifiques
+- Type de surendettement (actif/passif)
+- Éléments déclencheurs (divorce, chômage, maladie...)
+- Historique des procédures antérieures
+- Présence de cautions/codébiteurs
+- Propriétaire/locataire
+- Procédures d'exécution en cours
+
+### 3.3. Démarches CAF/MSA
+
+#### 3.3.1. Analyse d'éligibilité
+- **Description:** Évaluation des droits potentiels aux prestations sociales
+- **Fonctionnalités:**
+  - Simulateur multi-aides (RSA, APL, AAH, Prime d'activité, etc.)
+  - Questionnaire dynamique de situation personnelle/familiale
+  - Évaluation prédictive des montants d'aide
+  - Comparaison des options et combinaisons possibles
+- **Personnalisation possible:**
+  - Configuration des paramètres de simulation par aide
+  - Adaptation du questionnaire par situation client
+  - Paramétrage des règles d'évaluation
+  - Définition des options de comparaison
+
+#### 3.3.2. Constitution des dossiers
+- **Description:** Aide à la préparation des demandes d'allocations
+- **Fonctionnalités:**
+  - Assistants spécifiques par prestation sociale
+  - Checklist documentaire conditionnelle selon aide
+  - Contrôle de cohérence des informations fournies
+  - Calendrier des dates optimales de dépôt
+  - Modèles de courriers d'accompagnement
+- **Personnalisation possible:**
+  - Adaptation des assistants par organisme (CAF/MSA)
+  - Configuration des checklists documentaires
+  - Paramétrage des contrôles de cohérence
+  - Définition des modèles spécifiques par prestation
+
+#### 3.3.3. Suivi des dossiers
+- **Description:** Gestion des demandes en cours et prestations actives
+- **Fonctionnalités:**
+  - Suivi manuel des statuts de demande
+  - Calendrier des déclarations trimestrielles
+  - Alertes sur changements de situation impactants
+  - Gestion des indus et procédures de recours
+  - Historique des échanges avec les organismes
+- **Personnalisation possible:**
+  - Configuration des statuts de suivi par prestation
+  - Paramétrage des alertes de déclaration
+  - Adaptation des modèles de recours
+  - Définition des changements critiques par aide
+
+#### 3.3.4. Champs conditionnels spécifiques
+- Type de prestation demandée (détermine tout le workflow)
+- Composition familiale précise
+- Statut spécifique (étudiant, travailleur handicapé...)
+- Ressources par membre du foyer
+- Historique des droits précédents
+
+### 3.4. Démarches Logement Social
+
+#### 3.4.1. Préparation du dossier
+- **Description:** Analyse des besoins et éligibilité au logement social
+- **Fonctionnalités:**
+  - Évaluation structurée des besoins (taille, localisation, accessibilité)
+  - Calcul automatisé des plafonds de ressources applicables
+  - Identification des bailleurs sociaux pertinents par zone
+  - Analyse des délais d'attente prévisionnels par secteur
+  - Stratégie de demande optimisée
+- **Personnalisation possible:**
+  - Configuration des critères d'évaluation des besoins
+  - Paramétrage des règles de calcul de plafonds
+  - Adaptation de la base des bailleurs par territoire
+  - Définition des stratégies par profil de demandeur
+
+#### 3.4.2. Demande de logement
+- **Description:** Accompagnement au processus de candidature
+- **Fonctionnalités:**
+  - Assistant numéro unique départemental
+  - Remplissage guidé du formulaire Cerfa 14069
+  - Optimisation du choix des communes demandées
+  - Système de candidature multi-bailleurs
+  - Priorisation des contingents accessibles
+- **Personnalisation possible:**
+  - Adaptation aux spécificités départementales
+  - Configuration des champs d'aide au remplissage
+  - Paramétrage des critères géographiques
+  - Définition des stratégies de candidature
+
+#### 3.4.3. Suivi de la demande
+- **Description:** Gestion du parcours jusqu'à l'attribution
+- **Fonctionnalités:**
+  - Rappels de renouvellement annuel
+  - Tracking des propositions reçues
+  - Préparation aux commissions d'attribution
+  - Assistance à l'entrée dans les lieux
+  - Gestion des refus et conséquences
+- **Personnalisation possible:**
+  - Configuration des alertes de renouvellement
+  - Paramétrage des étapes de suivi par bailleur
+  - Adaptation des préparations selon type de commission
+  - Définition des procédures d'entrée dans les lieux
+
+#### 3.4.4. Champs conditionnels spécifiques
+- DALO (oui/non + suivi spécifique)
+- Contingents prioritaires (préfectoral, Action Logement...)
+- Critères d'urgence activables
+- Secteur géographique tendu/détendu
+- Adaptation handicap requise
+- Historique résidentiel
+
+### 3.5. Démarches Retraite
+
+#### 3.5.1. Carrière et reconstitution
+- **Description:** Analyse et validation du parcours professionnel
+- **Fonctionnalités:**
+  - Structure d'analyse détaillée du relevé de carrière
+  - Détection des anomalies et périodes manquantes
+  - Calculateur de rachats de trimestres
+  - Suivi des régularisations par régime
+  - Historique des demandes de correction
+- **Personnalisation possible:**
+  - Configuration des contrôles et détections d'anomalies
+  - Paramétrage des calculs de rachat
+  - Adaptation des procédures par régime de retraite
+  - Définition des modèles de demande de régularisation
+
+#### 3.5.2. Interface de gestion des demandes de réversion
+- **Description:** Accompagnement complet pour les demandes de réversion
+- **Fonctionnalités:**
+  - Workflow spécifique aux demandes de réversion
+  - Checklist documentaire adaptée aux ayants droit
+  - Suivi multi-organismes (régime général, complémentaires)
+  - Gestion des délais spécifiques post-décès
+  - Calcul des droits prévisionnels
+- **Personnalisation possible:**
+  - Adaptation aux règles spécifiques de chaque régime
+  - Configuration des champs selon situation familiale
+  - Paramétrage des étapes du workflow
+  - Définition des modèles de courrier spécifiques
+
+#### 3.5.3. Préparation à la liquidation
+- **Description:** Optimisation du départ à la retraite
+- **Fonctionnalités:**
+  - Simulateur multi-régimes personnalisé
+  - Optimisation de la date de départ (avec/sans surcote)
+  - Comparatif des options de liquidation
+  - Checklist documentaire dynamique selon régimes
+  - Planification fiscale du départ
+- **Personnalisation possible:**
+  - Configuration des paramètres de simulation
+  - Adaptation des stratégies d'optimisation
+  - Paramétrage des checklists par combinaison de régimes
+  - Définition des scénarios fiscaux types
+
+#### 3.5.4. Liquidation et suivi
+- **Description:** Gestion du processus de demande effective
+- **Fonctionnalités:**
+  - Workflow de dépôt des demandes (chronologie multi-régimes)
+  - Tracking des dossiers par caisse
+  - Vérification des montants notifiés
+  - Gestion des réclamations
+  - Suivi post-liquidation des versements
+- **Personnalisation possible:**
+  - Configuration du workflow selon combinaison de régimes
+  - Paramétrage des étapes de tracking par caisse
+  - Adaptation des modèles de réclamation
+  - Définition des contrôles de montants
+
+#### 3.5.5. Champs conditionnels spécifiques
+- Régimes concernés (général, complémentaires, spéciaux)
+- Situation particulière (carrière longue, invalidité, handicap)
+- Réversion concernée (oui/non)
+- Périodes à l'étranger
+- Enfants et majorations
+- Cumul emploi-retraite envisagé
+
+### 3.6. Démarches Fiscales
+
+#### 3.6.1. Interface de "question-réponse" interactive
+- **Description:** Guide interactif simplifié pour la déclaration fiscale
+- **Fonctionnalités:**
+  - Structure de questions-réponses par section de déclaration
+  - Explications vulgarisées pour chaque case
+  - Aide à la décision pour les options fiscales
+  - Glossaire fiscal simplifié
+  - Liens vers textes réglementaires pertinents
+- **Personnalisation possible:**
+  - Ajustement du niveau de détail selon client
+  - Personnalisation des explications par situation
+  - Configuration des questions complémentaires
+  - Adaptation des aides à la décision
+
+#### 3.6.2. Déclaration de revenus
+- **Description:** Assistance à la préparation des déclarations fiscales
+- **Fonctionnalités:**
+  - Structure de saisie organisée par type de revenu
+  - Assistant déclaratif par catégorie de revenus
+  - Optimisation des charges déductibles
+  - Simulateur d'imposition en temps réel
+  - Comparaison avec années précédentes
+- **Personnalisation possible:**
+  - Configuration des sections par profil fiscal
+  - Paramétrage des optimisations proposées
+  - Adaptation des simulations selon situation
+  - Définition des éléments de comparaison interannuelle
+
+#### 3.6.3. Gestion de l'impôt
+- **Description:** Suivi et optimisation de la fiscalité courante
+- **Fonctionnalités:**
+  - Suivi structuré du prélèvement à la source
+  - Assistant de modulation de taux
+  - Gestion des acomptes contemporains
+  - Demandes de délai et remises gracieuses
+  - Planification fiscale annuelle
+- **Personnalisation possible:**
+  - Configuration du suivi PAS selon source de revenus
+  - Paramétrage des scénarios de modulation
+  - Adaptation des modèles de demande de délai
+  - Définition des stratégies de planification
+
+#### 3.6.4. Contrôle et contentieux simple
+- **Description:** Gestion des relations avec l'administration fiscale
+- **Fonctionnalités:**
+  - Analyse structurée des avis d'imposition
+  - Détection d'erreurs potentielles (checklist)
+  - Préparation des réclamations contentieuses
+  - Suivi des demandes de dégrèvement
+  - Gestion des réponses aux demandes d'information
+- **Personnalisation possible:**
+  - Configuration des contrôles par type d'imposition
+  - Paramétrage des modèles de réclamation
+  - Adaptation des processus de suivi
+  - Définition des réponses types
+
+#### 3.6.5. Champs conditionnels spécifiques
+- Catégories de revenus (salaires, foncier, BIC, BNC, etc.)
+- Crédit d'impôt applicable
+- Situation familiale fiscale
+- Non-résidence fiscale
+- Biens à l'étranger
+- Régime micro vs réel
+
+### 3.7. Démarches ANTS Véhicules et Identité
+
+#### 3.7.1. Suivi de la validité des documents véhicules
+- **Description:** Système d'alerte pour les échéances liées aux véhicules
+- **Fonctionnalités:**
+  - Calendrier des contrôles techniques
+  - Suivi des dates de renouvellement d'assurance
+  - Alertes pour vignettes/taxes/péages
+  - Rappels administratifs (changement carte grise)
+  - Historique des opérations par véhicule
+- **Personnalisation possible:**
+  - Configuration des délais d'alerte par type d'échéance
+  - Paramétrage des rappels par importance
+  - Adaptation des informations suivies par véhicule
+  - Définition des modalités de notification
+
+#### 3.7.2. Liste consolidée des véhicules et biens
+- **Description:** Inventaire complet du patrimoine mobile et immobilier
+- **Fonctionnalités:**
+  - Fiche détaillée par véhicule/bien
+  - Suivi des documents associés (titre, assurance)
+  - Échéancier des obligations légales
+  - Historique des interventions et événements
+  - Visualisation sur portail client
+- **Personnalisation possible:**
+  - Configuration des champs par type de bien
+  - Paramétrage des échéances suivies
+  - Adaptation des niveaux de détail
+  - Définition des droits d'accès et visualisation
+
+#### 3.7.3. Carte grise/Certificat d'immatriculation
+- **Description:** Gestion des démarches liées aux certificats d'immatriculation
+- **Fonctionnalités:**
+  - Assistant changement de titulaire
+  - Gestion des cessions de véhicule
+  - Déclaration de changement d'adresse
+  - Demande de duplicata
+  - Suivi des demandes en cours
+- **Personnalisation possible:**
+  - Adaptation des assistants par type de démarche
+  - Configuration des documents requis selon situation
+  - Paramétrage des étapes de suivi
+  - Définition des modèles de document
+
+#### 3.7.4. Permis de conduire
+- **Description:** Accompagnement aux démarches liées au permis
+- **Fonctionnalités:**
+  - Suivi des points et échéances
+  - Demande de renouvellement
+  - Conversion de permis étrangers
+  - Gestion des extensions de catégories
+  - Récupération de points (stages)
+- **Personnalisation possible:**
+  - Configuration du suivi de points
+  - Adaptation des procédures par type de demande
+  - Paramétrage des documents requis
+  - Définition des étapes de suivi
+
+#### 3.7.5. Titres d'identité
+- **Description:** Assistance aux demandes de documents officiels
+- **Fonctionnalités:**
+  - Préparation des dossiers CNI/Passeport
+  - Prise de rendez-vous mairie
+  - Suivi des demandes en cours
+  - Alertes fin de validité
+  - Gestion des justificatifs annexes
+- **Personnalisation possible:**
+  - Adaptation des prérequis par type de titre
+  - Configuration des processus de rendez-vous par commune
+  - Paramétrage des alertes d'expiration
+  - Définition des documents complémentaires selon situation
+
+#### 3.7.6. Champs conditionnels spécifiques
+- Type de titre concerné (détermine le workflow)
+- Première demande vs renouvellement
+- Urgence (voyage imminent, véhicule professionnel)
+- Situation particulière (perte, vol, détérioration)
+- Type de véhicule (particulier, collection, importation)
+- Mode d'acquisition (neuf, occasion, héritage)
+
+### 3.8. Démarches MDPH
+
+#### 3.8.1. Évaluation des besoins
+- **Description:** Analyse détaillée de la situation de handicap
+- **Fonctionnalités:**
+  - Questionnaire structuré sur les limitations d'activité
+  - Recensement des aides techniques actuelles
+  - Identification des besoins non couverts
+  - Préparation du projet de vie personnalisé
+  - Évaluation préalable des prestations accessibles
+- **Personnalisation possible:**
+  - Configuration du questionnaire selon type de handicap
+  - Paramétrage de la structure d'analyse
+  - Adaptation des modèles de projet de vie
+  - Définition des critères d'évaluation des besoins
+
+#### 3.8.2. Module de suivi des équipements/aménagements
+- **Description:** Gestion des aides techniques et adaptations
+- **Fonctionnalités:**
+  - Inventaire structuré des besoins en équipements
+  - Suivi des demandes de financement PCH
+  - Étapes d'acquisition et installation
+  - Calendrier de maintenance et renouvellement
+  - Lien avec prestataires techniques
+- **Personnalisation possible:**
+  - Configuration des catégories d'équipements
+  - Paramétrage du suivi selon département
+  - Adaptation des étapes par type d'aide technique
+  - Définition des échéances de maintenance
+
+#### 3.8.3. Constitution du dossier
+- **Description:** Préparation des demandes auprès des MDPH
+- **Fonctionnalités:**
+  - Assistant de remplissage du formulaire MDPH
+  - Organisation des certificats médicaux
+  - Gestion des pièces justificatives (30+ documents)
+  - Préparation aux entretiens d'évaluation
+  - Coordination avec équipes médicales
+- **Personnalisation possible:**
+  - Adaptation de l'assistant aux spécificités départementales
+  - Configuration des listes documentaires selon situation
+  - Paramétrage des guides d'entretien
+  - Définition des documents médicaux selon pathologie
+
+#### 3.8.4. Suivi des droits
+- **Description:** Gestion des demandes et prestations accordées
+- **Fonctionnalités:**
+  - Timeline spécifique MDPH (8-12 étapes)
+  - Alertes échéances de renouvellement
+  - Gestion des prestations associées (AAH, PCH, AEEH)
+  - Suivi de la mise en œuvre des décisions
+  - Préparation des recours éventuels
+- **Personnalisation possible:**
+  - Configuration des étapes de suivi par département
+  - Paramétrage des alertes d'échéance
+  - Adaptation du suivi par type de prestation
+  - Définition des modèles de recours
+
+#### 3.8.5. Champs conditionnels spécifiques
+- Type de handicap (moteur, sensoriel, psychique, mental, multiple)
+- Demandes spécifiques (carte mobilité, AAH, orientation pro, PCH...)
+- Scolarité/emploi impacté
+- Taux d'incapacité prévisible
+- Évolutivité de la situation
+- Demande initiale ou renouvellement
+
+---
+
+## 4. Conseil en Abonnements du Quotidien
+
+### 4.1. Audit des Abonnements
+
+#### 4.1.1. Recensement personnalisable
+- **Description:** Inventaire structuré des contrats et services souscrits
+- **Fonctionnalités:**
+  - Structure de saisie organisée des prélèvements
+  - Classification par catégorie de service
+  - Questionnaire d'usages et besoins réels
+  - Cartographie visuelle des contrats et leurs interconnexions
+  - Historique des modifications contractuelles
+- **Personnalisation possible:**
+  - Configuration des catégories de classement
+  - Adaptation du questionnaire d'usages
+  - Paramétrage des visualisations
+  - Définition des champs spécifiques par type de contrat
+
+#### 4.1.2. Analyse des consommations
+- **Description:** Étude détaillée des usages et adéquation des offres
+- **Fonctionnalités:**
+  - Structure de saisie manuelle des consommations
+  - Profils d'usage par service (intensif, occasionnel, etc.)
+  - Analyse comparative usages/forfaits
+  - Détection des services redondants ou sous-utilisés
+  - Projection des besoins futurs
+- **Personnalisation possible:**
+  - Configuration des grilles d'analyse par service
+  - Paramétrage des seuils de sous/sur-utilisation
+  - Adaptation des critères de redondance
+  - Définition des méthodes de projection
+
+### 4.2. Optimisation des Contrats
+
+#### 4.2.1. Comparaison et benchmarking
+- **Description:** Évaluation des offres du marché vs contrats actuels
+- **Fonctionnalités:**
+  - Base de données manuelle des offres du marché
+  - Comparateur multicritères paramétrable
+  - Simulation des économies potentielles
+  - Score d'adéquation besoin/offre
+  - Analyse des avantages/inconvénients du changement
+- **Personnalisation possible:**
+  - Configuration des critères de comparaison
+  - Paramétrage des formules de calcul d'économie
+  - Adaptation des indicateurs d'adéquation
+  - Définition des facteurs avantages/inconvénients
+
+#### 4.2.2. Recommandations personnalisées
+- **Description:** Conseils adaptés pour l'optimisation des contrats
+- **Fonctionnalités:**
+  - Propositions hiérarchisées par impact
+  - Checklist avantages/inconvénients par offre
+  - Calcul du ROI incluant frais de transition
+  - Planning optimal de changement
+  - Scénarios alternatifs selon priorités client
+- **Personnalisation possible:**
+  - Configuration des critères de hiérarchisation
+  - Paramétrage des éléments de la checklist
+  - Adaptation des formules de ROI
+  - Définition des stratégies de planning
+
+### 4.3. Gestion des Transitions
+
+#### 4.3.1. Génération de mandats pour la gestion déléguée
+- **Description:** Système formalisé de délégation d'autorité
+- **Fonctionnalités:**
+  - Modèles de mandats par fournisseur/service
+  - Gestion des durées et périmètres d'autorisation
+  - Suivi des mandats actifs et expirés
+  - Historique des actions réalisées sous mandat
+  - Révocation et modification des autorisations
+- **Personnalisation possible:**
+  - Configuration des clauses par type de mandat
+  - Paramétrage des niveaux d'autorisation
+  - Adaptation des processus de validation
+  - Définition des champs spécifiques par fournisseur
+
+#### 4.3.2. Processus de souscription
+- **Description:** Accompagnement à la mise en place de nouveaux contrats
+- **Fonctionnalités:**
+  - Génération des demandes de souscription
+  - Checklist documentaire par fournisseur
+  - Suivi des validations et confirmations
+  - Monitoring de la mise en service
+  - Vérification post-activation
+- **Personnalisation possible:**
+  - Configuration des modèles de demande
+  - Paramétrage des listes documentaires
+  - Adaptation des étapes de suivi
+  - Définition des points de vérification
+
+#### 4.3.3. Processus de résiliation
+- **Description:** Gestion des fins de contrats et transitions
+- **Fonctionnalités:**
+  - Modèles de courriers spécifiques par fournisseur
+  - Calcul des dates optimales (éviter frais)
+  - Suivi des confirmations de résiliation
+  - Gestion des retours de matériel
+  - Contrôle des factures de clôture
+- **Personnalisation possible:**
+  - Configuration des modèles par fournisseur
+  - Paramétrage des règles de calcul de date
+  - Adaptation des procédures de suivi
+  - Définition des points de contrôle
+
+#### 4.3.4. Champs conditionnels par type d'abonnement
+- **Énergie:**
+  - Type d'énergie (électricité/gaz/fioul)
+  - Puissance souscrite
+  - Option tarifaire (base, HC/HP)
+  - Caractéristiques logement
+  - Consommation historique
+  
+- **Télécommunications:**
+  - Technologies disponibles (fibre, ADSL, 4G/5G)
+  - Nombre de lignes/utilisateurs
+  - Besoins spécifiques (international, data)
+  - Équipements associés
+  - Engagement en cours
+  
+- **Médias/Contenus:**
+  - Plateformes actuelles
+  - Préférences de contenu
+  - Appareils de visionnage
+  - Partage familial requis
+  - Téléchargement nécessaire
+
+---
+
+## 5. Module "Objectifs de Vie & Projets"
+
+### 5.1. Définition des Objectifs
+
+#### 5.1.1. Paramétrage personnalisable des objectifs
+- **Description:** Structure flexible pour la définition de projets personnels
+- **Fonctionnalités:**
+  - Catégories configurable (20+ types prédéfinis)
+  - Classification par horizon temporel (court/moyen/long)
+  - Système de priorisation et impact sur qualité de vie
+  - Gestion des interdépendances entre objectifs
+  - Évaluation des ressources nécessaires (financières, temps)
+- **Personnalisation possible:**
+  - Configuration des catégories d'objectifs
+  - Paramétrage des horizons temporels
+  - Adaptation des critères de priorisation
+  - Définition des types de ressources suivies
+
+#### 5.1.2. Planification stratégique personnalisable
+- **Description:** Décomposition structurée du parcours vers l'objectif
+- **Fonctionnalités:**
+  - Structure de jalons intermédiaires configurable
+  - Rétro-planning dynamique avec relations logiques
+  - Identification des prérequis administratifs par étape
+  - Cartographie des risques et obstacles potentiels
+  - Définition de plans alternatifs
+- **Personnalisation possible:**
+  - Configuration des types de jalons standard
+  - Paramétrage des règles de planification
+  - Adaptation des catégories de risques
+  - Définition des structures de plans alternatifs
+
+### 5.2. Suivi de Réalisation
+
+#### 5.2.1. Tracking des progrès personnalisable
+- **Description:** Outils de suivi et visualisation de l'avancement
+- **Fonctionnalités:**
+  - Visualisations graphiques configurables par objectif
+  - Journal de bord des actions entreprises
+  - Indicateurs de performance personnalisés
+  - Ajustement dynamique des échéances
+  - Historique comparatif des versions du plan
+- **Personnalisation possible:**
+  - Configuration des visualisations par type d'objectif
+  - Paramétrage des indicateurs de suivi
+  - Adaptation des formats de journal
+  - Définition des règles d'ajustement automatique
+
+#### 5.2.2. Support et accompagnement configurable
+- **Description:** Mécanismes de soutien à la réalisation des objectifs
+- **Fonctionnalités:**
+  - Structure d'alertes sur blocages ou retards
+  - Système d'encouragement et motivation
+  - Partage contrôlé avec proches ou conseillers
+  - Recommandations basées sur situations similaires
+  - Ajustements réguliers des objectifs
+- **Personnalisation possible:**
+  - Configuration des déclencheurs d'alerte
+  - Paramétrage des messages motivationnels
+  - Adaptation des règles de partage
+  - Définition des critères de similarité
+
+#### 5.2.3. Champs conditionnels par type d'objectif
+- **Projet immobilier:**
+  - Type d'opération (achat, construction, rénovation)
+  - Budget et financement envisagé
+  - Localisation et critères
+  - Échéance d'acquisition
+  - Documents préparatoires
+  
+- **Projet professionnel/Formation:**
+  - Nature du projet (reconversion, évolution, création)
+  - Compétences à acquérir
+  - Certifications visées
+  - Financement formation
+  - Impact sur revenus
+  
+- **Préparation retraite:**
+  - Âge souhaité de départ
+  - Niveau de vie cible
+  - Solutions complémentaires envisagées
+  - Patrimoine à constituer
+  - Transitions professionnelles intermédiaires
+
+### 5.3. Gestion Administrative Associée
+
+#### 5.3.1. Dossiers administratifs liés personnalisables
+- **Description:** Connexion entre objectifs et démarches nécessaires
+- **Fonctionnalités:**
+  - Génération manuelle des démarches associées à l'objectif
+  - Priorisation des formalités selon échéances
+  - Lien bidirectionnel avec les modules de démarches
+  - Documents préparatoires spécifiques à chaque objectif
+  - Suivi consolidé des aspects administratifs
+- **Personnalisation possible:**
+  - Configuration des liens objectifs-démarches
+  - Paramétrage des règles de priorisation
+  - Adaptation des documents préparatoires
+  - Définition des indicateurs de suivi consolidé
+
+#### 5.3.2. Aspects financiers configurables
+- **Description:** Gestion de la dimension budgétaire des projets
+- **Fonctionnalités:**
+  - Projection des besoins de financement
+  - Échéancier des dépenses prévues
+  - Alertes sur écarts budget/réalité
+  - Synchronisation avec le suivi budgétaire global
+  - Scénarios financiers alternatifs
+- **Personnalisation possible:**
+  - Configuration des méthodes de projection
+  - Paramétrage de l'échéancier des dépenses
+  - Adaptation des seuils d'alerte
+  - Définition des règles de synchronisation
+
+---
+
+## 6. Fonctionnalités transversales et interfaces
+
+### 6.1. Système d'administration et de personnalisation
+
+#### 6.1.1. Configuration des champs
+- **Description:** Gestion flexible de la structure de données
+- **Fonctionnalités:**
+  - Création/modification de champs par module
+  - Définition de conditions d'affichage (règles conditionnelles)
+  - Paramétrage des types de données et validations
+  - Organisation des champs par sections et onglets
+  - Gestion des valeurs par défaut
+- **Personnalisation possible:**
+  - Configuration des types de champs disponibles
+  - Paramétrage des règles conditionnelles
+  - Adaptation des validations par type de donnée
+  - Définition des structures d'affichage
+
+#### 6.1.2. Configuration des workflows et étapes
+- **Description:** Gestion des processus et parcours utilisateurs
+- **Fonctionnalités:**
+  - Éditeur de workflows par type de démarche
+  - Personnalisation des statuts et transitions
+  - Configuration des actions et documents requis par étape
+  - Paramétrage des durées et alertes
+  - Définition des rôles et responsabilités
+- **Personnalisation possible:**
+  - Configuration des types de workflow disponibles
+  - Paramétrage des options de transition
+  - Adaptation des documents par étape
+  - Définition des règles temporelles
+
+#### 6.1.3. Gestion des notifications
+- **Description:** Système d'alertes et communications automatisées
+- **Fonctionnalités:**
+  - Création de modèles de notification par événement
+  - Configuration des canaux de distribution
+  - Personnalisation des contenus et conditions
+  - Paramétrage des escalades et rappels
+  - Suivi des notifications envoyées
+- **Personnalisation possible:**
+  - Configuration des types d'événements déclencheurs
+  - Paramétrage des canaux disponibles
+  - Adaptation des contenus dynamiques
+  - Définition des règles d'escalade
+
+#### 6.1.4. Personnalisation des interfaces
+- **Description:** Adaptation des vues selon profils et besoins
+- **Fonctionnalités:**
+  - Configuration des tableaux de bord par profil
+  - Organisation des menus et accès rapides
+  - Paramétrage des vues par défaut et filtres
+  - Définition des permissions et restrictions
+  - Gestion des modèles de rapports
+- **Personnalisation possible:**
+  - Configuration des composants d'interface disponibles
+  - Paramétrage des options d'organisation
+  - Adaptation des filtres prédéfinis
+  - Définition des modèles de rapport standards
+
+### 6.2. Sécurité et confidentialité
+
+- **Chiffrement des données sensibles**
+- **Masquage contextuel des informations confidentielles**
+- **Journal d'audit des accès et modifications**
+- **Gestion fine des permissions par module et action**
+- **Conformité RGPD avec traçabilité des consentements**
+
+### 6.3. Accessibilité et inclusion
+
+- **Interface adaptée aux situations de handicap**
+- **Version simplifiée pour personnes en difficulté numérique**
+- **Mode accompagné avec assistance conseiller**
+- **Contenus pédagogiques adaptés aux niveaux de compréhension**
+- **Documentation utilisateur contextuelle**
+
+7. Structure des classes 
