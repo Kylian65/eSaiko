@@ -432,7 +432,177 @@ class ElaskaParticulierDemarcheSurendettement extends ElaskaParticulierDemarche
         
         return $result;
     }
+    /**
+     * Ajoute une entrée à l'historique des actions spécifiques du dossier de surendettement
+     *
+     * @param User   $user      Utilisateur effectuant l'action
+     * @param string $type      Type d'action (libre ou utiliser les constantes de la classe)
+     * @param string $details   Détails de l'action
+     * @param string $commentaire Commentaire optionnel
+     * @return int              <0 si erreur, >0 si OK
+     */
+    public function addHistoriqueAction($user, $type, $details, $commentaire = '')
+    {
+        $this->ajouterActionHistorique($user, $type, $details, $commentaire);
+        
+        // Mise à jour en base de données
+        return $this->update($user, 1); // Mise à jour silencieuse
+    }
 
+    /**
+     * Récupère l'historique des actions formaté
+     *
+     * @param bool   $html       True pour formater en HTML, false pour texte brut
+     * @param int    $limit      Limite du nombre d'entrées à récupérer (0 = toutes)
+     * @param string $filter     Filtre sur le type d'action (optionnel)
+     * @return string|array      Historique formaté (string) ou tableau d'entrées (array)
+     */
+    public function getHistoriqueActions($html = false, $limit = 0, $filter = '')
+    {
+        if (empty($this->historique_actions)) {
+            return $html ? '<em>Aucune action enregistrée</em>' : 'Aucune action enregistrée';
+        }
+        
+        // Découper en entrées individuelles
+        $entries = explode("\n\n", $this->historique_actions);
+        
+        // Appliquer le filtre si nécessaire
+        if (!empty($filter)) {
+            $filtered_entries = array();
+            foreach ($entries as $entry) {
+                if (strpos($entry, ' - ' . $filter . ' - ') !== false) {
+                    $filtered_entries[] = $entry;
+                }
+            }
+            $entries = $filtered_entries;
+        }
+        
+        // Limiter le nombre d'entrées si demandé
+        if ($limit > 0 && count($entries) > $limit) {
+            $entries = array_slice($entries, 0, $limit);
+        }
+        
+        // Si demande de tableau, retourner les entrées sous forme de tableau structuré
+        if (!$html && is_array($entries)) {
+            $structured_entries = array();
+            foreach ($entries as $entry) {
+                $parts = explode(' - ', $entry, 4); // Max 4 parties (date/heure, utilisateur, type, détails+commentaire)
+                if (count($parts) >= 3) {
+                    $structured_entry = array(
+                        'datetime' => $parts[0],
+                        'user' => $parts[1],
+                        'type' => $parts[2],
+                        'details' => isset($parts[3]) ? $parts[3] : ''
+                    );
+                    
+                    // Extraire le commentaire s'il existe
+                    $comment_pos = isset($parts[3]) ? strpos($parts[3], ' - Commentaire: ') : false;
+                    if ($comment_pos !== false) {
+                        $structured_entry['details'] = substr($parts[3], 0, $comment_pos);
+                        $structured_entry['comment'] = substr($parts[3], $comment_pos + 15); // 15 = longueur de ' - Commentaire: '
+                    }
+                    
+                    $structured_entries[] = $structured_entry;
+                }
+            }
+            return $structured_entries;
+        }
+        
+        // Formater en HTML si demandé
+        if ($html) {
+            $html_output = '<div class="historique-actions">';
+            foreach ($entries as $entry) {
+                // Extraction des parties pour mise en forme
+                $parts = explode(' - ', $entry, 4);
+                if (count($parts) >= 3) {
+                    $datetime = $parts[0];
+                    $user = $parts[1];
+                    $type = $parts[2];
+                    $details = isset($parts[3]) ? $parts[3] : '';
+                    
+                    // Coloriser selon le type d'action
+                    $class = '';
+                    switch ($type) {
+                        case 'CHANGEMENT_STADE':
+                            $class = 'bg-info';
+                            break;
+                        case 'MISE_A_JOUR_MONTANTS':
+                            $class = 'bg-success';
+                            break;
+                        case 'CONFIGURATION_PLAN':
+                            $class = 'bg-warning';
+                            break;
+                        default:
+                            $class = '';
+                    }
+                    
+                    // Extraire et formater le commentaire s'il existe
+                    $comment_html = '';
+                    $comment_pos = strpos($details, ' - Commentaire: ');
+                    if ($comment_pos !== false) {
+                        $comment = substr($details, $comment_pos + 15);
+                        $details = substr($details, 0, $comment_pos);
+                        $comment_html = '<div class="historique-comment"><em>' . dol_htmlentities($comment) . '</em></div>';
+                    }
+                    
+                    // Générer le HTML
+                    $html_output .= '<div class="historique-entry '.$class.'">';
+                    $html_output .= '<div class="historique-header">';
+                    $html_output .= '<span class="historique-date">' . dol_htmlentities($datetime) . '</span> - ';
+                    $html_output .= '<span class="historique-user">' . dol_htmlentities($user) . '</span> - ';
+                    $html_output .= '<span class="historique-type">' . dol_htmlentities($type) . '</span>';
+                    $html_output .= '</div>';
+                    $html_output .= '<div class="historique-details">' . dol_htmlentities($details) . '</div>';
+                    $html_output .= $comment_html;
+                    $html_output .= '</div>';
+                }
+            }
+            $html_output .= '</div>';
+            return $html_output;
+        }
+        
+        // Sinon retourner le texte brut
+        return implode("\n\n", $entries);
+    }
+    
+    /**
+     * Recherche dans l'historique des actions
+     * 
+     * @param string $search Texte à rechercher
+     * @return array         Tableau des entrées correspondantes
+     */
+    public function searchHistoriqueActions($search)
+    {
+        if (empty($this->historique_actions) || empty($search)) {
+            return array();
+        }
+        
+        $entries = explode("\n\n", $this->historique_actions);
+        $results = array();
+        
+        foreach ($entries as $entry) {
+            if (stripos($entry, $search) !== false) {
+                $results[] = $entry;
+            }
+        }
+        
+        return $results;
+    }
+    
+    /**
+     * Définit des constantes pour les types d'actions standards dans l'historique
+     */
+    const ACTION_CHANGEMENT_STADE = 'CHANGEMENT_STADE';
+    const ACTION_MISE_A_JOUR_MONTANTS = 'MISE_A_JOUR_MONTANTS';
+    const ACTION_CONFIGURATION_PLAN = 'CONFIGURATION_PLAN';
+    const ACTION_AJOUT_DOCUMENT = 'AJOUT_DOCUMENT';
+    const ACTION_CONTACT_CONSEILLER = 'CONTACT_CONSEILLER';
+    const ACTION_PAIEMENT_MENSUALITE = 'PAIEMENT_MENSUALITE';
+    const ACTION_REUNION_CLIENT = 'REUNION_CLIENT';
+    const ACTION_NOTE_INTERNE = 'NOTE_INTERNE';
+
+
+    
     /**
      * Configure le plan de remboursement
      *
