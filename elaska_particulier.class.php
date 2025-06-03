@@ -597,6 +597,36 @@ class ElaskaParticulier extends CommonObject
      */
     public $notes_specifiques_particulier;
 
+    // ATTRIBUTS LIÉS À L'ACCOMPAGNEMENT ADMINISTRATIF
+/**
+ * @var int Score d'autonomie numérique (1=très faible à 5=expert)
+ */
+public $score_autonomie_numerique;
+
+/**
+ * @var int Niveau d'urgence des situations administratives (1=faible, 2=moyen, 3=élevé)
+ */
+public $niveau_urgence_administrative;
+
+/**
+ * @var int Score de maturité administrative globale (0-100)
+ */
+public $score_maturite_administrative;
+
+/**
+ * @var string Date de la dernière évaluation administrative (format YYYY-MM-DD)
+ */
+public $date_derniere_evaluation_admin;
+
+/**
+ * @var int Mode de communication préféré pour les rappels (1=email, 2=SMS, 3=appel, 4=portail)
+ */
+public $mode_communication_prefere;
+
+/**
+ * @var int ID du conseiller référent pour l'accompagnement
+ */
+public $fk_user_conseiller_referent;
     // Champs techniques standard
     public $rowid;
     public $date_creation;
@@ -735,7 +765,12 @@ class ElaskaParticulier extends CommonObject
         'consentement_rgpd' => array('type' => 'boolean', 'label' => 'ConsentementRGPD', 'enabled' => 1, 'position' => 1320, 'notnull' => 1, 'visible' => 1, 'default' => '0'),
         'date_consentement_rgpd' => array('type' => 'datetime', 'label' => 'DateConsentementRGPD', 'enabled' => 1, 'position' => 1330, 'notnull' => 0, 'visible' => 1),
         'notes_specifiques_particulier' => array('type' => 'text', 'label' => 'NotesSpecifiquesParticulier', 'enabled' => 1, 'position' => 1340, 'notnull' => 0, 'visible' => 1),
-
+'score_autonomie_numerique' => array('type' => 'integer', 'label' => 'ScoreAutonomieNumerique', 'enabled' => 1, 'position' => 1350, 'notnull' => 0, 'visible' => 1, 'default' => '3', 'arrayofkeyval' => array('1' => 'TresFaible', '2' => 'Faible', '3' => 'Moyen', '4' => 'Bon', '5' => 'Expert')),
+'niveau_urgence_administrative' => array('type' => 'integer', 'label' => 'NiveauUrgenceAdministrative', 'enabled' => 1, 'position' => 1360, 'notnull' => 0, 'visible' => 1, 'default' => '1', 'arrayofkeyval' => array('1' => 'Faible', '2' => 'Moyen', '3' => 'Eleve')),
+'score_maturite_administrative' => array('type' => 'integer', 'label' => 'ScoreMaturiteAdministrative', 'enabled' => 1, 'position' => 1370, 'notnull' => 0, 'visible' => 1, 'default' => '50'),
+'date_derniere_evaluation_admin' => array('type' => 'date', 'label' => 'DateDerniereEvaluationAdmin', 'enabled' => 1, 'position' => 1380, 'notnull' => 0, 'visible' => 1),
+'mode_communication_prefere' => array('type' => 'integer', 'label' => 'ModeCommunicationPrefere', 'enabled' => 1, 'position' => 1390, 'notnull' => 0, 'visible' => 1, 'default' => '1', 'arrayofkeyval' => array('1' => 'Email', '2' => 'SMS', '3' => 'Appel', '4' => 'Portail')),
+'fk_user_conseiller_referent' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'ConseillerReferent', 'enabled' => 1, 'position' => 1400, 'notnull' => 0, 'visible' => 1),
         // CHAMPS TECHNIQUES
         'entity' => array('type' => 'integer', 'label' => 'Entity', 'visible' => 0, 'enabled' => 1, 'position' => 1900, 'notnull' => 1, 'default' => '1'),
         'date_creation' => array('type' => 'datetime', 'label' => 'DateCreation', 'visible' => 0, 'enabled' => 1, 'position' => 1910, 'notnull' => 1),
@@ -769,6 +804,10 @@ class ElaskaParticulier extends CommonObject
         $this->logement_conventionne_apl = isset($this->logement_conventionne_apl) ? $this->logement_conventionne_apl : 0;
         $this->eligible_prime_activite = isset($this->eligible_prime_activite) ? $this->eligible_prime_activite : 0;
         $this->utilise_transports_en_commun_regulierement = isset($this->utilise_transports_en_commun_regulierement) ? $this->utilise_transports_en_commun_regulierement : 0;
+    $this->score_autonomie_numerique = isset($this->score_autonomie_numerique) ? $this->score_autonomie_numerique : 3; // Niveau moyen par défaut
+$this->niveau_urgence_administrative = isset($this->niveau_urgence_administrative) ? $this->niveau_urgence_administrative : 1; // Niveau faible par défaut
+$this->score_maturite_administrative = isset($this->score_maturite_administrative) ? $this->score_maturite_administrative : 50; // Score moyen par défaut
+$this->mode_communication_prefere = isset($this->mode_communication_prefere) ? $this->mode_communication_prefere : 1; // Email par défaut
     }
 
     /**
@@ -1395,6 +1434,527 @@ class ElaskaParticulier extends CommonObject
         
         return $options;
     }
+
+    // MÉTHODES DE GESTION DES DÉMARCHES ADMINISTRATIVES
+
+/**
+ * Récupère toutes les démarches administratives liées à ce particulier
+ *
+ * @param int    $status      Filtre optionnel par statut (0=inactif, 1=actif, -1=tous)
+ * @param string $type_code   Filtre optionnel par type de démarche
+ * @param int    $limit       Limite de résultats
+ * @param int    $offset      Décalage pour pagination
+ * @return array              Tableau des démarches
+ */
+public function getDemarches($status = 1, $type_code = '', $limit = 0, $offset = 0)
+{
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_demarche.class.php';
+    
+    $demarches = array();
+    
+    $sql = "SELECT d.rowid FROM ".MAIN_DB_PREFIX."elaska_particulier_demarche as d";
+    $sql.= " WHERE d.fk_particulier = ".(int) $this->id;
+    
+    if ($status >= 0) {
+        $sql.= " AND d.status = ".(int) $status;
+    }
+    if (!empty($type_code)) {
+        $sql.= " AND d.type_demarche = '".$this->db->escape($type_code)."'";
+    }
+    
+    $sql.= " ORDER BY d.date_echeance ASC, d.date_creation DESC";
+    
+    if ($limit) {
+        if ($offset) $sql.= $this->db->plimit($limit, $offset);
+        else $sql.= $this->db->plimit($limit);
+    }
+    
+    $resql = $this->db->query($sql);
+    if ($resql) {
+        $num = $this->db->num_rows($resql);
+        
+        $i = 0;
+        while ($i < $num) {
+            $obj = $this->db->fetch_object($resql);
+            
+            $demarche = new ElaskaParticulierDemarche($this->db);
+            if ($demarche->fetch($obj->rowid) > 0) {
+                $demarches[] = $demarche;
+            }
+            
+            $i++;
+        }
+        
+        $this->db->free($resql);
+    }
+    
+    return $demarches;
+}
+
+/**
+ * Récupère la prochaine échéance administrative du particulier
+ *
+ * @return array|null Informations sur l'échéance (date, description, type, id_demarche) ou null si aucune
+ */
+public function getNextEcheance()
+{
+    $demarches = $this->getDemarches(1, '', 1);
+    
+    if (!empty($demarches)) {
+        $demarche = $demarches[0];
+        return array(
+            'date' => $demarche->date_echeance,
+            'description' => $demarche->libelle,
+            'type' => $demarche->type_demarche,
+            'id_demarche' => $demarche->id,
+            'priorite' => $demarche->priorite
+        );
+    }
+    
+    return null;
+}
+
+/**
+ * Analyse la maturité administrative du particulier
+ * 
+ * @return array Scores par dimension et score global
+ */
+public function analyseAdministrativeBilan()
+{
+    // Structure du résultat
+    $bilan = array(
+        'score_global' => 0,
+        'scores' => array(
+            'classement_papier' => 0,
+            'classement_numerique' => 0,
+            'connaissances_admin' => 0,
+            'autonomie' => 0,
+            'rigueur_suivi' => 0
+        ),
+        'recommandations' => array(),
+        'forces' => array(),
+        'faiblesses' => array()
+    );
+    
+    // Vérifier si l'audit existe déjà
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_audit.class.php';
+    $audit = new ElaskaParticulierAudit($this->db);
+    $result = $audit->fetchLast($this->id);
+    
+    if ($result > 0) {
+        // Récupérer les scores du dernier audit
+        $bilan['score_global'] = $audit->score_global;
+        $bilan['scores']['classement_papier'] = $audit->score_classement_papier;
+        $bilan['scores']['classement_numerique'] = $audit->score_classement_numerique;
+        $bilan['scores']['connaissances_admin'] = $audit->score_connaissances_admin;
+        $bilan['scores']['autonomie'] = $audit->score_autonomie;
+        $bilan['scores']['rigueur_suivi'] = $audit->score_rigueur_suivi;
+        
+        // Récupérer les recommandations, forces et faiblesses
+        $bilan['recommandations'] = json_decode($audit->recommandations, true);
+        $bilan['forces'] = json_decode($audit->forces, true);
+        $bilan['faiblesses'] = json_decode($audit->faiblesses, true);
+    }
+    
+    return $bilan;
+}
+
+// MÉTHODES DE GESTION DES OBJECTIFS DE VIE
+
+/**
+ * Récupère tous les objectifs de vie liés à ce particulier
+ *
+ * @param int    $status   Filtre optionnel par statut (0=inactif, 1=actif, -1=tous)
+ * @param string $type_code Filtre optionnel par type d'objectif
+ * @return array           Tableau des objectifs
+ */
+public function getObjectifs($status = 1, $type_code = '')
+{
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_objectif.class.php';
+    
+    $objectifs = array();
+    
+    $sql = "SELECT o.rowid FROM ".MAIN_DB_PREFIX."elaska_particulier_objectif as o";
+    $sql.= " WHERE o.fk_particulier = ".(int) $this->id;
+    
+    if ($status >= 0) {
+        $sql.= " AND o.status = ".(int) $status;
+    }
+    if (!empty($type_code)) {
+        $sql.= " AND o.type_objectif = '".$this->db->escape($type_code)."'";
+    }
+    
+    $sql.= " ORDER BY o.date_objectif ASC, o.priorite DESC";
+    
+    $resql = $this->db->query($sql);
+    if ($resql) {
+        $num = $this->db->num_rows($resql);
+        
+        $i = 0;
+        while ($i < $num) {
+            $obj = $this->db->fetch_object($resql);
+            
+            $objectif = new ElaskaParticulierObjectif($this->db);
+            if ($objectif->fetch($obj->rowid) > 0) {
+                $objectifs[] = $objectif;
+            }
+            
+            $i++;
+        }
+        
+        $this->db->free($resql);
+    }
+    
+    return $objectifs;
+}
+
+// MÉTHODES DE GESTION DES ABONNEMENTS
+
+/**
+ * Récupère tous les abonnements liés à ce particulier
+ *
+ * @param int    $status    Filtre optionnel par statut (0=inactif, 1=actif, -1=tous)
+ * @param string $type_code Filtre optionnel par type d'abonnement
+ * @return array            Tableau des abonnements
+ */
+public function getAbonnements($status = 1, $type_code = '')
+{
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_abonnement.class.php';
+    
+    $abonnements = array();
+    
+    $sql = "SELECT a.rowid FROM ".MAIN_DB_PREFIX."elaska_particulier_abonnement as a";
+    $sql.= " WHERE a.fk_particulier = ".(int) $this->id;
+    
+    if ($status >= 0) {
+        $sql.= " AND a.status = ".(int) $status;
+    }
+    if (!empty($type_code)) {
+        $sql.= " AND a.type = '".$this->db->escape($type_code)."'";
+    }
+    
+    $sql.= " ORDER BY a.date_fin ASC, a.montant_mensuel DESC";
+    
+    $resql = $this->db->query($sql);
+    if ($resql) {
+        $num = $this->db->num_rows($resql);
+        
+        $i = 0;
+        while ($i < $num) {
+            $obj = $this->db->fetch_object($resql);
+            
+            $abonnement = new ElaskaParticulierAbonnement($this->db);
+            if ($abonnement->fetch($obj->rowid) > 0) {
+                $abonnements[] = $abonnement;
+            }
+            
+            $i++;
+        }
+        
+        $this->db->free($resql);
+    }
+    
+    return $abonnements;
+}
+
+/**
+ * Calcule le coût mensuel total des abonnements
+ * 
+ * @param string $type_code Filtre optionnel par type d'abonnement
+ * @return float           Montant total mensuel
+ */
+public function getTotalAbonnementsMensuel($type_code = '')
+{
+    $total = 0;
+    
+    $abonnements = $this->getAbonnements(1, $type_code);
+    foreach ($abonnements as $abonnement) {
+        $total += $abonnement->montant_mensuel;
+    }
+    
+    return $total;
+}
+
+// MÉTHODES DE GESTION DU BUDGET
+
+/**
+ * Récupère le budget actuel du particulier
+ * 
+ * @return object|null Budget actuel ou null si aucun
+ */
+public function getBudgetActuel()
+{
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_budget.class.php';
+    
+    $budget = new ElaskaParticulierBudget($this->db);
+    $result = $budget->fetchCurrent($this->id);
+    
+    if ($result > 0) {
+        return $budget;
+    }
+    
+    return null;
+}
+
+// MÉTHODES DE GESTION DU COFFRE FORT NUMÉRIQUE
+
+/**
+ * Récupère le coffre-fort numérique du particulier
+ * 
+ * @return object|null Coffre-fort ou null si aucun
+ */
+public function getCoffreFort()
+{
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_coffre.class.php';
+    
+    $coffre = new ElaskaParticulierCoffre($this->db);
+    $result = $coffre->fetchByParticulierId($this->id);
+    
+    if ($result > 0) {
+        return $coffre;
+    }
+    
+    return null;
+}
+
+/**
+ * Vérifie si un document existe dans le coffre-fort
+ * 
+ * @param string $type_document Type de document à vérifier
+ * @return bool                 true si présent, false sinon
+ */
+public function checkDocumentInCoffreFort($type_document)
+{
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_coffre_document.class.php';
+    
+    $document = new ElaskaParticulierCoffreDocument($this->db);
+    return $document->checkExistByType($this->id, $type_document);
+}
+
+// MÉTHODES DE GESTION DES VÉHICULES ET BIENS
+
+/**
+ * Récupère tous les véhicules liés à ce particulier
+ *
+ * @param int $status Filtre optionnel par statut (0=inactif, 1=actif, -1=tous)
+ * @return array      Tableau des véhicules
+ */
+public function getVehicules($status = 1)
+{
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_vehicule.class.php';
+    
+    $vehicules = array();
+    
+    $sql = "SELECT v.rowid FROM ".MAIN_DB_PREFIX."elaska_particulier_vehicule as v";
+    $sql.= " WHERE v.fk_particulier = ".(int) $this->id;
+    
+    if ($status >= 0) {
+        $sql.= " AND v.status = ".(int) $status;
+    }
+    
+    $sql.= " ORDER BY v.date_acquisition DESC";
+    
+    $resql = $this->db->query($sql);
+    if ($resql) {
+        $num = $this->db->num_rows($resql);
+        
+        $i = 0;
+        while ($i < $num) {
+            $obj = $this->db->fetch_object($resql);
+            
+            $vehicule = new ElaskaParticulierVehicule($this->db);
+            if ($vehicule->fetch($obj->rowid) > 0) {
+                $vehicules[] = $vehicule;
+            }
+            
+            $i++;
+        }
+        
+        $this->db->free($resql);
+    }
+    
+    return $vehicules;
+}
+
+/**
+ * Récupère tous les biens immobiliers liés à ce particulier
+ *
+ * @param int $status Filtre optionnel par statut (0=inactif, 1=actif, -1=tous)
+ * @return array      Tableau des biens immobiliers
+ */
+public function getBiensImmobiliers($status = 1)
+{
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_immobilier.class.php';
+    
+    $biens = array();
+    
+    $sql = "SELECT b.rowid FROM ".MAIN_DB_PREFIX."elaska_particulier_immobilier as b";
+    $sql.= " WHERE b.fk_particulier = ".(int) $this->id;
+    
+    if ($status >= 0) {
+        $sql.= " AND b.status = ".(int) $status;
+    }
+    
+    $sql.= " ORDER BY b.date_acquisition DESC";
+    
+    $resql = $this->db->query($sql);
+    if ($resql) {
+        $num = $this->db->num_rows($resql);
+        
+        $i = 0;
+        while ($i < $num) {
+            $obj = $this->db->fetch_object($resql);
+            
+            $bien = new ElaskaParticulierImmobilier($this->db);
+            if ($bien->fetch($obj->rowid) > 0) {
+                $biens[] = $bien;
+            }
+            
+            $i++;
+        }
+        
+        $this->db->free($resql);
+    }
+    
+    return $biens;
+}
+
+// MÉTHODES DE GESTION DES CORRESPONDANCES
+
+/**
+ * Récupère les correspondances/courriers liés à ce particulier
+ *
+ * @param int    $status Filtre optionnel par statut (0=inactif, 1=actif, -1=tous)
+ * @param string $type   Filtre optionnel par type de correspondance
+ * @param int    $limit  Limite de résultats
+ * @return array         Tableau des correspondances
+ */
+public function getCorrespondances($status = 1, $type = '', $limit = 0)
+{
+    require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_particulier_correspondance.class.php';
+    
+    $correspondances = array();
+    
+    $sql = "SELECT c.rowid FROM ".MAIN_DB_PREFIX."elaska_particulier_correspondance as c";
+    $sql.= " WHERE c.fk_particulier = ".(int) $this->id;
+    
+    if ($status >= 0) {
+        $sql.= " AND c.status = ".(int) $status;
+    }
+    if (!empty($type)) {
+        $sql.= " AND c.type = '".$this->db->escape($type)."'";
+    }
+    
+    $sql.= " ORDER BY c.date_envoi DESC";
+    
+    if ($limit) {
+        $sql.= $this->db->plimit($limit);
+    }
+    
+    $resql = $this->db->query($sql);
+    if ($resql) {
+        $num = $this->db->num_rows($resql);
+        
+        $i = 0;
+        while ($i < $num) {
+            $obj = $this->db->fetch_object($resql);
+            
+            $correspondance = new ElaskaParticulierCorrespondance($this->db);
+            if ($correspondance->fetch($obj->rowid) > 0) {
+                $correspondances[] = $correspondance;
+            }
+            
+            $i++;
+        }
+        
+        $this->db->free($resql);
+    }
+    
+    return $correspondances;
+}
+
+// MÉTHODES D'ÉVALUATION ET SCORING
+
+/**
+ * Met à jour le score d'autonomie numérique
+ * 
+ * @param User $user                   Utilisateur effectuant l'action
+ * @param int  $score_autonomie_new    Nouveau score (1-5)
+ * @return int                         <0 si erreur, >0 si OK
+ */
+public function updateScoreAutonomieNumerique($user, $score_autonomie_new)
+{
+    if ($score_autonomie_new < 1 || $score_autonomie_new > 5) {
+        $this->error = 'InvalidScoreValue';
+        return -1;
+    }
+    
+    $this->score_autonomie_numerique = $score_autonomie_new;
+    return $this->update($user);
+}
+
+/**
+ * Met à jour le niveau d'urgence administrative
+ * 
+ * @param User $user                       Utilisateur effectuant l'action
+ * @param int  $niveau_urgence_new         Nouveau niveau (1=faible, 2=moyen, 3=élevé)
+ * @return int                             <0 si erreur, >0 si OK
+ */
+public function updateNiveauUrgenceAdministrative($user, $niveau_urgence_new)
+{
+    if ($niveau_urgence_new < 1 || $niveau_urgence_new > 3) {
+        $this->error = 'InvalidUrgencyLevel';
+        return -1;
+    }
+    
+    $this->niveau_urgence_administrative = $niveau_urgence_new;
+    return $this->update($user);
+}
+
+/**
+ * Retourne l'historique des actions pour ce particulier
+ * 
+ * @param int $limit   Limite du nombre d'actions à retourner
+ * @param int $offset  Décalage pour la pagination
+ * @return array       Tableau des actions
+ */
+public function getHistoriqueActions($limit = 50, $offset = 0)
+{
+    $actions = array();
+    
+    // Récupérer l'historique depuis la table des événements
+    require_once DOL_DOCUMENT_ROOT.'/core/class/events.class.php';
+    $eventobj = new Events($this->db);
+    
+    $sql = "SELECT rowid FROM ".MAIN_DB_PREFIX."events";
+    $sql.= " WHERE elementtype = 'elaskaparticulier' AND fk_element = ".(int) $this->id;
+    $sql.= " ORDER BY dateevent DESC";
+    
+    if ($limit) {
+        if ($offset) $sql.= $this->db->plimit($limit, $offset);
+        else $sql.= $this->db->plimit($limit);
+    }
+    
+    $resql = $this->db->query($sql);
+    if ($resql) {
+        $num = $this->db->num_rows($resql);
+        
+        $i = 0;
+        while ($i < $num) {
+            $obj = $this->db->fetch_object($resql);
+            
+            if ($eventobj->fetch($obj->rowid) > 0) {
+                $actions[] = $eventobj;
+            }
+            
+            $i++;
+        }
+        
+        $this->db->free($resql);
+    }
+    
+    return $actions;
+}
 }
 
 } // Fin de la condition if !class_exists
