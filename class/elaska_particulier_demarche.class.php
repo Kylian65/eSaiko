@@ -1,8 +1,3 @@
-# Création de elaska_particulier_demarche.class.php
-
-Je vais maintenant créer la classe `ElaskaParticulierDemarche` pour gérer les démarches administratives des particuliers. Cette classe sera centrale dans le module d'accompagnement administratif.
-
-```php
 <?php
 /**
  * eLaska - Classe pour gérer les démarches administratives des particuliers
@@ -657,7 +652,7 @@ class ElaskaParticulierDemarche extends CommonObject
         return $result;
     }
 
-    /**
+        /**
      * Assigne une démarche à un utilisateur
      *
      * @param User $user       Utilisateur effectuant l'action
@@ -668,6 +663,17 @@ class ElaskaParticulierDemarche extends CommonObject
     public function assignTo($user, $fk_user_assign, $commentaire = '')
     {
         $ancien_assignataire_id = $this->fk_user_assign;
+        
+        // Vérifier que le nouvel utilisateur existe
+        if ($fk_user_assign > 0) {
+            require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
+            $nouveau_user = new User($this->db);
+            if ($nouveau_user->fetch($fk_user_assign) <= 0) {
+                $this->error = 'UserDoesNotExist';
+                return -1;
+            }
+        }
+        
         $this->fk_user_assign = $fk_user_assign;
         
         // Mise à jour de la note si un commentaire est fourni
@@ -688,17 +694,20 @@ class ElaskaParticulierDemarche extends CommonObject
                 $action = 'ASSIGN';
                 
                 // Récupération des noms des utilisateurs
-                require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
-                $nouveau_user = new User($this->db);
-                $nouveau_user->fetch($fk_user_assign);
-                
                 $ancien_user = null;
                 if ($ancien_assignataire_id > 0) {
                     $ancien_user = new User($this->db);
                     $ancien_user->fetch($ancien_assignataire_id);
                 }
                 
-                $message = 'La démarche "'.$this->libelle.'" (Réf: '.$this->ref.') a été assignée à '.$nouveau_user->getFullName($particulier->langs);
+                $message = 'La démarche "'.$this->libelle.'" (Réf: '.$this->ref.') a été ';
+                
+                if ($fk_user_assign > 0) {
+                    $message .= 'assignée à '.$nouveau_user->getFullName($particulier->langs);
+                } else {
+                    $message .= 'désassignée';
+                }
+                
                 if ($ancien_user) {
                     $message .= ' (précédemment: '.$ancien_user->getFullName($particulier->langs).')';
                 }
@@ -1351,6 +1360,236 @@ class ElaskaParticulierDemarche extends CommonObject
         }
         
         return $options;
+    }
+
+        /**
+     * Ajoute ou associe un document à cette démarche
+     *
+     * @param User   $user       Utilisateur effectuant l'action
+     * @param int    $document_id ID du document à associer
+     * @param bool   $is_main_doc True pour définir comme document principal
+     * @param string $commentaire Commentaire optionnel sur le document
+     * @return int                <0 si erreur, >0 si OK
+     */
+    public function addDocument($user, $document_id, $is_main_doc = false, $commentaire = '')
+    {
+        require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_document.class.php';
+        
+        // Vérifier que le document existe
+        $document = new ElaskaDocument($this->db);
+        if ($document->fetch($document_id) <= 0) {
+            $this->error = 'DocumentDoesNotExist';
+            return -1;
+        }
+        
+        // Si c'est le document principal, mettre à jour la démarche
+        if ($is_main_doc) {
+            $ancien_doc_id = $this->fk_document_principal;
+            $this->fk_document_principal = $document_id;
+            
+            $result = $this->update($user, 1); // mise à jour silencieuse
+            
+            if ($result > 0) {
+                // Ajouter à l'historique
+                $particulier = new ElaskaParticulier($this->db);
+                if ($particulier->fetch($this->fk_particulier) > 0) {
+                    $message = 'Document principal "'.$document->libelle.'" (Réf: '.$document->ref.') associé à la démarche "'.$this->libelle.'" (Réf: '.$this->ref.')';
+                    
+                    if (!empty($commentaire)) {
+                        $message .= ' avec le commentaire : '.$commentaire;
+                    }
+                    
+                    $particulier->addHistorique(
+                        $user,
+                        'ADD_DOCUMENT',
+                        'demarche',
+                        $this->id,
+                        $message,
+                        array('fk_document_principal' => array($ancien_doc_id, $document_id))
+                    );
+                }
+            } else {
+                return $result;
+            }
+        } else {
+            // Sinon, créer une liaison dans la table de relation
+            $sql = "INSERT INTO ".MAIN_DB_PREFIX."elaska_demarche_document";
+            $sql.= " (fk_demarche, fk_document, date_ajout, fk_user_ajout, commentaire)";
+            $sql.= " VALUES (".(int)$this->id.", ".(int)$document_id.", '".$this->db->idate(dol_now())."', ";
+            $sql.= (int)$user->id.", ".($commentaire ? "'".$this->db->escape($commentaire)."'" : "NULL").")";
+            
+            $this->db->begin();
+            
+            $resql = $this->db->query($sql);
+            if (!$resql) {
+                $this->error = $this->db->lasterror();
+                $this->db->rollback();
+                return -1;
+            }
+            
+            // Ajouter à l'historique
+            $particulier = new ElaskaParticulier($this->db);
+            if ($particulier->fetch($this->fk_particulier) > 0) {
+                $message = 'Document "'.$document->libelle.'" (Réf: '.$document->ref.') associé à la démarche "'.$this->libelle.'" (Réf: '.$this->ref.')';
+                
+                if (!empty($commentaire)) {
+                    $message .= ' avec le commentaire : '.$commentaire;
+                }
+                
+                $particulier->addHistorique(
+                    $user,
+                    'ADD_DOCUMENT',
+                    'demarche',
+                    $this->id,
+                    $message
+                );
+            }
+            
+            $this->db->commit();
+            return 1;
+        }
+        
+        return 1;
+    }
+
+    /**
+     * Récupère le document principal de la démarche
+     * 
+     * @return ElaskaDocument|null Document principal ou null si non trouvé
+     */
+    public function getMainDocument()
+    {
+        if (empty($this->fk_document_principal)) {
+            return null;
+        }
+        
+        require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_document.class.php';
+        $document = new ElaskaDocument($this->db);
+        
+        if ($document->fetch($this->fk_document_principal) > 0) {
+            return $document;
+        }
+        
+        return null;
+    }
+
+    /**
+     * Récupère tous les documents associés à cette démarche
+     * 
+     * @param bool $include_main_doc Inclure le document principal dans la liste
+     * @return array                 Tableau d'objets ElaskaDocument
+     */
+    public function getDocuments($include_main_doc = true)
+    {
+        require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_document.class.php';
+        $documents = array();
+        
+        // Ajouter d'abord le document principal s'il existe et qu'on veut l'inclure
+        if ($include_main_doc && !empty($this->fk_document_principal)) {
+            $document_principal = $this->getMainDocument();
+            if ($document_principal) {
+                $document_principal->is_main_doc = true; // Ajouter une propriété pour identifier le doc principal
+                $documents[] = $document_principal;
+            }
+        }
+        
+        // Récupérer les autres documents liés
+        $sql = "SELECT d.rowid FROM ".MAIN_DB_PREFIX."elaska_document as d";
+        $sql.= " INNER JOIN ".MAIN_DB_PREFIX."elaska_demarche_document as dd ON dd.fk_document = d.rowid";
+        $sql.= " WHERE dd.fk_demarche = ".(int) $this->id;
+        // Exclure le document principal s'il est déjà dans la liste
+        if (!empty($this->fk_document_principal)) {
+            $sql.= " AND d.rowid != ".(int) $this->fk_document_principal;
+        }
+        $sql.= " ORDER BY d.date_creation DESC";
+        
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            while ($obj = $this->db->fetch_object($resql)) {
+                $document = new ElaskaDocument($this->db);
+                if ($document->fetch($obj->rowid) > 0) {
+                    $document->is_main_doc = false;
+                    $documents[] = $document;
+                }
+            }
+            $this->db->free($resql);
+        } else {
+            dol_syslog('Error in ElaskaParticulierDemarche::getDocuments: '.$this->db->lasterror(), LOG_ERR);
+        }
+        
+        return $documents;
+    }
+
+    /**
+     * Supprime l'association avec un document
+     * 
+     * @param User $user       Utilisateur effectuant l'action
+     * @param int  $document_id ID du document à dissocier
+     * @return int             <0 si erreur, >0 si OK
+     */
+    public function removeDocument($user, $document_id)
+    {
+        require_once DOL_DOCUMENT_ROOT.'/custom/elaska/class/elaska_document.class.php';
+        
+        // Vérifier que le document existe
+        $document = new ElaskaDocument($this->db);
+        if ($document->fetch($document_id) <= 0) {
+            $this->error = 'DocumentDoesNotExist';
+            return -1;
+        }
+        
+        // Si c'est le document principal
+        if ($this->fk_document_principal == $document_id) {
+            $ancien_doc_id = $this->fk_document_principal;
+            $this->fk_document_principal = null;
+            
+            $result = $this->update($user, 1); // mise à jour silencieuse
+            
+            if ($result > 0) {
+                // Ajouter à l'historique
+                $particulier = new ElaskaParticulier($this->db);
+                if ($particulier->fetch($this->fk_particulier) > 0) {
+                    $particulier->addHistorique(
+                        $user,
+                        'REMOVE_DOCUMENT',
+                        'demarche',
+                        $this->id,
+                        'Document principal "'.$document->libelle.'" (Réf: '.$document->ref.') retiré de la démarche "'.$this->libelle.'" (Réf: '.$this->ref.')',
+                        array('fk_document_principal' => array($ancien_doc_id, null))
+                    );
+                }
+            } else {
+                return $result;
+            }
+        }
+        
+        // Supprimer l'association dans la table de relation (dans tous les cas, pour être sûr)
+        $sql = "DELETE FROM ".MAIN_DB_PREFIX."elaska_demarche_document";
+        $sql.= " WHERE fk_demarche = ".(int)$this->id." AND fk_document = ".(int)$document_id;
+        
+        $resql = $this->db->query($sql);
+        if (!$resql) {
+            $this->error = $this->db->lasterror();
+            dol_syslog('Error in ElaskaParticulierDemarche::removeDocument: '.$this->db->lasterror(), LOG_ERR);
+            return -1;
+        }
+        
+        // Si ce n'était pas le document principal ou si on a déjà fait l'historique pour le doc principal
+        if ($this->fk_document_principal != $document_id) {
+            // Ajouter à l'historique
+            $particulier = new ElaskaParticulier($this->db);
+            if ($particulier->fetch($this->fk_particulier) > 0) {
+                $particulier->addHistorique(
+                    $user,
+                    'REMOVE_DOCUMENT',
+                    'demarche',
+                    $this->id,
+                    'Document "'.$document->libelle.'" (Réf: '.$document->ref.') retiré de la démarche "'.$this->libelle.'" (Réf: '.$this->ref.')'
+                );
+            }
+        }
+        
+        return 1;
     }
 }
 
