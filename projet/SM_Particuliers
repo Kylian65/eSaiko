@@ -1,4 +1,4 @@
-# Documentation complète du sous-Module d'Accompagnement Spécifique des Particuliers
+# Documentation complète du sous-Module d'Accompagnement Spécifique des Particuliers pour module eLaska (Dolibarr).
 **Version:** 3.6.2
 **Date:** 2025-06-03
 **Utilisateur:** Kylian65
@@ -15,7 +15,7 @@
 
 ## 1. Vue d'ensemble
 
-Le sous-module d'Accompagnement Spécifique des Particuliers, qui est une composante du module eLaska, est conçu pour fournir une assistance complète aux clients particuliers dans l'ensemble de leurs démarches administratives et projets de vie. Il s'articule autour de quatre piliers:
+Le sous-module d'Accompagnement Spécifique des Particuliers, qui est une composante du module eLaska, pour la plateforme Dolibarr, est conçu pour fournir une assistance complète aux clients particuliers dans l'ensemble de leurs démarches administratives et projets de vie. Il s'articule autour de quatre piliers:
 
 - **Gestion administrative quotidienne** - Organisation, classement et suivi des documents et échéances
 - **Démarches administratives complexes** - Accompagnement aux procédures spécifiques (surendettement, CAF, retraite, etc.)
